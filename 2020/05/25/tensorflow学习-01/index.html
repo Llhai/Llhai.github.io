@@ -79,14 +79,14 @@
 
 
 
-<meta name="description" content="VIBE运行尝试VIBE 全名 Video Inference for Human Body Pose and Shape Estimation[CVPR-2020] 官方开源代码链接:github项目地址。论文链接：arXiv。VIBE结合了人体姿态估计与人体形状估计，对于输入视频的每一帧，VIBE都相应地预测出SMPL人体模型的参数 运行环境 ubuntu 18.04 PY37  运行准备首先">
+<meta name="description" content="tf.variable与tf.tensor variable用于存储网络模型中的权重参数，tensor用于存储中间结果数据。 variable是可更改的，具有assign函数，tensor则是不可更改的。  tf.nn.conv2d函数tf.nn.conv2d是TensorFlow里面实现卷积的函数，是搭建神经网络的一个比较核心的方法。函数形式为tf.nn.conv2d(input, filter">
 <meta property="og:type" content="article">
-<meta property="og:title" content="VIBE运行尝试-20200308">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;08&#x2F;VIBE%E8%BF%90%E8%A1%8C%E5%B0%9D%E8%AF%95-20200308&#x2F;index.html">
+<meta property="og:title" content="tensorflow学习-01">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;25&#x2F;tensorflow%E5%AD%A6%E4%B9%A0-01&#x2F;index.html">
 <meta property="og:site_name" content="LlHai">
-<meta property="og:description" content="VIBE运行尝试VIBE 全名 Video Inference for Human Body Pose and Shape Estimation[CVPR-2020] 官方开源代码链接:github项目地址。论文链接：arXiv。VIBE结合了人体姿态估计与人体形状估计，对于输入视频的每一帧，VIBE都相应地预测出SMPL人体模型的参数 运行环境 ubuntu 18.04 PY37  运行准备首先">
-<meta property="article:published_time" content="2020-03-08T02:42:28.814Z">
-<meta property="article:modified_time" content="2020-03-09T08:26:48.920Z">
+<meta property="og:description" content="tf.variable与tf.tensor variable用于存储网络模型中的权重参数，tensor用于存储中间结果数据。 variable是可更改的，具有assign函数，tensor则是不可更改的。  tf.nn.conv2d函数tf.nn.conv2d是TensorFlow里面实现卷积的函数，是搭建神经网络的一个比较核心的方法。函数形式为tf.nn.conv2d(input, filter">
+<meta property="article:published_time" content="2020-05-25T07:52:55.000Z">
+<meta property="article:modified_time" content="2020-05-25T07:53:12.315Z">
 <meta property="article:author" content="LlHai">
 <meta name="twitter:card" content="summary">
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/03/08/VIBE运行尝试-20200308/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/05/25/tensorflow学习-01/"/>
 
 
 
 
 
-  <title>VIBE运行尝试-20200308 | LlHai</title>
+  <title>tensorflow学习-01 | LlHai</title>
   
 
 
@@ -261,7 +261,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/08/VIBE%E8%BF%90%E8%A1%8C%E5%B0%9D%E8%AF%95-20200308/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/25/tensorflow%E5%AD%A6%E4%B9%A0-01/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="LlHai">
@@ -278,7 +278,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">VIBE运行尝试-20200308</h1>
+          <h1 class="post-title" itemprop="name headline">tensorflow学习-01</h1>
         
 
         <div class="post-meta">
@@ -290,8 +290,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-08T10:42:28+08:00">
-                2020-03-08
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-25T15:52:55+08:00">
+                2020-05-25
               </time>
             
 
@@ -328,30 +328,18 @@
       
 
       
-        <h1 id="VIBE运行尝试"><a href="#VIBE运行尝试" class="headerlink" title="VIBE运行尝试"></a>VIBE运行尝试</h1><p>VIBE 全名 Video Inference for Human Body Pose and Shape Estimation[CVPR-2020] 官方开源代码链接:<a href="https://github.com/mkocabas/VIBE" target="_blank" rel="noopener">github项目地址</a>。论文链接：<a href="https://arxiv.org/abs/1912.05656" target="_blank" rel="noopener">arXiv</a>。VIBE结合了人体姿态估计与人体形状估计，对于输入视频的每一帧，VIBE都相应地预测出SMPL人体模型的参数</p>
-<h4 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h4><ul>
-<li>ubuntu 18.04</li>
-<li>PY37</li>
+        <h4 id="tf-variable与tf-tensor"><a href="#tf-variable与tf-tensor" class="headerlink" title="tf.variable与tf.tensor"></a>tf.variable与tf.tensor</h4><ul>
+<li>variable用于存储网络模型中的权重参数，tensor用于存储中间结果数据。</li>
+<li>variable是可更改的，具有assign函数，tensor则是不可更改的。</li>
 </ul>
-<h4 id="运行准备"><a href="#运行准备" class="headerlink" title="运行准备"></a>运行准备</h4><p>首先尝试在win10下运行</p>
-<p>官方在github上给出了linux下的sh脚本，win下自己按照脚本内容自己配置也很简单，这里就不重复写了，我在安装pytorch时遇到了以下问题</p>
-<pre><code>ERROR: Could not find a version that satisfies the requirement torch==1.4.0</code></pre><p>具体错误原因也没必要细究，解决方法换一下安装命令即可：<br>    pip install torch===1.4.0 torchvision===0.5.0 -f <a href="https://download.pytorch.org/whl/torch_stable.html" target="_blank" rel="noopener">https://download.pytorch.org/whl/torch_stable.html</a><br>在运行完官方脚本的所有配置命令之后，输入以下命令运行：</p>
-<pre><code>python demo.py --vid_file sample_video.mp4 --output_folder output/ --display</code></pre><p>不出意外的话会遇到一万个库缺失的报错，一个一个pip安装即可，接下来俺在导入pyopengl时遇到了以下错误：</p>
-<pre><code>  File &quot;C:\Users\41656\Anaconda3\envs\pyVIBE\lib\site-packages\OpenGL\platform\egl.py&quot;, line 73, in EGL
-raise ImportError(&quot;Unable to load EGL library&quot;, *err.args)
-ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定的模块。&apos;, None, 126, None, &apos;EGL&apos;, None)</code></pre><p>查遍资料后也没解决这个问题，在github上提了issue，作者回复说可能是pyrender的问题，并表示他们没在win上运行过。</p>
-<p>到这里就结束了win上的尝试，转向Ubuntu</p>
-<h4 id="Ubuntu踩坑"><a href="#Ubuntu踩坑" class="headerlink" title="Ubuntu踩坑"></a>Ubuntu踩坑</h4><ol>
-<li><p>装 pytorch时 在跑完下载进度条就显示 进程被killed，解决方法：把虚拟机分配的内存改为8G</p>
-</li>
-<li><p>tqdm报错，</p>
-<pre><code>RuntimeError:cannot join current thread</code></pre><p> 是老版本tqdm的bug，在4.31.1后就已经修复了这个bug，安装最新版tqdm即可</p>
-</li>
-<li><p>DataLoader报错：</p>
-<pre><code>RuntimeError: DataLoader worker (pid 4654) is killed by signal: Killed</code></pre><p> 观察发现在加载数据时内存耗尽了，还是虚拟机内存不够的问题，batch改小即可</p>
-</li>
-<li></li>
-</ol>
+<h4 id="tf-nn-conv2d函数"><a href="#tf-nn-conv2d函数" class="headerlink" title="tf.nn.conv2d函数"></a>tf.nn.conv2d函数</h4><p>tf.nn.conv2d是TensorFlow里面实现卷积的函数，是搭建神经网络的一个比较核心的方法。函数形式为<strong>tf.nn.conv2d(input, filter, strides, padding, use_cudnn_on_gpu=None, name=None)</strong>，具体参数为：</p>
+<ul>
+<li>input：需要做卷积操作的输入图像，它是shape = [batch, in_height, in_width, in_channels]的Tensor</li>
+<li>filter 卷积核，它是shape = [filter_height, filter_width, in_channels, out_channels]的Tensor，具体含义是[卷积核的高度，卷积核的宽度，图像通道数，卷积核个数]</li>
+<li>strides 卷积步长</li>
+<li>padding 边界填充方式，“SAME”或“VALID”</li>
+<li>use_cudnn_on_gpu cuda开关，bool类型</li>
+</ul>
 
       
     </div>
@@ -376,8 +364,8 @@ ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定�
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/02/29/Unity-Tensorflow-%E5%8A%A0%E8%BD%BD%E6%A8%A1%E5%9E%8B-20200228/" rel="next" title="Unity-Tensorflow-加载模型-20200228">
-                <i class="fa fa-chevron-left"></i> Unity-Tensorflow-加载模型-20200228
+              <a href="/2020/05/25/tf01/" rel="next" title="tf01">
+                <i class="fa fa-chevron-left"></i> tf01
               </a>
             
           </div>
@@ -385,10 +373,6 @@ ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定�
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/05/25/tf01/" rel="prev" title="tf01">
-                tf01 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -527,7 +511,7 @@ ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定�
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#VIBE运行尝试"><span class="nav-number">1.</span> <span class="nav-text">VIBE运行尝试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#运行环境"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">运行环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行准备"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">运行准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Ubuntu踩坑"><span class="nav-number">1.0.0.3.</span> <span class="nav-text">Ubuntu踩坑</span></a></li></ol></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#tf-variable与tf-tensor"><span class="nav-number">1.</span> <span class="nav-text">tf.variable与tf.tensor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tf-nn-conv2d函数"><span class="nav-number">2.</span> <span class="nav-text">tf.nn.conv2d函数</span></a></li></ol></div>
             
 
           </div>
