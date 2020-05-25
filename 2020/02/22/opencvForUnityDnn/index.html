@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="OpenCVForUnity笔记2-加载TF模型涉及以下函数 Dnn.readNetFromTensorflow() Dnn.blobFromImage() net.setInput() net.forward()  几个关键点 Dnn.blobFromImage()  1static Mat OpenCVForUnity.DnnModule.Dnn.blobFromImage(Mat image">
+<meta property="og:type" content="article">
+<meta property="og:title" content="opencvForUnityDnn">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;22&#x2F;opencvForUnityDnn&#x2F;index.html">
+<meta property="og:site_name" content="LlHai">
+<meta property="og:description" content="OpenCVForUnity笔记2-加载TF模型涉及以下函数 Dnn.readNetFromTensorflow() Dnn.blobFromImage() net.setInput() net.forward()  几个关键点 Dnn.blobFromImage()  1static Mat OpenCVForUnity.DnnModule.Dnn.blobFromImage(Mat image">
+<meta property="article:published_time" content="2020-02-22T03:37:09.061Z">
+<meta property="article:modified_time" content="2020-02-25T03:25:07.254Z">
+<meta property="article:author" content="LlHai">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/02/22/opencvForUnityDnn/"/>
+
+
+
+
+
+  <title>opencvForUnityDnn | LlHai</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.1.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LlHai</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">你说的对</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/22/opencvForUnityDnn/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LlHai">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LlHai">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">opencvForUnityDnn</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-22T11:37:09+08:00">
+                2020-02-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="OpenCVForUnity笔记2-加载TF模型"><a href="#OpenCVForUnity笔记2-加载TF模型" class="headerlink" title="OpenCVForUnity笔记2-加载TF模型"></a>OpenCVForUnity笔记2-加载TF模型</h1><h4 id="涉及以下函数"><a href="#涉及以下函数" class="headerlink" title="涉及以下函数"></a>涉及以下函数</h4><ul>
+<li>Dnn.readNetFromTensorflow()</li>
+<li>Dnn.blobFromImage()</li>
+<li>net.setInput()</li>
+<li>net.forward()</li>
+</ul>
+<h4 id="几个关键点"><a href="#几个关键点" class="headerlink" title="几个关键点"></a>几个关键点</h4><ol>
+<li>Dnn.blobFromImage()</li>
+</ol>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> Mat OpenCVForUnity.DnnModule.Dnn.blobFromImage(Mat image,<span class="keyword">double</span> scalefactor,Size size,Scalar	mean,<span class="keyword">bool</span> swapRB,<span class="keyword">bool</span> crop)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><strong>image</strong> 表示输入的图像</p>
+</li>
+<li><p><strong>scalefactor</strong> 如果训练时，是归一化到0-1之间，那么这个参数就应该为（1/255），否则为1.0</p>
+</li>
+<li><p><strong>size</strong> 尺寸，最好和训练时的图像尺寸一致，openpose的训练尺寸为432*368</p>
+</li>
+<li><p><strong>mean</strong> 训练数据的均值，tf中一般用不到</p>
+</li>
+<li><p><strong>swapRB</strong> 是否交换图像第一个通道和最后一个通道的顺序，用于BGR和RGB混用的情况</p>
+</li>
+<li><p><strong>crop</strong> 是否裁剪图像，否为不裁剪</p>
+<p>  通过函数参数可以看出，blobFromImage函数主要作用在于对输入数据的进行预处理，并检查输入的合法性，便于传入到网络中。</p>
+</li>
+</ul>
+<ol start="2">
+<li>net.setInput()</li>
+</ol>
+<ul>
+<li><strong>blob</strong> 前一个函数的结果</li>
+<li><strong>string</strong> <strong>name</strong> 输入层名称，可以通过打印计算图所有节点的方式，得到输入节点和输出节点的名称 输入为“image”，输出为“Openpose/concat_stage”</li>
+</ul>
+<ol start="3">
+<li><p>net.forward()</p>
+<p> 这个函数只需要提供layer的name即可；函数返回一个Mat变量，返回值是指输入的layername首次出现的输出。默认输出整个网络的运行结果</p>
+</li>
+</ol>
+<h4 id="核心代码"><a href="#核心代码" class="headerlink" title="核心代码"></a>核心代码</h4><figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">string</span> modelName = <span class="string">"graph_opt.pb"</span>;</span><br><span class="line">tfModel = Dnn.readNetFromTensorflow(modelName);</span><br><span class="line">Scalar mean = <span class="keyword">new</span> Scalar(<span class="number">0.0</span>);</span><br><span class="line">Mat blob = Dnn.blobFromImage(img, <span class="number">1.0</span>, imgSize, mean, <span class="literal">false</span>, <span class="literal">false</span>);</span><br><span class="line">tfModel.setInput(blob, <span class="string">"image"</span>);</span><br><span class="line">Mat res = tfModel.forward(<span class="string">"Openpose/concat_stage7"</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="踩坑"><a href="#踩坑" class="headerlink" title="踩坑"></a>踩坑</h4><ol>
+<li>readNetFromTensorflow()和forward()返回值都为Mat（-1<em>-1），起初以为图像输入有问题或者函数传入参数有问题，最后在<a href="https://github.com/opencv/opencv/issues/12520找到了答案。因为C#和JAVA的toString（）对高维Mat支持不好，四维Mat会被错误显示为Mat（-1" target="_blank" rel="noopener">https://github.com/opencv/opencv/issues/12520找到了答案。因为C#和JAVA的toString（）对高维Mat支持不好，四维Mat会被错误显示为Mat（-1</a></em>-1），并且四维Mat没有定义cols和rows，所以输出也会为-1，-1。</li>
+<li>c#的opencv读高维Mat很麻烦，输出结果Mat为（1<em>57</em>(width/8)*(height/8)）,测试的网络输出约有14W个元素，其中57个通道的数据中，前17个通道为关节点的热点图，每个通道对应一个关节，所以需要找出每个通道上最高概率的点，则该点的索引则表示关节点的像素坐标，这部分操作的python代码如下：<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">jointList = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">17</span>):</span><br><span class="line">    newMat = res[<span class="number">0</span>][i]</span><br><span class="line">    max = np.max(newMat)</span><br><span class="line">    (x,y) = np.where(newMat==max)</span><br><span class="line">    jointList.append((max,x[<span class="number">0</span>],y[<span class="number">0</span>]))</span><br></pre></td></tr></table></figure>
+<strong>但 是</strong>想在c#中实现这段代码的难度是灾难性的，官方提供的对Mat操作的函数完全不起作用，split，get等函数完全没法用，尝试了一天之后，找到了唯一一种读到Mat数据的方法，使用Utils.copyFromMat（）将数据拷贝到数组中，很明显这是种很蠢的方法，把数据变成线性结构极大地加大了处理难度。代码如下：<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">float</span>[] bytes = <span class="keyword">new</span> <span class="keyword">float</span>[outs.total() * outs.channels()];</span><br><span class="line">Utils.copyFromMat&lt;<span class="keyword">float</span>&gt;(outs, bytes);</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">17</span>; i++)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">float</span> maxScore = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; imgSize.height / <span class="number">8</span>; j++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; imgSize.width / <span class="number">8</span>; k++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">float</span> tarData = bytes[((<span class="keyword">int</span>)(j * imgSize.width / <span class="number">8</span>) + k) * <span class="number">57</span> + i];</span><br><span class="line">            <span class="keyword">if</span>(maxScore&lt;tarData)</span><br><span class="line">            &#123;</span><br><span class="line">                maxScore = tarData;</span><br><span class="line">                jointList[i].score = tarData;</span><br><span class="line">                jointList[i].heightPos = j;</span><br><span class="line">                jointList[i].widthPos = k;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>Dnn.readNetFromTensorflow()这个函数支持的网络很有限，我测试了三个网络，只能一个最简单的网络能够正确读取，其他两个网络报错如下：<br> Traceback (most recent call last):<br>File “d:\Project\Python\opencvDnn\opencvDnnOpenPose.py”, line 6, in <module><br> net = cv2.dnn.readNetFromTensorflow(“large.pb”)<br> cv2.error: OpenCV(4.2.0) C:\projects\opencv-python\opencv\modules\dnn\src\tensorflow\tf_importer.cpp:582: error: (-2:Unspecified error) Input [strided_slice] for node [base/layer_14/output/upsample] not found in function ‘cv::dnn::dnn4_v20191202::`anonymous-namespace’::TFImporter::getConstBlob<br>在网上看了一下其他的受害者，这个函数对于Mask R-CNN等等结构的不支持的</li>
+</ol>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>综上可知，使用opencv的DNN模块读TF这个方法基本是行不通的，写起来费时费力不说，对于大多数模型也是不支持的，所以还是老老实实用TensorFlowSharp吧</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/19/opencvForUnity1/" rel="next" title="opencvForUnity1">
+                <i class="fa fa-chevron-left"></i> opencvForUnity1
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/02/24/opencvForUnity-%E9%AB%98%E7%BB%B4Mat/" rel="prev" title="opencvForUnity-高维Mat">
+                opencvForUnity-高维Mat <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">LlHai</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Llhai" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="llhai@hust.edu.cn" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#OpenCVForUnity笔记2-加载TF模型"><span class="nav-number">1.</span> <span class="nav-text">OpenCVForUnity笔记2-加载TF模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#涉及以下函数"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">涉及以下函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#几个关键点"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">几个关键点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#核心代码"><span class="nav-number">1.0.0.3.</span> <span class="nav-text">核心代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#踩坑"><span class="nav-number">1.0.0.4.</span> <span class="nav-text">踩坑</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">1.0.0.5.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LlHai</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
