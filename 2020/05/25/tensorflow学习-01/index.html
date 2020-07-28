@@ -408,6 +408,10 @@
 <li>padding 边界填充方式，“SAME”或“VALID”</li>
 <li>use_cudnn_on_gpu cuda开关，bool类型</li>
 </ul>
+<h4 id="tf-truncated-normal"><a href="#tf-truncated-normal" class="headerlink" title="tf.truncated_normal"></a>tf.truncated_normal</h4><p>该函数产生截断的正态分布，常用于初始化网络权重，<strong>tf.truncated_normal(shape, mean, stddev)</strong> :shape表示生成张量的维度，mean是均值，stddev是标准差。</p>
+<h4 id="L2正则化处理"><a href="#L2正则化处理" class="headerlink" title="L2正则化处理"></a>L2正则化处理</h4><p>L2正则化可以通过惩罚特征权重来达到缓解过拟合问题的目的，即特征的权重也会成为模型损失函数的一部分。可以理解为，为了使用某个特征，就需要付出loss的代价，除非这个特征非常有效，否则就会被loss上的增加覆盖效果。L1特征会使无用特征的权重置为0而制造出稀疏的特征，L2正则的特征权重则比较平均。</p>
+<p>使用wl控制L2 loss的大小，是哦那个<strong>tf.nn.l2_loss</strong>函数计算weight的L2 loss，再使用<strong>tf.multiply</strong>让L2 loss乘以wl，得到最后的weight loss。接着使用<strong>tf.add_to_collection</strong>把weight loss统一存到一个collection，这个collection名为“losses”，用于后续计算总体loss。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">variable_with_weight_loss</span><span class="params">(shape, stddev, wl)</span>:</span></span><br><span class="line">    var = tf.Variable(tf.truncated_normal(shape, stddev=stddev))</span><br><span class="line">    <span class="keyword">if</span> wf <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        weight_loss = tf.multiply(tf.nn.l2_loss(var), wl, name=‘weight_loss’)</span><br><span class="line">        tf.add_to_collection(<span class="string">'losses'</span>, weight_loss)</span><br><span class="line">    <span class="keyword">return</span> var</span><br></pre></td></tr></table></figure>
 
           
             <div class='article_footer'>
@@ -495,10 +499,10 @@
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-05-26T12:00:21+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-06-02T12:23:42+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：May 26, 2020</p>
+    <p>更新于：Jun 2, 2020</p>
   </a>
 </div>
 
@@ -649,7 +653,7 @@
 
 
     <div class='content'>
-      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#tf-variable与tf-tensor"><span class="toc-text">tf.variable与tf.tensor</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#tf-nn-conv2d函数"><span class="toc-text">tf.nn.conv2d函数</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#tf-variable与tf-tensor"><span class="toc-text">tf.variable与tf.tensor</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#tf-nn-conv2d函数"><span class="toc-text">tf.nn.conv2d函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#tf-truncated-normal"><span class="toc-text">tf.truncated_normal</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#L2正则化处理"><span class="toc-text">L2正则化处理</span></a></li></ol>
     </div>
   </section>
 
@@ -712,16 +716,16 @@
       
     
       
-        <div><p>Blog content follows the <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener">Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License</a></p>
+        <div><p>博客内容遵循 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
 </div>
       
     
       
-        Use
+        本站使用
         <a href="https://volantis.js.org/" target="_blank" class="codename">Volantis</a>
-        as theme, total visits
+        作为主题，总访问量为
           <span id="busuanzi_value_site_pv"><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
-          times
+          次
         
       
     
@@ -797,7 +801,7 @@
 
     <script type="text/javascript">
       $(function(){
-        var imgs=["https://cdn.jsdelivr.net/gh/xaoxuu/cdn-wallpaper/abstract/41F215B9-261F-48B4-80B5-4E86E165259E.jpeg"];
+        var imgs=["https://cdn.jsdelivr.net/gh/Llhai/img/source/wallhaven-6k3oox.jpg"];
         if ('true' == 'true') {
           function shuffle(arr){
             /*From countercurrent-time*/

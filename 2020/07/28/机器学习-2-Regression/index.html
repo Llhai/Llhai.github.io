@@ -16,10 +16,12 @@
 
   <!-- 页面元数据 -->
   
-    <title>VIBE运行尝试 - LlHai</title>
+    <title>机器学习-2.Regression - LlHai</title>
+  
+    <meta name="keywords" content="“机器学习”">
   
   
-    <meta name="description" content="记录测试运行VIBE过程中遇到的问题以及测试结果">
+    <meta name="description" content="介绍线性回归相关概念">
   
 
   <!-- feed -->
@@ -343,8 +345,8 @@
         
           
   <h1 class="title">
-    <a href="/2020/03/25/VIBE%E8%BF%90%E8%A1%8C%E5%B0%9D%E8%AF%95/">
-      VIBE运行尝试
+    <a href="/2020/07/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-2-Regression/">
+      机器学习-2.Regression
     </a>
   </h1>
 
@@ -360,9 +362,9 @@
               
   
   <div class='new-meta-item category'>
-    <a href='/categories/CVPR2020%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/' rel="nofollow">
+    <a href='/categories/ML2020%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/' rel="nofollow">
       <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>CVPR2020开源项目</p>
+      <p>ML2020课程笔记</p>
     </a>
   </div>
 
@@ -373,7 +375,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：Mar 25, 2020</p>
+    <p>发布于：Jul 28, 2020</p>
   </a>
 </div>
 
@@ -396,30 +398,7 @@
       <section class="article typo">
         <div class="article-entry" itemprop="articleBody">
           
-          <p>VIBE 全名 Video Inference for Human Body Pose and Shape Estimation[CVPR-2020] 官方开源代码链接:<a href="https://github.com/mkocabas/VIBE" target="_blank" rel="noopener">github项目地址</a>。论文链接：<a href="https://arxiv.org/abs/1912.05656" target="_blank" rel="noopener">arXiv</a>。VIBE结合了人体姿态估计与人体形状估计，对于输入视频的每一帧，VIBE都相应地预测出SMPL人体模型的参数</p>
-<h4 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h4><ul>
-<li>ubuntu 18.04</li>
-<li>PY37</li>
-</ul>
-<h4 id="运行准备"><a href="#运行准备" class="headerlink" title="运行准备"></a>运行准备</h4><p>首先尝试在win10下运行</p>
-<p>官方在github上给出了linux下的sh脚本，win下自己按照脚本内容自己配置也很简单，这里就不重复写了，我在安装pytorch时遇到了以下问题</p>
-<pre><code>ERROR: Could not find a version that satisfies the requirement torch==1.4.0</code></pre><p>具体错误原因也没必要细究，解决方法换一下安装命令即可：<br>    pip install torch===1.4.0 torchvision===0.5.0 -f <a href="https://download.pytorch.org/whl/torch_stable.html" target="_blank" rel="noopener">https://download.pytorch.org/whl/torch_stable.html</a><br>在运行完官方脚本的所有配置命令之后，输入以下命令运行：</p>
-<pre><code>python demo.py --vid_file sample_video.mp4 --output_folder output/ --display</code></pre><p>不出意外的话会遇到一万个库缺失的报错，一个一个pip安装即可，接下来俺在导入pyopengl时遇到了以下错误：</p>
-<pre><code>  File &quot;C:\Users\41656\Anaconda3\envs\pyVIBE\lib\site-packages\OpenGL\platform\egl.py&quot;, line 73, in EGL
-raise ImportError(&quot;Unable to load EGL library&quot;, *err.args)
-ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定的模块。&apos;, None, 126, None, &apos;EGL&apos;, None)</code></pre><p>查遍资料后也没解决这个问题，在github上提了issue，作者回复说可能是pyrender的问题，并表示他们没在win上运行过。</p>
-<p>到这里就结束了win上的尝试，转向Ubuntu</p>
-<h4 id="Ubuntu踩坑"><a href="#Ubuntu踩坑" class="headerlink" title="Ubuntu踩坑"></a>Ubuntu踩坑</h4><ol>
-<li><p>装 pytorch时 在跑完下载进度条就显示 进程被killed，解决方法：把虚拟机分配的内存改为8G</p>
-</li>
-<li><p>tqdm报错，</p>
-<pre><code>RuntimeError:cannot join current thread</code></pre><p> 是老版本tqdm的bug，在4.31.1后就已经修复了这个bug，安装最新版tqdm即可</p>
-</li>
-<li><p>DataLoader报错：</p>
-<pre><code>RuntimeError: DataLoader worker (pid 4654) is killed by signal: Killed</code></pre><p> 观察发现在加载数据时内存耗尽了，还是虚拟机内存不够的问题，batch改小即可</p>
-</li>
-</ol>
-
+          
           
             <div class='article_footer'>
               
@@ -455,7 +434,7 @@ ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定�
           
         
           
-            <p>本文永久链接是：<a href=http://yoursite.com/2020/03/25/VIBE%E8%BF%90%E8%A1%8C%E5%B0%9D%E8%AF%95/>http://yoursite.com/2020/03/25/VIBE%E8%BF%90%E8%A1%8C%E5%B0%9D%E8%AF%95/</a></p>
+            <p>本文永久链接是：<a href=http://yoursite.com/2020/07/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-2-Regression/>http://yoursite.com/2020/07/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-2-Regression/</a></p>
           
         
       </blockquote>
@@ -506,10 +485,10 @@ ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定�
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-05-27T15:58:19+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-07-28T21:20:48+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：May 27, 2020</p>
+    <p>更新于：Jul 28, 2020</p>
   </a>
 </div>
 
@@ -517,6 +496,9 @@ ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定�
       
         
           
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E2%80%9C%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E2%80%9D/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>“机器学习”</p></a></div>
+
 
         
       
@@ -533,7 +515,7 @@ ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定�
       
         <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer"
           
-          href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2020/03/25/VIBE%E8%BF%90%E8%A1%8C%E5%B0%9D%E8%AF%95/&title=VIBE运行尝试 - LlHai&summary="
+          href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2020/07/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-2-Regression/&title=机器学习-2.Regression - LlHai&summary="
           
           >
           
@@ -545,7 +527,7 @@ ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定�
       
         <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer"
           
-          href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://yoursite.com/2020/03/25/VIBE%E8%BF%90%E8%A1%8C%E5%B0%9D%E8%AF%95/&title=VIBE运行尝试 - LlHai&summary="
+          href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://yoursite.com/2020/07/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-2-Regression/&title=机器学习-2.Regression - LlHai&summary="
           
           >
           
@@ -557,7 +539,7 @@ ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定�
       
         <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer"
           
-          href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2020/03/25/VIBE%E8%BF%90%E8%A1%8C%E5%B0%9D%E8%AF%95/&title=VIBE运行尝试 - LlHai&summary="
+          href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2020/07/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-2-Regression/&title=机器学习-2.Regression - LlHai&summary="
           
           >
           
@@ -581,17 +563,16 @@ ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定�
         
           <div class="prev-next">
             
-              <a class='prev' href='/2020/05/25/tensorflow%E5%AD%A6%E4%B9%A0-01/'>
-                <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Tensorflow学习-01</p>
-                <p class='content'>tf.variable与tf.tensor
-variable用于存储网络模型中的权重参数，tensor用于存储中间结果数据。
-variable是可更改的，具有assign函数，tensor则是不...</p>
+              <a class='prev' href='/2020/07/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-3-Error-Come-From/'>
+                <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>机器学习-3.Error Come From</p>
+                <p class='content'>引入之前了解到，不同的模型(model)在测试数据(testing data)上会得到不同的error, 越复杂的model，在测试集上的表现也不一定会越好。这个error通常来自于两个方面：
+...</p>
               </a>
             
             
-              <a class='next' href='/2020/03/25/Unity-Tensorflow%E5%B0%9D%E8%AF%95/'>
-                <p class='title'>Tensorflow Unity尝试<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
-                <p class='content'>环境配置在Unity上使用Tensorflow需要借助ML-Agents，Unity Machine Learning Agents (ML-Agents) 是一款开源的 Unity 插件， 使...</p>
+              <a class='next' href='/2020/07/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-1-introduction/'>
+                <p class='title'>机器学习-1.introduction<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+                <p class='content'></p>
               </a>
             
           </div>
@@ -636,7 +617,7 @@ variable是可更改的，具有assign函数，tensor则是不...</p>
 
   <script>
     window.subData = {
-      title: 'VIBE运行尝试',
+      title: '机器学习-2.Regression',
       tools: true
     }
   </script>
@@ -651,20 +632,6 @@ variable是可更改的，具有assign函数，tensor则是不...</p>
     
     
 
-
-  <section class="widget toc-wrapper shadow desktop mobile">
-    
-  <header>
-    
-      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
-    
-  </header>
-
-
-    <div class='content'>
-      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#运行环境"><span class="toc-text">运行环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#运行准备"><span class="toc-text">运行准备</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Ubuntu踩坑"><span class="toc-text">Ubuntu踩坑</span></a></li></ol>
-    </div>
-  </section>
 
 
   

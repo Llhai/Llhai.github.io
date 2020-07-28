@@ -16,10 +16,12 @@
 
   <!-- 页面元数据 -->
   
-    <title>VIBE运行尝试 - LlHai</title>
+    <title>机器学习-3.Error Come From - LlHai</title>
+  
+    <meta name="keywords" content="“机器学习”">
   
   
-    <meta name="description" content="记录测试运行VIBE过程中遇到的问题以及测试结果">
+    <meta name="description" content="之前了解到，不同的模型(model)在测试数据(testing data)上会得到不同的error，所以本节要讨论的问题是，这个error来自什么地方">
   
 
   <!-- feed -->
@@ -343,8 +345,8 @@
         
           
   <h1 class="title">
-    <a href="/2020/03/25/VIBE%E8%BF%90%E8%A1%8C%E5%B0%9D%E8%AF%95/">
-      VIBE运行尝试
+    <a href="/2020/07/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-3-Error-Come-From/">
+      机器学习-3.Error Come From
     </a>
   </h1>
 
@@ -360,9 +362,9 @@
               
   
   <div class='new-meta-item category'>
-    <a href='/categories/CVPR2020%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/' rel="nofollow">
+    <a href='/categories/ML2020%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/' rel="nofollow">
       <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>CVPR2020开源项目</p>
+      <p>ML2020课程笔记</p>
     </a>
   </div>
 
@@ -373,7 +375,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：Mar 25, 2020</p>
+    <p>发布于：Jul 28, 2020</p>
   </a>
 </div>
 
@@ -396,29 +398,71 @@
       <section class="article typo">
         <div class="article-entry" itemprop="articleBody">
           
-          <p>VIBE 全名 Video Inference for Human Body Pose and Shape Estimation[CVPR-2020] 官方开源代码链接:<a href="https://github.com/mkocabas/VIBE" target="_blank" rel="noopener">github项目地址</a>。论文链接：<a href="https://arxiv.org/abs/1912.05656" target="_blank" rel="noopener">arXiv</a>。VIBE结合了人体姿态估计与人体形状估计，对于输入视频的每一帧，VIBE都相应地预测出SMPL人体模型的参数</p>
-<h4 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h4><ul>
-<li>ubuntu 18.04</li>
-<li>PY37</li>
+          <h4 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h4><p>之前了解到，不同的模型(model)在测试数据(testing data)上会得到不同的error, 越复杂的model，在测试集上的表现也不一定会越好。这个error通常来自于两个方面：</p>
+<ul>
+<li><strong>bias</strong> 预测值相对于真实值的<strong>偏差</strong></li>
+<li><strong>variance</strong> 模型预测值的<strong>方差</strong></li>
 </ul>
-<h4 id="运行准备"><a href="#运行准备" class="headerlink" title="运行准备"></a>运行准备</h4><p>首先尝试在win10下运行</p>
-<p>官方在github上给出了linux下的sh脚本，win下自己按照脚本内容自己配置也很简单，这里就不重复写了，我在安装pytorch时遇到了以下问题</p>
-<pre><code>ERROR: Could not find a version that satisfies the requirement torch==1.4.0</code></pre><p>具体错误原因也没必要细究，解决方法换一下安装命令即可：<br>    pip install torch===1.4.0 torchvision===0.5.0 -f <a href="https://download.pytorch.org/whl/torch_stable.html" target="_blank" rel="noopener">https://download.pytorch.org/whl/torch_stable.html</a><br>在运行完官方脚本的所有配置命令之后，输入以下命令运行：</p>
-<pre><code>python demo.py --vid_file sample_video.mp4 --output_folder output/ --display</code></pre><p>不出意外的话会遇到一万个库缺失的报错，一个一个pip安装即可，接下来俺在导入pyopengl时遇到了以下错误：</p>
-<pre><code>  File &quot;C:\Users\41656\Anaconda3\envs\pyVIBE\lib\site-packages\OpenGL\platform\egl.py&quot;, line 73, in EGL
-raise ImportError(&quot;Unable to load EGL library&quot;, *err.args)
-ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定的模块。&apos;, None, 126, None, &apos;EGL&apos;, None)</code></pre><p>查遍资料后也没解决这个问题，在github上提了issue，作者回复说可能是pyrender的问题，并表示他们没在win上运行过。</p>
-<p>到这里就结束了win上的尝试，转向Ubuntu</p>
-<h4 id="Ubuntu踩坑"><a href="#Ubuntu踩坑" class="headerlink" title="Ubuntu踩坑"></a>Ubuntu踩坑</h4><ol>
-<li><p>装 pytorch时 在跑完下载进度条就显示 进程被killed，解决方法：把虚拟机分配的内存改为8G</p>
+<p>只有了解模型error的来源，才能有针对性的优化模型，提高model的准确性</p>
+<h4 id="Bias-和-Variance的基本概念"><a href="#Bias-和-Variance的基本概念" class="headerlink" title="Bias 和 Variance的基本概念"></a>Bias 和 Variance的基本概念</h4><p>Bias反映的是模型在样本上的输出与真实值之间的误差，即模型本身的精准度<br>Variance反映的是模型每一次输出结果与模型输出期望之间的误差，即模型的稳定性</p>
+<p>我们假定$\widehat{y}$和$y^<em>$ 分别表示真值和估测值。以打靶为例，$\widehat{f}$是靶的中心点，$f^</em>$则是trained模型给出的预测值，这个$f^*$落在靶上的某个位置，它跟靶中心有一段距离，这段距离就是由Bias和variance决定的。</p>
+<center><img src="https://github.com/Llhai/img/blob/master/source/ML2020/Regression/bias-variance.png?raw=true" style="width:60%;" /></center>
+
+
+<p>可以这样理解error的来源：</p>
+<ul>
+<li>多次实验得到的$f^*$的期望$\overline{f}$与靶心$\widehat{f}$之间的偏差bias，可以形象地理解为瞄准的位置和靶心的距离的偏差</li>
+<li>多次实验的$f^*$之间的方差variance，可以形象地理解为多次打在靶上的点的集中程度</li>
+</ul>
+<h4 id="影响Bias和Variance的因素"><a href="#影响Bias和Variance的因素" class="headerlink" title="影响Bias和Variance的因素"></a>影响Bias和Variance的因素</h4><h6 id="f-的variance取决于model的复杂程度和data的数量"><a href="#f-的variance取决于model的复杂程度和data的数量" class="headerlink" title="$f^*$的variance取决于model的复杂程度和data的数量"></a>$f^*$的variance取决于model的复杂程度和data的数量</h6><p>在一定量训练数据的情况下，简单的模型通常可以获得分布稳定的$f^*$(low variance)，复杂的模型所得到的结果分布则会比较杂乱(high variance),但如果训练数据足够，那么即使非常复杂的模型也能得到比较稳定的结果分布。</p>
+<blockquote>
+<p>那为什么比较复杂的model，它的散布就比较开呢？比较简单的model，它的散布就比较密集呢？</p>
+</blockquote>
+<p>原因在于，简单模型不含有高次项的权重，或者高次项的系数非常小，这就使得model表现非常平滑，受到不同的数据影响较小。</p>
+<h6 id="f-的bias只取决于model的复杂程度"><a href="#f-的bias只取决于model的复杂程度" class="headerlink" title="$f^*$的bias只取决于model的复杂程度"></a>$f^*$的bias只取决于model的复杂程度</h6><p>bias是说，我们把所有的$f^<em>$平均起来得到$E(f^</em>)=\overline{f^<em>}$，这个$\overline{f^</em>}$与真值$\widehat{f}$有多接近。</p>
+<p>显而易见的，越简单的模型，其预测值距离真实值的偏移也就越大。</p>
+<h6 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h6><ul>
+<li>如果是一个比较简单的model，那它有比较小的variance和比较大的bias。就像下图中左下角的打靶模型，每次实验的$f^*$都比较集中，但是他们平均起来距离靶心会有一段距离</li>
+<li>如果是一个比较复杂的model，每次实验找出来的$f^<em>$都不一样，它有比较大的variance但是却有比较小的bias。就像下图中右下角的打靶模型，每次实验的$f^</em>$都比较分散，但是他们平均起来的位置与靶心比较接近</li>
+</ul>
+<center><img src="https://github.com/Llhai/img/blob/master/source/ML2020/Regression/model-bias.png?raw=true" style="width:60%;" /></center>
+
+
+<h4 id="Bias和Variance对error的影响"><a href="#Bias和Variance对error的影响" class="headerlink" title="Bias和Variance对error的影响"></a>Bias和Variance对error的影响</h4><p>下图可以直观地展示出bias和variance对error的影响，不难看出，随着模型复杂程度的逐渐增加：</p>
+<ul>
+<li>bias逐渐减小，bias所造成的error也逐渐减小</li>
+<li>variance逐渐变大，variance所造成的error也逐渐增大</li>
+<li>bias和variance所共同贡献出的error，先减小后变大，图中蓝线最低值的点即是表现最好的model<center><img src="https://github.com/Llhai/img/blob/master/source/ML2020/Regression/bias-vs-variance.png?raw=true" style="width:60%;"></center>
+
 </li>
-<li><p>tqdm报错，</p>
-<pre><code>RuntimeError:cannot join current thread</code></pre><p> 是老版本tqdm的bug，在4.31.1后就已经修复了这个bug，安装最新版tqdm即可</p>
+</ul>
+<p>通常将：</p>
+<ul>
+<li>因variance过大而导致模型error很大的情况称为过拟合overfitting</li>
+<li>因bias过大而导致模型error很大的情况称为欠拟合underfitting</li>
+</ul>
+<h4 id="如何优化你的模型"><a href="#如何优化你的模型" class="headerlink" title="如何优化你的模型"></a>如何优化你的模型</h4><h5 id="首先明确现在模型的error主要由bias引起还是variance引起"><a href="#首先明确现在模型的error主要由bias引起还是variance引起" class="headerlink" title="首先明确现在模型的error主要由bias引起还是variance引起"></a>首先明确现在模型的error主要由bias引起还是variance引起</h5><ul>
+<li>如果当前模型在训练集上的error仍较大，即模型无法fit training data的examples，代表bias比较大，这时是underfitting</li>
+<li>如果模型在训练集表现足够优秀，但是在测试集上仍有较大的error，则代表variance比较大，这时是overfitting</li>
+</ul>
+<h5 id="针对性地优化现有模型"><a href="#针对性地优化现有模型" class="headerlink" title="针对性地优化现有模型"></a>针对性地优化现有模型</h5><h6 id="如果模型的bias大"><a href="#如果模型的bias大" class="headerlink" title="如果模型的bias大"></a>如果模型的bias大</h6><p>如果模型的error主要由bias引起，则说明模型本身存在问题，所以需要对模型进行重新设计：</p>
+<ul>
+<li>增加更多的features作为model的input输入变量</li>
+<li>让model变得更复杂，增加高次项</li>
+</ul>
+<h6 id="如果模型的variance大"><a href="#如果模型的variance大" class="headerlink" title="如果模型的variance大"></a>如果模型的variance大</h6><p>对于这种情况，可以从以下两方面入手：</p>
+<ul>
+<li>增加data<ul>
+<li>增加data是一个很有效控制variance的方法，假设你variance太大的话，collect data几乎是一个万能丹一样的东西，并且它不会伤害你的bias</li>
+<li>当没有办法collect更多的data时，可以想办法在原有数据的基础上，generate更多相关的假数据</li>
+</ul>
 </li>
-<li><p>DataLoader报错：</p>
-<pre><code>RuntimeError: DataLoader worker (pid 4654) is killed by signal: Killed</code></pre><p> 观察发现在加载数据时内存耗尽了，还是虚拟机内存不够的问题，batch改小即可</p>
+<li>正则化(Regularization)<ul>
+<li>具体做法是在loss function中增加与模型高次项系数相关的项，来惩罚过高的高次项参数，进而强迫模型曲线变得平滑</li>
+<li>加了regularization以后，因为你强迫所有的曲线都要比较平滑，所以这个时候也会让你的variance变小；但regularization是可能会伤害bias的，因为它实际上调整了function set的space范围，变成它只包含那些比较平滑的曲线，这个缩小的space可能没有包含原先在更大space内的$\widehat{f}$，因此伤害了bias，所以当你做regularization的时候，需要调整regularization的weight，在variance和bias之间取得平衡</li>
+</ul>
 </li>
-</ol>
+</ul>
 
           
             <div class='article_footer'>
@@ -455,7 +499,7 @@ ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定�
           
         
           
-            <p>本文永久链接是：<a href=http://yoursite.com/2020/03/25/VIBE%E8%BF%90%E8%A1%8C%E5%B0%9D%E8%AF%95/>http://yoursite.com/2020/03/25/VIBE%E8%BF%90%E8%A1%8C%E5%B0%9D%E8%AF%95/</a></p>
+            <p>本文永久链接是：<a href=http://yoursite.com/2020/07/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-3-Error-Come-From/>http://yoursite.com/2020/07/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-3-Error-Come-From/</a></p>
           
         
       </blockquote>
@@ -506,10 +550,10 @@ ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定�
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-05-27T15:58:19+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-07-28T21:22:27+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：May 27, 2020</p>
+    <p>更新于：Jul 28, 2020</p>
   </a>
 </div>
 
@@ -517,6 +561,9 @@ ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定�
       
         
           
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E2%80%9C%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E2%80%9D/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>“机器学习”</p></a></div>
+
 
         
       
@@ -533,7 +580,7 @@ ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定�
       
         <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer"
           
-          href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2020/03/25/VIBE%E8%BF%90%E8%A1%8C%E5%B0%9D%E8%AF%95/&title=VIBE运行尝试 - LlHai&summary="
+          href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2020/07/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-3-Error-Come-From/&title=机器学习-3.Error Come From - LlHai&summary="
           
           >
           
@@ -545,7 +592,7 @@ ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定�
       
         <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer"
           
-          href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://yoursite.com/2020/03/25/VIBE%E8%BF%90%E8%A1%8C%E5%B0%9D%E8%AF%95/&title=VIBE运行尝试 - LlHai&summary="
+          href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://yoursite.com/2020/07/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-3-Error-Come-From/&title=机器学习-3.Error Come From - LlHai&summary="
           
           >
           
@@ -557,7 +604,7 @@ ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定�
       
         <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer"
           
-          href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2020/03/25/VIBE%E8%BF%90%E8%A1%8C%E5%B0%9D%E8%AF%95/&title=VIBE运行尝试 - LlHai&summary="
+          href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2020/07/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-3-Error-Come-From/&title=机器学习-3.Error Come From - LlHai&summary="
           
           >
           
@@ -581,17 +628,10 @@ ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定�
         
           <div class="prev-next">
             
-              <a class='prev' href='/2020/05/25/tensorflow%E5%AD%A6%E4%B9%A0-01/'>
-                <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Tensorflow学习-01</p>
-                <p class='content'>tf.variable与tf.tensor
-variable用于存储网络模型中的权重参数，tensor用于存储中间结果数据。
-variable是可更改的，具有assign函数，tensor则是不...</p>
-              </a>
             
-            
-              <a class='next' href='/2020/03/25/Unity-Tensorflow%E5%B0%9D%E8%AF%95/'>
-                <p class='title'>Tensorflow Unity尝试<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
-                <p class='content'>环境配置在Unity上使用Tensorflow需要借助ML-Agents，Unity Machine Learning Agents (ML-Agents) 是一款开源的 Unity 插件， 使...</p>
+              <a class='next' href='/2020/07/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-2-Regression/'>
+                <p class='title'>机器学习-2.Regression<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+                <p class='content'></p>
               </a>
             
           </div>
@@ -636,7 +676,7 @@ variable是可更改的，具有assign函数，tensor则是不...</p>
 
   <script>
     window.subData = {
-      title: 'VIBE运行尝试',
+      title: '机器学习-3.Error Come From',
       tools: true
     }
   </script>
@@ -662,7 +702,7 @@ variable是可更改的，具有assign函数，tensor则是不...</p>
 
 
     <div class='content'>
-      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#运行环境"><span class="toc-text">运行环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#运行准备"><span class="toc-text">运行准备</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Ubuntu踩坑"><span class="toc-text">Ubuntu踩坑</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#引入"><span class="toc-text">引入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Bias-和-Variance的基本概念"><span class="toc-text">Bias 和 Variance的基本概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#影响Bias和Variance的因素"><span class="toc-text">影响Bias和Variance的因素</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Bias和Variance对error的影响"><span class="toc-text">Bias和Variance对error的影响</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#如何优化你的模型"><span class="toc-text">如何优化你的模型</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#首先明确现在模型的error主要由bias引起还是variance引起"><span class="toc-text">首先明确现在模型的error主要由bias引起还是variance引起</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#针对性地优化现有模型"><span class="toc-text">针对性地优化现有模型</span></a></li></ol></li></ol>
     </div>
   </section>
 
