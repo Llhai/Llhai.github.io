@@ -426,10 +426,21 @@
 <p>而极大似然函数$L(u,\Sigma)=f_{u,\Sigma}(x^1)\cdot f_{u,\Sigma}(x^2)…f_{u,\Sigma}(x^{79})$，实际上就是该事件发生的概率就等于每个点都发生的概率之积，我们只需要把每一个点的data代进去，就可以得到一个关于$u$和$\Sigma$的函数，分别求偏导，解出微分是0的点，即使L最大的那组参数，便是最终的估测值，通过微分得到的高斯函数的$u$和$\Sigma$的最优解如下：<br>$$<br>u^<em>,\Sigma^</em>=\arg \max\limits_{u,\Sigma} L(u,\Sigma) \<br>u^<em>=\frac{1}{79}\sum\limits_{n=1}^{79}x^n \ \ \ \ \Sigma^</em>=\frac{1}{79}\sum\limits_{n=1}^{79}(x^n-u^<em>)(x^n-u^</em>)^T<br>$$</p>
 <p>注：数学期望：$u=E(X)$，协方差：$\Sigma=cov(X,Y)=E[(X-u)(Y-u)^T]$，对同一个变量来说，协方差为$cov(X,X)=E[(X-u)(X-u)^T$</p>
 <p>根据上述公式和79个点的数据，我们就能得出class1和class2的的高斯分布，然后将海龟的特征带入，即可获得最终的$P(x|C_1),P(x|C_2)$结果。</p>
-<h4 id="开始分类"><a href="#开始分类" class="headerlink" title="开始分类"></a>开始分类</h4><p>至此，我们已经得到了分类所需的所有数据：</p>
+<h6 id="开始分类"><a href="#开始分类" class="headerlink" title="开始分类"></a>开始分类</h6><p>至此，我们已经得到了分类所需的所有数据：</p>
 <center><img src="https://github.com/Llhai/img/blob/master/source/ML2020/Classification/do-classification.png" width="60%;" /></center>
 
-<p>只要带入某一个input x，计算出后验概率Posterior，因此令几率&gt;0.5的点为类别1，几率&lt;0.5的点为类别2。</p>
+<p>计算出P(C_1|x)的值，如果该值的概率大于1，则说明该宝可梦属性为Class1。</p>
+<h4 id="分类的三个步骤"><a href="#分类的三个步骤" class="headerlink" title="分类的三个步骤"></a>分类的三个步骤</h4><ul>
+<li><p>寻找一个合适的模型(Function Set)</p>
+<center><img src="https://github.com/Llhai/img/blob/master/source/ML2020/Classification/do-class.png" width="60%;" /></center>
+这些Prior Probability 和 Probability Distribution 就是Model的参数，选择不同的分布函数，就会得到不同的Function。将这些不同分布函数组合起来，就是一个新的model。
+</li>
+<li><p>定义Function的好坏(Goodness of function)</p>
+<p>对于Gaussian distribution这个model来说，我们要评价的是决定这个高斯函数形状的均值$u$和协方差$\Sigma$这两个参数的好坏，而极大似然函数$L(u,\Sigma)$的输出值，就评价了这组参数的好坏</p>
+</li>
+<li><p>Find the best function<br>找到的那个最好的function，就是使极大似然函数值最大的那组参数，实际上就是所有样本点的均值和协方差</p>
+</li>
+</ul>
 
           
             <div class='article_footer'>
@@ -517,10 +528,10 @@
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-07-30T21:03:44+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-07-31T16:47:41+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：Jul 30, 2020</p>
+    <p>更新于：Jul 31, 2020</p>
   </a>
 </div>
 
@@ -670,7 +681,7 @@
 
 
     <div class='content'>
-      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#Classification"><span class="toc-text">Classification</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#概念"><span class="toc-text">概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#问题引入"><span class="toc-text">问题引入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#开始分类"><span class="toc-text">开始分类</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#Classification"><span class="toc-text">Classification</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#概念"><span class="toc-text">概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#问题引入"><span class="toc-text">问题引入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分类的三个步骤"><span class="toc-text">分类的三个步骤</span></a></li></ol>
     </div>
   </section>
 
@@ -733,16 +744,16 @@
       
     
       
-        <div><p>博客内容遵循 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+        <div><p>Blog content follows the <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener">Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License</a></p>
 </div>
       
     
       
-        本站使用
+        Use
         <a href="https://volantis.js.org/" target="_blank" class="codename">Volantis</a>
-        作为主题，总访问量为
+        as theme, total visits
           <span id="busuanzi_value_site_pv"><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
-          次
+          times
         
       
     
