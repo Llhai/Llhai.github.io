@@ -396,14 +396,14 @@
       <section class="article typo">
         <div class="article-entry" itemprop="articleBody">
           
-          <p>VIBE 全名 Video Inference for Human Body Pose and Shape Estimation[CVPR-2020] 官方开源代码链接:<a href="https://github.com/mkocabas/VIBE" target="_blank" rel="noopener">github项目地址</a>。论文链接：<a href="https://arxiv.org/abs/1912.05656" target="_blank" rel="noopener">arXiv</a>。VIBE结合了人体姿态估计与人体形状估计，对于输入视频的每一帧，VIBE都相应地预测出SMPL人体模型的参数</p>
+          <p>VIBE 全名 Video Inference for Human Body Pose and Shape Estimation[CVPR-2020] 官方开源代码链接:<a target="_blank" rel="noopener" href="https://github.com/mkocabas/VIBE">github项目地址</a>。论文链接：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1912.05656">arXiv</a>。VIBE结合了人体姿态估计与人体形状估计，对于输入视频的每一帧，VIBE都相应地预测出SMPL人体模型的参数</p>
 <h4 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h4><ul>
 <li>ubuntu 18.04</li>
 <li>PY37</li>
 </ul>
 <h4 id="运行准备"><a href="#运行准备" class="headerlink" title="运行准备"></a>运行准备</h4><p>首先尝试在win10下运行</p>
 <p>官方在github上给出了linux下的sh脚本，win下自己按照脚本内容自己配置也很简单，这里就不重复写了，我在安装pytorch时遇到了以下问题</p>
-<pre><code>ERROR: Could not find a version that satisfies the requirement torch==1.4.0</code></pre><p>具体错误原因也没必要细究，解决方法换一下安装命令即可：<br>    pip install torch===1.4.0 torchvision===0.5.0 -f <a href="https://download.pytorch.org/whl/torch_stable.html" target="_blank" rel="noopener">https://download.pytorch.org/whl/torch_stable.html</a><br>在运行完官方脚本的所有配置命令之后，输入以下命令运行：</p>
+<pre><code>ERROR: Could not find a version that satisfies the requirement torch==1.4.0</code></pre><p>具体错误原因也没必要细究，解决方法换一下安装命令即可：<br>    pip install torch===1.4.0 torchvision===0.5.0 -f <a target="_blank" rel="noopener" href="https://download.pytorch.org/whl/torch_stable.html">https://download.pytorch.org/whl/torch_stable.html</a><br>在运行完官方脚本的所有配置命令之后，输入以下命令运行：</p>
 <pre><code>python demo.py --vid_file sample_video.mp4 --output_folder output/ --display</code></pre><p>不出意外的话会遇到一万个库缺失的报错，一个一个pip安装即可，接下来俺在导入pyopengl时遇到了以下错误：</p>
 <pre><code>  File &quot;C:\Users\41656\Anaconda3\envs\pyVIBE\lib\site-packages\OpenGL\platform\egl.py&quot;, line 73, in EGL
 raise ImportError(&quot;Unable to load EGL library&quot;, *err.args)
@@ -531,9 +531,9 @@ ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定�
   <div class="-mob-share-list share-body">
     
       
-        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer"
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
           
-          href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2020/03/25/VIBE%E8%BF%90%E8%A1%8C%E5%B0%9D%E8%AF%95/&title=VIBE运行尝试 - LlHai&summary="
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2020/03/25/VIBE%E8%BF%90%E8%A1%8C%E5%B0%9D%E8%AF%95/&title=VIBE运行尝试 - LlHai&summary="
           
           >
           
@@ -543,9 +543,9 @@ ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定�
       
     
       
-        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer"
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
           
-          href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://yoursite.com/2020/03/25/VIBE%E8%BF%90%E8%A1%8C%E5%B0%9D%E8%AF%95/&title=VIBE运行尝试 - LlHai&summary="
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://yoursite.com/2020/03/25/VIBE%E8%BF%90%E8%A1%8C%E5%B0%9D%E8%AF%95/&title=VIBE运行尝试 - LlHai&summary="
           
           >
           
@@ -555,9 +555,9 @@ ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定�
       
     
       
-        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer"
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
           
-          href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2020/03/25/VIBE%E8%BF%90%E8%A1%8C%E5%B0%9D%E8%AF%95/&title=VIBE运行尝试 - LlHai&summary="
+          target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2020/03/25/VIBE%E8%BF%90%E8%A1%8C%E5%B0%9D%E8%AF%95/&title=VIBE运行尝试 - LlHai&summary="
           
           >
           
@@ -581,17 +581,22 @@ ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定�
         
           <div class="prev-next">
             
-              <a class='prev' href='/2020/05/25/tensorflow%E5%AD%A6%E4%B9%A0-01/'>
-                <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Tensorflow学习-01</p>
-                <p class='content'>tf.variable与tf.tensor
-variable用于存储网络模型中的权重参数，tensor用于存储中间结果数据。
-variable是可更改的，具有assign函数，tensor则是不...</p>
+              <a class='prev' href='/2020/03/25/Unity-Tensorflow%E5%B0%9D%E8%AF%95/'>
+                <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Tensorflow Unity尝试</p>
+                <p class='content'>环境配置在Unity上使用Tensorflow需要借助ML-Agents，Unity Machine Learning Agents (ML-Agents) 是一款开源的 Unity 插件， 使...</p>
               </a>
             
             
-              <a class='next' href='/2020/03/25/Unity-Tensorflow%E5%B0%9D%E8%AF%95/'>
-                <p class='title'>Tensorflow Unity尝试<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
-                <p class='content'>环境配置在Unity上使用Tensorflow需要借助ML-Agents，Unity Machine Learning Agents (ML-Agents) 是一款开源的 Unity 插件， 使...</p>
+              <a class='next' href='/2020/03/25/opencvForUnityDnn/'>
+                <p class='title'>OpenCVForUnity笔记2-加载TF模型<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+                <p class='content'>涉及以下函数
+Dnn.readNetFromTensorflow()
+Dnn.blobFromImage()
+net.setInput()
+net.forward()
+
+几个关键点
+Dnn.bl...</p>
               </a>
             
           </div>
@@ -662,7 +667,7 @@ variable是可更改的，具有assign函数，tensor则是不...</p>
 
 
     <div class='content'>
-      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#运行环境"><span class="toc-text">运行环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#运行准备"><span class="toc-text">运行准备</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Ubuntu踩坑"><span class="toc-text">Ubuntu踩坑</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83"><span class="toc-text">运行环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E5%87%86%E5%A4%87"><span class="toc-text">运行准备</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Ubuntu%E8%B8%A9%E5%9D%91"><span class="toc-text">Ubuntu踩坑</span></a></li></ol>
     </div>
   </section>
 
@@ -725,22 +730,22 @@ variable是可更改的，具有assign函数，tensor则是不...</p>
       
     
       
-        <div><p>Blog content follows the <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener">Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License</a></p>
+        <div><p>博客內容遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh_TW">姓名標示-非商業性-相同方式分享 4.0 國際 (CC BY-NC-SA 4.0) 協議</a></p>
 </div>
       
     
       
-        Use
+        本站使用
         <a href="https://volantis.js.org/" target="_blank" class="codename">Volantis</a>
-        as theme, total visits
+        作為主題，總訪問量為
           <span id="busuanzi_value_site_pv"><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
-          times
+          次
         
       
     
       
         <div class='copyright'>
-        <p><a href="https://xaoxuu.com" target="_blank" rel="noopener">Copyright © 2017-2020 Mr. X</a></p>
+        <p><a target="_blank" rel="noopener" href="https://xaoxuu.com">Copyright © 2017-2020 Mr. X</a></p>
 
         </div>
       

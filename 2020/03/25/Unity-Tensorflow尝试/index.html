@@ -400,14 +400,14 @@
 <ol>
 <li>Anaconda Tensorflow配置就不写了，本着不给自己找事的原则，使用Py36，tf-1.13.1</li>
 <li>安装 mlagents环境工具，<code>pip install mlagents</code></li>
-<li>获取ml-agents，在 <a href="https://github.com/Unity-Technologies/ml-agents" target="_blank" rel="noopener">ml-agents仓库</a>页面直接download所有内容即可。</li>
+<li>获取ml-agents，在 <a target="_blank" rel="noopener" href="https://github.com/Unity-Technologies/ml-agents">ml-agents仓库</a>页面直接download所有内容即可。</li>
 <li>进入 解压出的ml-agents目录，安装项目所需文件，有报错基本是依赖版本不符合，卸载原有版本，安装要求版本即可。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd ml-agents-envs</span><br><span class="line">pip install -e .&#x2F;</span><br><span class="line">cd …</span><br><span class="line">cd ml-agents</span><br><span class="line">pip install -e .&#x2F;</span><br></pre></td></tr></table></figure></li>
 <li>将ml-agents/project/Assets目录下内容拖到Unity中，我在这步时报错了，然后按照官方文档的方法，<code>Select Add package from disk... and navigate into the com.unity.ml-agents folder and select the package.json folder.</code> 然后就可以了</li>
 <li>导入TensorFlowSharp包，这是tensorflowsharp的unity专用包 。该包包含一个tensorflow环境，使你不必依赖系统环境。可以直接跨平台打包。</li>
 <li>后续还有一些诸如在Edit→Player→otherSetting→DefineSymbols中加入 ENABLE_TENSORFLOW等等玄学操作，我也不知道需不需要</li>
 </ol>
 <h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><p>如果你觉得你已经配置好了，可以运行以下代码，输出正常说明配置成功了</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">using System.Collections;</span><br><span class="line">using System.Collections.Generic;</span><br><span class="line">using UnityEngine;</span><br><span class="line">using TensorFlow;</span><br><span class="line"></span><br><span class="line">public class tensorflowTest : MonoBehaviour</span><br><span class="line">&#123;</span><br><span class="line">    &#x2F;&#x2F; Start is called before the first frame update</span><br><span class="line">    void Start()</span><br><span class="line">    &#123;</span><br><span class="line">        TFSession session &#x3D; new TFSession();</span><br><span class="line">        TFGraph graph &#x3D; session.Graph;</span><br><span class="line">        var a &#x3D; graph.Const(2);</span><br><span class="line">        var b &#x3D; graph.Const(3);</span><br><span class="line"></span><br><span class="line">        var addRes &#x3D; session.GetRunner().Run(graph.Add(a, b));</span><br><span class="line">        var res &#x3D; addRes.GetValue();</span><br><span class="line">        Debug.Log(res);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">using System.Collections;</span><br><span class="line">using System.Collections.Generic;</span><br><span class="line">using UnityEngine;</span><br><span class="line">using TensorFlow;</span><br><span class="line"></span><br><span class="line">public class tensorflowTest : MonoBehaviour</span><br><span class="line">&#123;</span><br><span class="line">    &#x2F;&#x2F; Start is called before the first frame update</span><br><span class="line">    void Start()</span><br><span class="line">    &#123;</span><br><span class="line">        TFSession session &#x3D; new TFSession();</span><br><span class="line">        TFGraph graph &#x3D; session.Graph;</span><br><span class="line">        var a &#x3D; graph.Const(2);</span><br><span class="line">        var b &#x3D; graph.Const(3);</span><br><span class="line"></span><br><span class="line">        var addRes &#x3D; session.GetRunner().Run(graph.Add(a, b));</span><br><span class="line">        var res &#x3D; addRes.GetValue();</span><br><span class="line">        Debug.Log(res);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
           
             <div class='article_footer'>
               
@@ -519,9 +519,9 @@
   <div class="-mob-share-list share-body">
     
       
-        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer"
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
           
-          href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2020/03/25/Unity-Tensorflow%E5%B0%9D%E8%AF%95/&title=Tensorflow Unity尝试 - LlHai&summary="
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2020/03/25/Unity-Tensorflow%E5%B0%9D%E8%AF%95/&title=Tensorflow Unity尝试 - LlHai&summary="
           
           >
           
@@ -531,9 +531,9 @@
       
     
       
-        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer"
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
           
-          href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://yoursite.com/2020/03/25/Unity-Tensorflow%E5%B0%9D%E8%AF%95/&title=Tensorflow Unity尝试 - LlHai&summary="
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://yoursite.com/2020/03/25/Unity-Tensorflow%E5%B0%9D%E8%AF%95/&title=Tensorflow Unity尝试 - LlHai&summary="
           
           >
           
@@ -543,9 +543,9 @@
       
     
       
-        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer"
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
           
-          href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2020/03/25/Unity-Tensorflow%E5%B0%9D%E8%AF%95/&title=Tensorflow Unity尝试 - LlHai&summary="
+          target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2020/03/25/Unity-Tensorflow%E5%B0%9D%E8%AF%95/&title=Tensorflow Unity尝试 - LlHai&summary="
           
           >
           
@@ -569,22 +569,17 @@
         
           <div class="prev-next">
             
-              <a class='prev' href='/2020/03/25/VIBE%E8%BF%90%E8%A1%8C%E5%B0%9D%E8%AF%95/'>
-                <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>VIBE运行尝试</p>
-                <p class='content'>VIBE 全名 Video Inference for Human Body Pose and Shape Estimation[CVPR-2020] 官方开源代码链接:github项目地址。论...</p>
+              <a class='prev' href='/2020/05/25/tensorflow%E5%AD%A6%E4%B9%A0-01/'>
+                <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Tensorflow学习-01</p>
+                <p class='content'>tf.variable与tf.tensor
+variable用于存储网络模型中的权重参数，tensor用于存储中间结果数据。
+variable是可更改的，具有assign函数，tensor则是不...</p>
               </a>
             
             
-              <a class='next' href='/2020/03/25/opencvForUnityDnn/'>
-                <p class='title'>OpenCVForUnity笔记2-加载TF模型<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
-                <p class='content'>涉及以下函数
-Dnn.readNetFromTensorflow()
-Dnn.blobFromImage()
-net.setInput()
-net.forward()
-
-几个关键点
-Dnn.bl...</p>
+              <a class='next' href='/2020/03/25/VIBE%E8%BF%90%E8%A1%8C%E5%B0%9D%E8%AF%95/'>
+                <p class='title'>VIBE运行尝试<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+                <p class='content'>VIBE 全名 Video Inference for Human Body Pose and Shape Estimation[CVPR-2020] 官方开源代码链接:github项目地址。论...</p>
               </a>
             
           </div>
@@ -655,7 +650,7 @@ Dnn.bl...</p>
 
 
     <div class='content'>
-      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#环境配置"><span class="toc-text">环境配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#测试"><span class="toc-text">测试</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-text">环境配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95"><span class="toc-text">测试</span></a></li></ol>
     </div>
   </section>
 
@@ -718,22 +713,22 @@ Dnn.bl...</p>
       
     
       
-        <div><p>Blog content follows the <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener">Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License</a></p>
+        <div><p>博客內容遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh_TW">姓名標示-非商業性-相同方式分享 4.0 國際 (CC BY-NC-SA 4.0) 協議</a></p>
 </div>
       
     
       
-        Use
+        本站使用
         <a href="https://volantis.js.org/" target="_blank" class="codename">Volantis</a>
-        as theme, total visits
+        作為主題，總訪問量為
           <span id="busuanzi_value_site_pv"><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
-          times
+          次
         
       
     
       
         <div class='copyright'>
-        <p><a href="https://xaoxuu.com" target="_blank" rel="noopener">Copyright © 2017-2020 Mr. X</a></p>
+        <p><a target="_blank" rel="noopener" href="https://xaoxuu.com">Copyright © 2017-2020 Mr. X</a></p>
 
         </div>
       
