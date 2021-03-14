@@ -396,27 +396,27 @@
       <section class="article typo">
         <div class="article-entry" itemprop="articleBody">
           
-          <p>VIBE 全名 Video Inference for Human Body Pose and Shape Estimation[CVPR-2020] 官方开源代码链接:<a target="_blank" rel="noopener" href="https://github.com/mkocabas/VIBE">github项目地址</a>。论文链接：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1912.05656">arXiv</a>。VIBE结合了人体姿态估计与人体形状估计，对于输入视频的每一帧，VIBE都相应地预测出SMPL人体模型的参数</p>
+          <p>VIBE 全名 Video Inference for Human Body Pose and Shape Estimation[CVPR-2020] 官方开源代码链接:<a target="_blank" rel="noopener" href="https://github.com/mkocabas/VIBE">github 项目地址</a>。论文链接：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1912.05656">arXiv</a>。VIBE 结合了人体姿态估计与人体形状估计，对于输入视频的每一帧，VIBE 都相应地预测出 SMPL 人体模型的参数</p>
 <h4 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h4><ul>
 <li>ubuntu 18.04</li>
 <li>PY37</li>
 </ul>
-<h4 id="运行准备"><a href="#运行准备" class="headerlink" title="运行准备"></a>运行准备</h4><p>首先尝试在win10下运行</p>
-<p>官方在github上给出了linux下的sh脚本，win下自己按照脚本内容自己配置也很简单，这里就不重复写了，我在安装pytorch时遇到了以下问题</p>
-<pre><code>ERROR: Could not find a version that satisfies the requirement torch==1.4.0</code></pre><p>具体错误原因也没必要细究，解决方法换一下安装命令即可：<br>    pip install torch===1.4.0 torchvision===0.5.0 -f <a target="_blank" rel="noopener" href="https://download.pytorch.org/whl/torch_stable.html">https://download.pytorch.org/whl/torch_stable.html</a><br>在运行完官方脚本的所有配置命令之后，输入以下命令运行：</p>
-<pre><code>python demo.py --vid_file sample_video.mp4 --output_folder output/ --display</code></pre><p>不出意外的话会遇到一万个库缺失的报错，一个一个pip安装即可，接下来俺在导入pyopengl时遇到了以下错误：</p>
+<h4 id="运行准备"><a href="#运行准备" class="headerlink" title="运行准备"></a>运行准备</h4><p>首先尝试在 win10 下运行</p>
+<p>官方在 github 上给出了 linux 下的 sh 脚本，win 下自己按照脚本内容自己配置也很简单，这里就不重复写了，我在安装 pytorch 时遇到了以下问题</p>
+<pre><code>ERROR: Could not find a version that satisfies the requirement torch==1.4.0</code></pre><p>具体错误原因也没必要细究，解决方法换一下安装命令即可：<br>pip install torch===1.4.0 torchvision===0.5.0 -f <a target="_blank" rel="noopener" href="https://download.pytorch.org/whl/torch_stable.html">https://download.pytorch.org/whl/torch_stable.html</a><br>在运行完官方脚本的所有配置命令之后，输入以下命令运行：</p>
+<pre><code>python demo.py --vid_file sample_video.mp4 --output_folder output/ --display</code></pre><p>不出意外的话会遇到一万个库缺失的报错，一个一个 pip 安装即可，接下来俺在导入 pyopengl 时遇到了以下错误：</p>
 <pre><code>  File &quot;C:\Users\41656\Anaconda3\envs\pyVIBE\lib\site-packages\OpenGL\platform\egl.py&quot;, line 73, in EGL
 raise ImportError(&quot;Unable to load EGL library&quot;, *err.args)
-ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定的模块。&apos;, None, 126, None, &apos;EGL&apos;, None)</code></pre><p>查遍资料后也没解决这个问题，在github上提了issue，作者回复说可能是pyrender的问题，并表示他们没在win上运行过。</p>
-<p>到这里就结束了win上的尝试，转向Ubuntu</p>
-<h4 id="Ubuntu踩坑"><a href="#Ubuntu踩坑" class="headerlink" title="Ubuntu踩坑"></a>Ubuntu踩坑</h4><ol>
-<li><p>装 pytorch时 在跑完下载进度条就显示 进程被killed，解决方法：把虚拟机分配的内存改为8G</p>
+ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定的模块。&apos;, None, 126, None, &apos;EGL&apos;, None)</code></pre><p>查遍资料后也没解决这个问题，在 github 上提了 issue，作者回复说可能是 pyrender 的问题，并表示他们没在 win 上运行过。</p>
+<p>到这里就结束了 win 上的尝试，转向 Ubuntu</p>
+<h4 id="Ubuntu-踩坑"><a href="#Ubuntu-踩坑" class="headerlink" title="Ubuntu 踩坑"></a>Ubuntu 踩坑</h4><ol>
+<li><p>装 pytorch 时 在跑完下载进度条就显示 进程被 killed，解决方法：把虚拟机分配的内存改为 8G</p>
 </li>
-<li><p>tqdm报错，</p>
-<pre><code>RuntimeError:cannot join current thread</code></pre><p> 是老版本tqdm的bug，在4.31.1后就已经修复了这个bug，安装最新版tqdm即可</p>
+<li><p>tqdm 报错，</p>
+<pre><code>RuntimeError:cannot join current thread</code></pre><p>是老版本 tqdm 的 bug，在 4.31.1 后就已经修复了这个 bug，安装最新版 tqdm 即可</p>
 </li>
-<li><p>DataLoader报错：</p>
-<pre><code>RuntimeError: DataLoader worker (pid 4654) is killed by signal: Killed</code></pre><p> 观察发现在加载数据时内存耗尽了，还是虚拟机内存不够的问题，batch改小即可</p>
+<li><p>DataLoader 报错：</p>
+<pre><code>RuntimeError: DataLoader worker (pid 4654) is killed by signal: Killed</code></pre><p>观察发现在加载数据时内存耗尽了，还是虚拟机内存不够的问题，batch 改小即可</p>
 </li>
 </ol>
 
@@ -506,10 +506,10 @@ ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定�
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-05-27T15:58:19+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-03-14T16:13:17+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：May 27, 2020</p>
+    <p>更新于：Mar 14, 2021</p>
   </a>
 </div>
 
@@ -667,7 +667,7 @@ Dnn.bl...</p>
 
 
     <div class='content'>
-      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83"><span class="toc-text">运行环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E5%87%86%E5%A4%87"><span class="toc-text">运行准备</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Ubuntu%E8%B8%A9%E5%9D%91"><span class="toc-text">Ubuntu踩坑</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83"><span class="toc-text">运行环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E5%87%86%E5%A4%87"><span class="toc-text">运行准备</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Ubuntu-%E8%B8%A9%E5%9D%91"><span class="toc-text">Ubuntu 踩坑</span></a></li></ol>
     </div>
   </section>
 
@@ -730,16 +730,16 @@ Dnn.bl...</p>
       
     
       
-        <div><p>Blog content follows the <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en">Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License</a></p>
+        <div><p>博客内容遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
 </div>
       
     
       
-        Use
+        本站使用
         <a href="https://volantis.js.org/" target="_blank" class="codename">Volantis</a>
-        as theme, total visits
+        作为主题，总访问量为
           <span id="busuanzi_value_site_pv"><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
-          times
+          次
         
       
     

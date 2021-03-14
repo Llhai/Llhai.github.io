@@ -402,43 +402,44 @@
 <h6 id="分类问题和回归问题的区别在于："><a href="#分类问题和回归问题的区别在于：" class="headerlink" title="分类问题和回归问题的区别在于："></a>分类问题和回归问题的区别在于：</h6><p>分类模型的输出为几个离散的点，而回归模型的输出则是连续的数值。</p>
 <p>这也是我们不能用回归的方法来解决分类问题的原因，我们很难找到一个回归函数，使得这个函数所有样本点的输出都集中在几个离散的点附近。</p>
 <h4 id="问题引入"><a href="#问题引入" class="headerlink" title="问题引入"></a>问题引入</h4><p>以宝可梦属性分类问题为例，实现一个宝可梦属性分类器，输入一个宝可梦的全部特征(生命值、攻击力、防御力等等)，分类器可以给出这只宝可梦的属性(火系、水系)</p>
-<h6 id="问题抽象"><a href="#问题抽象" class="headerlink" title="问题抽象"></a>问题抽象</h6><p>将问题抽象简化为以一个二分类问题，对于给定的input x,想要找出这个x属于class 1或class 2的概率。</p>
-<p>实际上就是一个贝叶斯公式，x属于class 1的概率就等于class 1自身发生的概率乘上在class 1里取出x这种颜色的球的概率除以在class 1和 class 2里取出x这种颜色的球的概率，具体如下图：</p>
-<center><img src="https://github.com/Llhai/img/blob/master/source/ML2020/Classification/two-class.png" width="60%;" /></center>
+<h6 id="问题抽象"><a href="#问题抽象" class="headerlink" title="问题抽象"></a>问题抽象</h6><p>将问题抽象简化为以一个二分类问题，对于给定的 input x,想要找出这个 x 属于 class 1 或 class 2 的概率。</p>
+<p>实际上就是一个贝叶斯公式，x 属于 class 1 的概率就等于 class 1 自身发生的概率乘上在 class 1 里取出 x 这种颜色的球的概率除以在 class 1 和 class 2 里取出 x 这种颜色的球的概率，具体如下图：</p>
+<center><img src="https://cdn.jsdelivr.net/gh/Llhai/img/source/ML2020/Classification/two-class.png" width="60%;" /></center>
 
-<p>所以我们想要知道x属于class 1或是class 2的概率，只需要知道4个值：$P(C_1),P(x|C_1),P(C_2),P(x|C_2)$，我们希望从Training data中估测出这四个值。</p>
+<p>所以我们想要知道 x 属于 class 1 或是 class 2 的概率，只需要知道 4 个值：$P(C_1),P(x|C_1),P(C_2),P(x|C_2)$，我们希望从 Training data 中估测出这四个值。</p>
 <h6 id="Prior"><a href="#Prior" class="headerlink" title="Prior"></a>Prior</h6><p>Prior 先验概率，是指根据以往经验和分析得到的概率。在这个问题中，$P(C_1)$和$P(C_2)$这两个概率就是先验概率，它的计算相对简单：</p>
-<p>在Training data里面，有79只水系宝可梦，61只一般系宝可梦，那么$P(C_1)=79/(79+61)=0.56$，$P(C_2)=61/(79+61)=0.44$</p>
+<p>在 Training data 里面，有 79 只水系宝可梦，61 只一般系宝可梦，那么$P(C_1)=79/(79+61)=0.56$，$P(C_2)=61/(79+61)=0.44$</p>
 <h6 id="Likelihood"><a href="#Likelihood" class="headerlink" title="Likelihood"></a>Likelihood</h6><p>Likelihood 似然，可以理解为某件事发生的概率，即这个问题中的$P(x|C_1)$和$P(x|C_2)$。</p>
-<p>因为我们新物种海龟X在训练数据集中没有出现过，所以无法直接计算出这两个似然概率，所以我们需要使用已有的数据来估测海龟出现的可能性。</p>
-<p>其实每一只宝可梦都是用一组特征值组成的向量来表示的，在这个vector里一共有七种不同的feature，为了方便可视化，这里先只考虑Defense和SP Defence这两种feature。</p>
-<p>可以想象说这已有的79只水系宝可梦的data其实只是冰山一角，假定水系神奇宝贝的Defense和SP Defense是从一个高斯分布里面sample出来的，因此我们只要能使用已有数据集找出这个高斯分布函数，再将海龟的特征输入到分布函数中，就能得到海龟的似然概率了。</p>
-<center><img src="https://github.com/Llhai/img/blob/master/source/ML2020/Classification/feature.png" width="60%;" /></center>
+<p>因为我们新物种海龟 X 在训练数据集中没有出现过，所以无法直接计算出这两个似然概率，所以我们需要使用已有的数据来估测海龟出现的可能性。</p>
+<p>其实每一只宝可梦都是用一组特征值组成的向量来表示的，在这个 vector 里一共有七种不同的 feature，为了方便可视化，这里先只考虑 Defense 和 SP Defence 这两种 feature。</p>
+<p>可以想象说这已有的 79 只水系宝可梦的 data 其实只是冰山一角，假定水系神奇宝贝的 Defense 和 SP Defense 是从一个高斯分布里面 sample 出来的，因此我们只要能使用已有数据集找出这个高斯分布函数，再将海龟的特征输入到分布函数中，就能得到海龟的似然概率了。</p>
+<center><img src="https://cdn.jsdelivr.net/gh/Llhai/img/source/ML2020/Classification/feature.png" width="60%;" /></center>
 
 <h6 id="Gaussian-Distribution"><a href="#Gaussian-Distribution" class="headerlink" title="Gaussian Distribution"></a>Gaussian Distribution</h6><p>(概率论复习时间到~)高斯分布的概率密度函数如下，</p>
-<center><img src="https://github.com/Llhai/img/blob/master/source/ML2020/Classification/gass.jpg"/></center>
+<center><img src="https://cdn.jsdelivr.net/gh/Llhai/img/source/ML2020/Classification/gass.jpg"/></center>
 
-<p>从公式可以看出，高斯分布包含两个变量，分别是均值$u$，协方差$\Sigma$，两者都是矩阵matrix，所以只需要去估测出这个Gaussian的均值$u$和协方差$\Sigma$即可。</p>
+<p>从公式可以看出，高斯分布包含两个变量，分别是均值$u$，协方差$\Sigma$，两者都是矩阵 matrix，所以只需要去估测出这个 Gaussian 的均值$u$和协方差$\Sigma$即可。</p>
 <p>估测$u$和$\Sigma$的方法就是极大似然估计法(Maximum Likelihood)。</p>
 <blockquote>
 <p>极大似然估计，就是利用已知的样本结果信息，反推最具有可能（最大概率）导致这些样本结果出现的模型参数值。<br>换句话说，极大似然估计提供了一种给定观察数据来评估模型参数的方法，即：“模型已定，参数未知”。</p>
 </blockquote>
-<p>而极大似然函数$L(u,\Sigma)=f_{u,\Sigma}(x^1)\cdot f_{u,\Sigma}(x^2)…f_{u,\Sigma}(x^{79})$，实际上就是该事件发生的概率就等于每个点都发生的概率之积，我们只需要把每一个点的data代进去，就可以得到一个关于$u$和$\Sigma$的函数，分别求偏导，解出微分是0的点，即使L最大的那组参数，便是最终的估测值，通过微分得到的高斯函数的$u$和$\Sigma$的最优解如下：<br>$$<br>u^<em>,\Sigma^</em>=\arg \max\limits_{u,\Sigma} L(u,\Sigma) \<br>u^<em>=\frac{1}{79}\sum\limits_{n=1}^{79}x^n \ \ \ \ \Sigma^</em>=\frac{1}{79}\sum\limits_{n=1}^{79}(x^n-u^<em>)(x^n-u^</em>)^T<br>$$</p>
+<p>而极大似然函数$L(u,\Sigma)=f_{u,\Sigma}(x^1)\cdot f_{u,\Sigma}(x^2)…f_{u,\Sigma}(x^{79})$，实际上就是该事件发生的概率就等于每个点都发生的概率之积，我们只需要把每一个点的 data 代进去，就可以得到一个关于$u$和$\Sigma$的函数，分别求偏导，解出微分是 0 的点，即使 L 最大的那组参数，便是最终的估测值，通过微分得到的高斯函数的$u$和$\Sigma$的最优解如下：</p>
+<p>$$<br>u^<em>,\Sigma^</em>=\arg \max\limits_{u,\Sigma} L(u,\Sigma) \<br>u^<em>=\frac{1}{79}\sum\limits_{n=1}^{79}x^n \ \ \ \ \Sigma^</em>=\frac{1}{79}\sum\limits_{n=1}^{79}(x^n-u^<em>)(x^n-u^</em>)^T<br>$$</p>
 <p>注：数学期望：$u=E(X)$，协方差：$\Sigma=cov(X,Y)=E[(X-u)(Y-u)^T]$，对同一个变量来说，协方差为$cov(X,X)=E[(X-u)(X-u)^T$</p>
-<p>根据上述公式和79个点的数据，我们就能得出class1和class2的的高斯分布，然后将海龟的特征带入，即可获得最终的$P(x|C_1),P(x|C_2)$结果。</p>
+<p>根据上述公式和 79 个点的数据，我们就能得出 class1 和 class2 的的高斯分布，然后将海龟的特征带入，即可获得最终的$P(x|C_1),P(x|C_2)$结果。</p>
 <h6 id="开始分类"><a href="#开始分类" class="headerlink" title="开始分类"></a>开始分类</h6><p>至此，我们已经得到了分类所需的所有数据：</p>
-<center><img src="https://github.com/Llhai/img/blob/master/source/ML2020/Classification/do-classification.png" width="60%;" /></center>
+<center><img src="https://cdn.jsdelivr.net/gh/Llhai/img/source/ML2020/Classification/do-classification.png" width="60%;" /></center>
 
-<p>计算出P(C_1|x)的值，如果该值的概率大于1，则说明该宝可梦属性为Class1。</p>
+<p>计算出 P(C_1|x)的值，如果该值的概率大于 1，则说明该宝可梦属性为 Class1。</p>
 <h4 id="分类的三个步骤"><a href="#分类的三个步骤" class="headerlink" title="分类的三个步骤"></a>分类的三个步骤</h4><ul>
 <li><p>寻找一个合适的模型(Function Set)</p>
-<center><img src="https://github.com/Llhai/img/blob/master/source/ML2020/Classification/do-class.png" width="60%;" /></center>
+<center><img src="https://cdn.jsdelivr.net/gh/Llhai/img/source/ML2020/Classification/do-class.png" width="60%;" /></center>
 这些Prior Probability 和 Probability Distribution 就是Model的参数，选择不同的分布函数，就会得到不同的Function。将这些不同分布函数组合起来，就是一个新的model。
 </li>
-<li><p>定义Function的好坏(Goodness of function)</p>
-<p>对于Gaussian distribution这个model来说，我们要评价的是决定这个高斯函数形状的均值$u$和协方差$\Sigma$这两个参数的好坏，而极大似然函数$L(u,\Sigma)$的输出值，就评价了这组参数的好坏</p>
+<li><p>定义 Function 的好坏(Goodness of function)</p>
+<p>对于 Gaussian distribution 这个 model 来说，我们要评价的是决定这个高斯函数形状的均值$u$和协方差$\Sigma$这两个参数的好坏，而极大似然函数$L(u,\Sigma)$的输出值，就评价了这组参数的好坏</p>
 </li>
-<li><p>Find the best function<br>找到的那个最好的function，就是使极大似然函数值最大的那组参数，实际上就是所有样本点的均值和协方差</p>
+<li><p>Find the best function<br>找到的那个最好的 function，就是使极大似然函数值最大的那组参数，实际上就是所有样本点的均值和协方差</p>
 </li>
 </ul>
 
@@ -528,10 +529,10 @@
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-07-31T16:47:41+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-03-14T16:11:43+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：Jul 31, 2020</p>
+    <p>更新于：Mar 14, 2021</p>
   </a>
 </div>
 
@@ -614,8 +615,7 @@
             
               <a class='next' href='/2020/07/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-3-Error-Come-From/'>
                 <p class='title'>机器学习-3.Error Come From<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
-                <p class='content'>引入之前了解到，不同的模型(model)在测试数据(testing data)上会得到不同的error, 越复杂的model，在测试集上的表现也不一定会越好。这个error通常来自于两个方面：
-...</p>
+                <p class='content'>引入之前了解到，不同的模型(model)在测试数据(testing data)上会得到不同的 error, 越复杂的 model，在测试集上的表现也不一定会越好。这个 error 通常来自于两个...</p>
               </a>
             
           </div>
@@ -749,16 +749,16 @@
       
     
       
-        <div><p>Blog content follows the <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en">Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License</a></p>
+        <div><p>博客内容遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
 </div>
       
     
       
-        Use
+        本站使用
         <a href="https://volantis.js.org/" target="_blank" class="codename">Volantis</a>
-        as theme, total visits
+        作为主题，总访问量为
           <span id="busuanzi_value_site_pv"><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
-          times
+          次
         
       
     
