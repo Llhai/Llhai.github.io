@@ -397,26 +397,44 @@
         <div class="article-entry" itemprop="articleBody">
           
           <p>VIBE 全名 Video Inference for Human Body Pose and Shape Estimation[CVPR-2020] 官方开源代码链接:<a target="_blank" rel="noopener" href="https://github.com/mkocabas/VIBE">github 项目地址</a>。论文链接：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1912.05656">arXiv</a>。VIBE 结合了人体姿态估计与人体形状估计，对于输入视频的每一帧，VIBE 都相应地预测出 SMPL 人体模型的参数</p>
-<h4 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h4><ul>
+<h4 id="运行环境"><a class="markdownIt-Anchor" href="#运行环境"></a> 运行环境</h4>
+<ul>
 <li>ubuntu 18.04</li>
 <li>PY37</li>
 </ul>
-<h4 id="运行准备"><a href="#运行准备" class="headerlink" title="运行准备"></a>运行准备</h4><p>首先尝试在 win10 下运行</p>
+<h4 id="运行准备"><a class="markdownIt-Anchor" href="#运行准备"></a> 运行准备</h4>
+<p>首先尝试在 win10 下运行</p>
 <p>官方在 github 上给出了 linux 下的 sh 脚本，win 下自己按照脚本内容自己配置也很简单，这里就不重复写了，我在安装 pytorch 时遇到了以下问题</p>
-<pre><code>ERROR: Could not find a version that satisfies the requirement torch==1.4.0</code></pre><p>具体错误原因也没必要细究，解决方法换一下安装命令即可：<br>pip install torch===1.4.0 torchvision===0.5.0 -f <a target="_blank" rel="noopener" href="https://download.pytorch.org/whl/torch_stable.html">https://download.pytorch.org/whl/torch_stable.html</a><br>在运行完官方脚本的所有配置命令之后，输入以下命令运行：</p>
-<pre><code>python demo.py --vid_file sample_video.mp4 --output_folder output/ --display</code></pre><p>不出意外的话会遇到一万个库缺失的报错，一个一个 pip 安装即可，接下来俺在导入 pyopengl 时遇到了以下错误：</p>
+<pre><code>ERROR: Could not find a version that satisfies the requirement torch==1.4.0
+</code></pre>
+<p>具体错误原因也没必要细究，解决方法换一下安装命令即可：<br />
+pip install torch===1.4.0 torchvision===0.5.0 -f <a target="_blank" rel="noopener" href="https://download.pytorch.org/whl/torch_stable.html">https://download.pytorch.org/whl/torch_stable.html</a><br />
+在运行完官方脚本的所有配置命令之后，输入以下命令运行：</p>
+<pre><code>python demo.py --vid_file sample_video.mp4 --output_folder output/ --display
+</code></pre>
+<p>不出意外的话会遇到一万个库缺失的报错，一个一个 pip 安装即可，接下来俺在导入 pyopengl 时遇到了以下错误：</p>
 <pre><code>  File &quot;C:\Users\41656\Anaconda3\envs\pyVIBE\lib\site-packages\OpenGL\platform\egl.py&quot;, line 73, in EGL
 raise ImportError(&quot;Unable to load EGL library&quot;, *err.args)
-ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定的模块。&apos;, None, 126, None, &apos;EGL&apos;, None)</code></pre><p>查遍资料后也没解决这个问题，在 github 上提了 issue，作者回复说可能是 pyrender 的问题，并表示他们没在 win 上运行过。</p>
+ImportError: ('Unable to load EGL library', 22, '找不到指定的模块。', None, 126, None, 'EGL', None)
+</code></pre>
+<p>查遍资料后也没解决这个问题，在 github 上提了 issue，作者回复说可能是 pyrender 的问题，并表示他们没在 win 上运行过。</p>
 <p>到这里就结束了 win 上的尝试，转向 Ubuntu</p>
-<h4 id="Ubuntu-踩坑"><a href="#Ubuntu-踩坑" class="headerlink" title="Ubuntu 踩坑"></a>Ubuntu 踩坑</h4><ol>
-<li><p>装 pytorch 时 在跑完下载进度条就显示 进程被 killed，解决方法：把虚拟机分配的内存改为 8G</p>
+<h4 id="ubuntu-踩坑"><a class="markdownIt-Anchor" href="#ubuntu-踩坑"></a> Ubuntu 踩坑</h4>
+<ol>
+<li>
+<p>装 pytorch 时 在跑完下载进度条就显示 进程被 killed，解决方法：把虚拟机分配的内存改为 8G</p>
 </li>
-<li><p>tqdm 报错，</p>
-<pre><code>RuntimeError:cannot join current thread</code></pre><p>是老版本 tqdm 的 bug，在 4.31.1 后就已经修复了这个 bug，安装最新版 tqdm 即可</p>
+<li>
+<p>tqdm 报错，</p>
+<pre><code>RuntimeError:cannot join current thread
+</code></pre>
+<p>是老版本 tqdm 的 bug，在 4.31.1 后就已经修复了这个 bug，安装最新版 tqdm 即可</p>
 </li>
-<li><p>DataLoader 报错：</p>
-<pre><code>RuntimeError: DataLoader worker (pid 4654) is killed by signal: Killed</code></pre><p>观察发现在加载数据时内存耗尽了，还是虚拟机内存不够的问题，batch 改小即可</p>
+<li>
+<p>DataLoader 报错：</p>
+<pre><code>RuntimeError: DataLoader worker (pid 4654) is killed by signal: Killed
+</code></pre>
+<p>观察发现在加载数据时内存耗尽了，还是虚拟机内存不够的问题，batch 改小即可</p>
 </li>
 </ol>
 
@@ -583,20 +601,23 @@ ImportError: (&apos;Unable to load EGL library&apos;, 22, &apos;找不到指定�
             
               <a class='prev' href='/2020/03/25/Unity-Tensorflow%E5%B0%9D%E8%AF%95/'>
                 <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Tensorflow Unity尝试</p>
-                <p class='content'>环境配置在Unity上使用Tensorflow需要借助ML-Agents，Unity Machine Learning Agents (ML-Agents) 是一款开源的 Unity 插件， 使...</p>
+                <p class='content'> 环境配置
+在Unity上使用Tensorflow需要借助ML-Agents，Unity Machine Learning Agents (ML-Agents) 是一款开源的 Unity 插件，...</p>
               </a>
             
             
               <a class='next' href='/2020/03/25/opencvForUnityDnn/'>
                 <p class='title'>OpenCVForUnity笔记2-加载TF模型<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
-                <p class='content'>涉及以下函数
+                <p class='content'> 涉及以下函数
+
 Dnn.readNetFromTensorflow()
 Dnn.blobFromImage()
 net.setInput()
 net.forward()
 
-几个关键点
-Dnn.bl...</p>
+ 几个关键点
+
+Dn...</p>
               </a>
             
           </div>
@@ -667,7 +688,7 @@ Dnn.bl...</p>
 
 
     <div class='content'>
-      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83"><span class="toc-text">运行环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E5%87%86%E5%A4%87"><span class="toc-text">运行准备</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Ubuntu-%E8%B8%A9%E5%9D%91"><span class="toc-text">Ubuntu 踩坑</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83"><span class="toc-text"> 运行环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E5%87%86%E5%A4%87"><span class="toc-text"> 运行准备</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ubuntu-%E8%B8%A9%E5%9D%91"><span class="toc-text"> Ubuntu 踩坑</span></a></li></ol>
     </div>
   </section>
 

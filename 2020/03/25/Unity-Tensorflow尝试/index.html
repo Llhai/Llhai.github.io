@@ -396,17 +396,22 @@
       <section class="article typo">
         <div class="article-entry" itemprop="articleBody">
           
-          <h4 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h4><p>在Unity上使用Tensorflow需要借助ML-Agents，Unity Machine Learning Agents (ML-Agents) 是一款开源的 Unity 插件， 使得我们得以在游戏环境和模拟环境中训练智能 agents。</p>
+          <h4 id="环境配置"><a class="markdownIt-Anchor" href="#环境配置"></a> 环境配置</h4>
+<p>在Unity上使用Tensorflow需要借助ML-Agents，Unity Machine Learning Agents (ML-Agents) 是一款开源的 Unity 插件， 使得我们得以在游戏环境和模拟环境中训练智能 agents。</p>
 <ol>
 <li>Anaconda Tensorflow配置就不写了，本着不给自己找事的原则，使用Py36，tf-1.13.1</li>
 <li>安装 mlagents环境工具，<code>pip install mlagents</code></li>
 <li>获取ml-agents，在 <a target="_blank" rel="noopener" href="https://github.com/Unity-Technologies/ml-agents">ml-agents仓库</a>页面直接download所有内容即可。</li>
-<li>进入 解压出的ml-agents目录，安装项目所需文件，有报错基本是依赖版本不符合，卸载原有版本，安装要求版本即可。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd ml-agents-envs</span><br><span class="line">pip install -e .&#x2F;</span><br><span class="line">cd …</span><br><span class="line">cd ml-agents</span><br><span class="line">pip install -e .&#x2F;</span><br></pre></td></tr></table></figure></li>
+<li>进入 解压出的ml-agents目录，安装项目所需文件，有报错基本是依赖版本不符合，卸载原有版本，安装要求版本即可。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd ml-agents-envs</span><br><span class="line">pip install -e .&#x2F;</span><br><span class="line">cd …</span><br><span class="line">cd ml-agents</span><br><span class="line">pip install -e .&#x2F;</span><br></pre></td></tr></table></figure>
+<ol start="5">
 <li>将ml-agents/project/Assets目录下内容拖到Unity中，我在这步时报错了，然后按照官方文档的方法，<code>Select Add package from disk... and navigate into the com.unity.ml-agents folder and select the package.json folder.</code> 然后就可以了</li>
 <li>导入TensorFlowSharp包，这是tensorflowsharp的unity专用包 。该包包含一个tensorflow环境，使你不必依赖系统环境。可以直接跨平台打包。</li>
 <li>后续还有一些诸如在Edit→Player→otherSetting→DefineSymbols中加入 ENABLE_TENSORFLOW等等玄学操作，我也不知道需不需要</li>
 </ol>
-<h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><p>如果你觉得你已经配置好了，可以运行以下代码，输出正常说明配置成功了</p>
+<h4 id="测试"><a class="markdownIt-Anchor" href="#测试"></a> 测试</h4>
+<p>如果你觉得你已经配置好了，可以运行以下代码，输出正常说明配置成功了</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">using System.Collections;</span><br><span class="line">using System.Collections.Generic;</span><br><span class="line">using UnityEngine;</span><br><span class="line">using TensorFlow;</span><br><span class="line"></span><br><span class="line">public class tensorflowTest : MonoBehaviour</span><br><span class="line">&#123;</span><br><span class="line">    &#x2F;&#x2F; Start is called before the first frame update</span><br><span class="line">    void Start()</span><br><span class="line">    &#123;</span><br><span class="line">        TFSession session &#x3D; new TFSession();</span><br><span class="line">        TFGraph graph &#x3D; session.Graph;</span><br><span class="line">        var a &#x3D; graph.Const(2);</span><br><span class="line">        var b &#x3D; graph.Const(3);</span><br><span class="line"></span><br><span class="line">        var addRes &#x3D; session.GetRunner().Run(graph.Add(a, b));</span><br><span class="line">        var res &#x3D; addRes.GetValue();</span><br><span class="line">        Debug.Log(res);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
           
             <div class='article_footer'>
@@ -571,9 +576,10 @@
             
               <a class='prev' href='/2020/05/25/tensorflow%E5%AD%A6%E4%B9%A0-01/'>
                 <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Tensorflow学习-01</p>
-                <p class='content'>tf.variable与tf.tensor
+                <p class='content'> tf.variable与tf.tensor
+
 variable用于存储网络模型中的权重参数，tensor用于存储中间结果数据。
-variable是可更改的，具有assign函数，tensor则是不...</p>
+variable是可更改的，具有assign函数，tensor则...</p>
               </a>
             
             
@@ -650,7 +656,7 @@ variable是可更改的，具有assign函数，tensor则是不...</p>
 
 
     <div class='content'>
-      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-text">环境配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95"><span class="toc-text">测试</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-text"> 环境配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95"><span class="toc-text"> 测试</span></a></li></ol>
     </div>
   </section>
 
