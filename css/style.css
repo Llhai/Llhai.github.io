@@ -1512,7 +1512,7 @@ div.tabs .tab-content .tab-pane > .fancybox:last-child {
 .l_side .toc-wrapper a {
   padding-left: 8px;
   color: rgba(85,85,85,0.65);
-  font-size: 0.6rem;
+  font-size: 0.85rem;
   display: inline-block;
 }
 .l_side .toc-wrapper ul .toc-child a,
