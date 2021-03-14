@@ -399,28 +399,32 @@
         <div class="article-entry" itemprop="articleBody">
           
           <p>(Backpropagation)反向传播，是在训练神经网络时使用梯度下降法的计算方法。</p>
-<p>在神经网络中，通常有百万级别的参数，所以高效地计算出网络中参数的梯度，成为了一个难题，这就是反向传播需要做的事。所以<strong>Backpropagation并不是一个和gradient descent不同的training的方法，它就是gradient descent，它只是一个比较有效率的算法</strong>，让你在计算这个gradient的vector的时候更有效率</p>
+<p>在神经网络中，通常有百万级别的参数，所以高效地计算出网络中参数的梯度，成为了一个难题，这就是反向传播需要做的事。所以<strong>Backpropagation 并不是一个和 gradient descent 不同的 training 的方法，它就是 gradient descent，它只是一个比较有效率的算法</strong>，让你在计算这个 gradient 的 vector 的时候更有效率</p>
 <h4 id="链式法则-Chain-Rule"><a href="#链式法则-Chain-Rule" class="headerlink" title="链式法则(Chain Rule)"></a>链式法则(Chain Rule)</h4><p>反向传播不需要高深的数学原理，唯一需要记得的只有链式法则。</p>
-<p>在神经网络中定义了一个loss function: $L(\theta)=\sum\limits_{n=1}^N l^n(\theta)$，它等于所有training data的loss之和，我们希望使用梯度下降法来尽可能最小化$L(\theta)$。</p>
-<p>$L(\theta)$对某一个参数w做偏微分，表达式如下：<br>$$<br>\frac{\partial L(\theta)}{\partial w}=\sum\limits_{n=1}^N\frac{\partial l^n(\theta)}{\partial w}<br>$$</p>
-<p>可以看出我们需要计算的值是$\frac{\partial l}{\partial w}$，按照chain rule，可以把它拆分成两项，$\frac{\partial l}{\partial w}=\frac{\partial z}{\partial w} \frac{\partial l}{\partial z}$，这两项分别去把它计算出来。根据这两项的计算特点，我们将计算前面这一项$\frac{\partial z}{\partial w}$的这个process，我们称之为Forward pass；而计算后面这项$\frac{\partial l}{\partial z}$的process，我们称之为Backward pass</p>
+<p>在神经网络中定义了一个 loss function: $L(\theta)=\sum\limits_{n=1}^N l^n(\theta)$，它等于所有 training data 的 loss 之和，我们希望使用梯度下降法来尽可能最小化$L(\theta)$。</p>
+<p>$L(\theta)$对某一个参数 w 做偏微分，表达式如下：</p>
+<p>$$<br>\frac{\partial L(\theta)}{\partial w}=\sum\limits_{n=1}^N\frac{\partial l^n(\theta)}{\partial w}<br>$$</p>
+<p>可以看出我们需要计算的值是$\frac{\partial l}{\partial w}$，按照 chain rule，可以把它拆分成两项，$\frac{\partial l}{\partial w}=\frac{\partial z}{\partial w} \frac{\partial l}{\partial z}$，这两项分别去把它计算出来。根据这两项的计算特点，我们将计算前面这一项$\frac{\partial z}{\partial w}$的这个 process，我们称之为 Forward pass；而计算后面这项$\frac{\partial l}{\partial z}$的 process，我们称之为 Backward pass</p>
 <center><img src="https://gitee.com/Sakura-gh/ML-notes/raw/master/img/bp-forward-backward.png" width="50%;" /></center>
 
-<h4 id="Forward-pass"><a href="#Forward-pass" class="headerlink" title="Forward pass"></a>Forward pass</h4><p>Forward pass的计算很简单，从上图可以直接看出，$\frac{\partial z}{\partial w_1}=x_1 ,\ \frac{\partial z}{\partial w_2}=x_2$</p>
+<h4 id="Forward-pass"><a href="#Forward-pass" class="headerlink" title="Forward pass"></a>Forward pass</h4><p>Forward pass 的计算很简单，从上图可以直接看出，$\frac{\partial z}{\partial w_1}=x_1 ,\ \frac{\partial z}{\partial w_2}=x_2$</p>
 <h4 id="Back-pass"><a href="#Back-pass" class="headerlink" title="Back pass"></a>Back pass</h4><p>$\frac{\partial l}{\partial z}$的计算相对复杂，以一层完整的输入输出为例，进行公式推导：</p>
-<p>z通过activation function(sigmoid function)得到a，这个neuron的output是$a=\sigma(z)$，接下来这个a会乘上某一个weight $w_3$，再加上其它一大堆的value得到$z’$，它是下一个neuron activation function的input，然后a又会乘上另一个weight $w_4$，再加上其它一堆value得到$z’’$。</p>
-<p>首先应用链式法则:<br>$$<br>\frac{\partial l}{\partial z}=\frac{\partial a}{\partial z} \frac{\partial l}{\partial a}<br>$$<br>这里的$\frac{\partial a}{\partial z}$实际上就是activation function的微分(可以直接计算出),对于$\frac{\partial l}{\partial a}$可以通过chain rule得到， a会影响$z’$和$z’’$，而$z’$和$z’’$会影响$l$，所以：<br>$$<br>\frac{\partial l}{\partial a}=\frac{\partial z’}{\partial a} \frac{\partial l}{\partial z’}+\frac{\partial z’’}{\partial a} \frac{\partial l}{\partial z’’}<br>$$</p>
+<p>z 通过 activation function(sigmoid function)得到 a，这个 neuron 的 output 是$a=\sigma(z)$，接下来这个 a 会乘上某一个 weight $w_3$，再加上其它一大堆的 value 得到$z’$，它是下一个 neuron activation function 的 input，然后 a 又会乘上另一个 weight $w_4$，再加上其它一堆 value 得到$z’’$。</p>
+<p>首先应用链式法则:</p>
+<p>$$<br>\frac{\partial l}{\partial z}=\frac{\partial a}{\partial z} \frac{\partial l}{\partial a}<br>$$</p>
+<p>这里的$\frac{\partial a}{\partial z}$实际上就是 activation function 的微分(可以直接计算出),对于$\frac{\partial l}{\partial a}$可以通过 chain rule 得到， a 会影响$z’$和$z’’$，而$z’$和$z’’$会影响$l$，所以：</p>
+<p>$$<br>\frac{\partial l}{\partial a}=\frac{\partial z’}{\partial a} \frac{\partial l}{\partial z’}+\frac{\partial z’’}{\partial a} \frac{\partial l}{\partial z’’}<br>$$</p>
 <p>式中的$\frac{\partial z’}{\partial a}=w_3$，$\frac{\partial z’’}{\partial a}=w_4$，所以现在只剩下$\frac{\partial l}{\partial z’}$和$\frac{\partial l}{\partial z’’}$需要计算。通过观察可以发现，这项的形式 和我们最初的目标$\frac{\partial l}{\partial z}$相同，这就很类似算法中常见的递归关系。在网络最后的输出层，这项很容易就可以计算出来：</p>
 <p>$$<br>\frac{\partial l}{\partial z’}=\frac{\partial y_1}{\partial z’} \frac{\partial l}{\partial y_1}<br>$$</p>
-<p>其中$\frac{\partial y_1}{\partial z’}$就是output layer的activation function (softmax) 对$z’$的偏微分，而$\frac{\partial l}{\partial y_1}$就是loss对$y_1$的偏微分，它取决于你的loss function是怎么定义的。</p>
+<p>其中$\frac{\partial y_1}{\partial z’}$就是 output layer 的 activation function (softmax) 对$z’$的偏微分，而$\frac{\partial l}{\partial y_1}$就是 loss 对$y_1$的偏微分，它取决于你的 loss function 是怎么定义的。</p>
 <center><img src="https://gitee.com/Sakura-gh/ML-notes/raw/master/img/bp-op-amp.png" width="50%;" /></center>
 综上可知，我们计算Backpass的过程，实际上是从后向前计算的，这也是反向传播一词的由来。
 
-
-<h4 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h4><p>最后，我们来总结一下Backpropagation是怎么做的</p>
-<p><strong>Forward pass</strong>，每个neuron的activation function的output，就是它所连接的weight的$\frac{\partial z}{\partial w}$</p>
-<p><strong>Backward pass</strong>，建一个与原来方向相反的neural network，它的三角形neuron的output就是$\frac{\partial l}{\partial z}$</p>
-<p>把通过forward pass得到的$\frac{\partial z}{\partial w}$和通过backward pass得到的$\frac{\partial l}{\partial z}$乘起来就可以得到$l$对$w$的偏微分$\frac{\partial l}{\partial w}$<br>$$<br>\frac{\partial l}{\partial w} = \frac{\partial z}{\partial w}|<em>{forward\ pass} \cdot \frac{\partial l}{\partial z}|</em>{backward \ pass}<br>$$</p>
+<h4 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h4><p>最后，我们来总结一下 Backpropagation 是怎么做的</p>
+<p><strong>Forward pass</strong>，每个 neuron 的 activation function 的 output，就是它所连接的 weight 的$\frac{\partial z}{\partial w}$</p>
+<p><strong>Backward pass</strong>，建一个与原来方向相反的 neural network，它的三角形 neuron 的 output 就是$\frac{\partial l}{\partial z}$</p>
+<p>把通过 forward pass 得到的$\frac{\partial z}{\partial w}$和通过 backward pass 得到的$\frac{\partial l}{\partial z}$乘起来就可以得到$l$对$w$的偏微分$\frac{\partial l}{\partial w}$</p>
+<p>$$<br>\frac{\partial l}{\partial w} = \frac{\partial z}{\partial w}|<em>{forward\ pass} \cdot \frac{\partial l}{\partial z}|</em>{backward \ pass}<br>$$</p>
 
           
             <div class='article_footer'>
@@ -508,10 +512,10 @@
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-08-09T16:28:24+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-03-14T16:44:20+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：Aug 9, 2020</p>
+    <p>更新于：Mar 14, 2021</p>
   </a>
 </div>
 
@@ -598,7 +602,7 @@
             
               <a class='next' href='/2020/08/01/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-5-Logistic-Regression-md/'>
                 <p class='title'>机器学习-5-Logistic Regression.md<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
-                <p class='content'>概念引入在前一节的classification中，我们讨论了在classification这一章节，我们讨论了如何通过样本点的均值$u$和协方差$\Sigma$来计算$P(C_1),P(C_2)...</p>
+                <p class='content'>概念引入在前一节的 classification 中，我们讨论了在 classification 这一章节，我们讨论了如何通过样本点的均值$u$和协方差$\Sigma$来计算$P(C_1),P(...</p>
               </a>
             
           </div>
@@ -638,6 +642,59 @@
 
 
 <!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+  <script>
+  // https://github.com/theme-next/hexo-theme-next/blob/master/layout/_third-party/math/mathjax.swig
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.0/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    // 文章章节标题不能为 “MathJax” ，否则会报错。
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
 
 
 
@@ -732,16 +789,16 @@
       
     
       
-        <div><p>博客内容遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+        <div><p>Blog content follows the <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en">Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License</a></p>
 </div>
       
     
       
-        本站使用
+        Use
         <a href="https://volantis.js.org/" target="_blank" class="codename">Volantis</a>
-        作为主题，总访问量为
+        as theme, total visits
           <span id="busuanzi_value_site_pv"><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
-          次
+          times
         
       
     

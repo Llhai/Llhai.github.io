@@ -398,42 +398,44 @@
       <section class="article typo">
         <div class="article-entry" itemprop="articleBody">
           
-          <h4 id="概念引入"><a href="#概念引入" class="headerlink" title="概念引入"></a>概念引入</h4><p>在前一节的classification中，我们讨论了在classification这一章节，我们讨论了如何通过样本点的均值$u$和协方差$\Sigma$来计算$P(C_1),P(C_2),P(x|C_1),P(x|C_2)$，进而利用$P(C_1|x)=\frac{P(C_1)P(x|C_1)}{P(C_1)P(x|C_1)+P(C_2)P(x|C_2)}$计算得到新的样本点x属于class的概率。</p>
-<p>之后我们还推导了$P(C_1|x)=\sigma(z)=\frac{1}{1+e^{-z}}$，并且在Gaussian的distribution下考虑class 1和class 2共用$\Sigma$，可以得到一个线性的z(其实很多其他的Probability model经过化简以后也都可以得到同样的结果)</p>
-<p>$$<br>P_{w,b}(C_1|x)=\sigma(z)=\frac{1}{1+e^{-z}} \<br>z=w\cdot x+b=\sum\limits_i w_ix_i+b \<br>$$<br>这里的w和x都是vector，从上式中我们可以看出，现在这个model(function set)是受w和b控制的，因此我们不必要再去像前面一样计算一大堆东西，而是用这个全新的由w和b决定的model——<strong>Logistic Regression(逻辑回归)</strong></p>
+          <h4 id="概念引入"><a href="#概念引入" class="headerlink" title="概念引入"></a>概念引入</h4><p>在前一节的 classification 中，我们讨论了在 classification 这一章节，我们讨论了如何通过样本点的均值$u$和协方差$\Sigma$来计算$P(C_1),P(C_2),P(x|C_1),P(x|C_2)$，进而利用$P(C_1|x)=\frac{P(C_1)P(x|C_1)}{P(C_1)P(x|C_1)+P(C_2)P(x|C_2)}$计算得到新的样本点 x 属于 class 的概率。</p>
+<p>之后我们还推导了$P(C_1|x)=\sigma(z)=\frac{1}{1+e^{-z}}$，并且在 Gaussian 的 distribution 下考虑 class 1 和 class 2 共用$\Sigma$，可以得到一个线性的 z(其实很多其他的 Probability model 经过化简以后也都可以得到同样的结果)</p>
+<p>$$<br>P_{w,b}(C_1|x)=\sigma(z)=\frac{1}{1+e^{-z}} \<br>z=w\cdot x+b=\sum\limits_i w_ix_i+b \<br>$$</p>
+<p>这里的 w 和 x 都是 vector，从上式中我们可以看出，现在这个 model(function set)是受 w 和 b 控制的，因此我们不必要再去像前面一样计算一大堆东西，而是用这个全新的由 w 和 b 决定的 model——<strong>Logistic Regression(逻辑回归)</strong></p>
 <h4 id="逻辑回归"><a href="#逻辑回归" class="headerlink" title="逻辑回归"></a>逻辑回归</h4><p>逻辑回归实际上是线性回归的一个演变，它在线性回归的基础上，套用了一个逻辑函数，因此逻辑回归的过程也同样分为以下三步</p>
-<h5 id="Step-1：function-set"><a href="#Step-1：function-set" class="headerlink" title="Step 1：function set"></a>Step 1：function set</h5><p>逻辑回归的function set如下图：</p>
-<center><img src="https://github.com/Llhai/img/tree/master/source/ML2020/Regression/activation-function.png" width="60%;" /></center>
+<h5 id="Step-1：function-set"><a href="#Step-1：function-set" class="headerlink" title="Step 1：function set"></a>Step 1：function set</h5><p>逻辑回归的 function set 如下图：</p>
+<center><img src="https://cdn.jsdelivr.net/gh/Llhai/img/source/ML2020/Regression/activation-function.png" width="60%;" /></center>
 
-<p>由图可以看出，逻辑回归的模型包含两部分，第一步和线性回归的形式相同，是一个关于输入x的线性函数，第二步通过一个逻辑函数，即sigmoid函数，将线性函数转换为非线性函数</p>
+<p>由图可以看出，逻辑回归的模型包含两部分，第一步和线性回归的形式相同，是一个关于输入 x 的线性函数，第二步通过一个逻辑函数，即 sigmoid 函数，将线性函数转换为非线性函数</p>
 <h5 id="Step-2：Goodness-of-a-function"><a href="#Step-2：Goodness-of-a-function" class="headerlink" title="Step 2：Goodness of a function"></a>Step 2：Goodness of a function</h5><p>课程中给出了详细的损失函数推导过程：</p>
-<center><img src="https://github.com/Llhai/img/tree/master/source/ML2020/Regression/likelihood.png" width="60%;" /></center>
+<center><img src="https://cdn.jsdelivr.net/gh/Llhai/img/source/ML2020/Regression/likelihood.png" width="60%;" /></center>
 
-<p>同样是极大似然的思想，我们认为使上图中$L(w,b)$最大的$w^<em>$和$b^</em>$就是最有可能产生当前N笔Training data分布的$w^<em>$和$b^</em>$</p>
-<p>为了方便计算，对上式子取负对数，整理可得：<br>$$<br>-\ln L(w,b)=\sum\limits_n -[\hat{y}^n \ln f_{w,b}(x^n)+(1-\hat{y}^n) \ln(1-f_{w,b}(x^n))]<br>$$</p>
-<h6 id="为什么Square-error不适合逻辑回归？"><a href="#为什么Square-error不适合逻辑回归？" class="headerlink" title="为什么Square error不适合逻辑回归？"></a>为什么Square error不适合逻辑回归？</h6><center><img src="https://github.com/Llhai/img/blob/master/source/ML2020/Regression/whynotsquareerror.png" width="60%;" /></center>
+<p>同样是极大似然的思想，我们认为使上图中$L(w,b)$最大的$w^<em>$和$b^</em>$就是最有可能产生当前 N 笔 Training data 分布的$w^<em>$和$b^</em>$</p>
+<p>为了方便计算，对上式子取负对数，整理可得：</p>
+<p>$$<br>-\ln L(w,b)=\sum\limits_n -[\hat{y}^n \ln f_{w,b}(x^n)+(1-\hat{y}^n) \ln(1-f_{w,b}(x^n))]<br>$$</p>
+<h6 id="为什么-Square-error-不适合逻辑回归？"><a href="#为什么-Square-error-不适合逻辑回归？" class="headerlink" title="为什么 Square error 不适合逻辑回归？"></a>为什么 Square error 不适合逻辑回归？</h6><center><img src="https://cdn.jsdelivr.net/gh/Llhai/img/source/ML2020/Regression/whynotsquareerror.png" width="60%;" /></center>
 
-<p>这是使用square error代替交叉熵的计算过程，从图中可以看出，当$f_{w,b}(x^n)=1$时，函数的梯度为0，正常。但当$f_{w,b}(x^n)=0$时，函数的梯度仍为0，无法进行后续的更新，这就是不使用Square error的原因。</p>
-<p>如果我们把参数的变化对total loss作图的话，loss function选择cross entropy或square error，参数的变化跟loss的变化情况可视化出来如下所示：(黑色的是cross entropy，红色的是square error)</p>
-<center><img src="https://github.com/Llhai/img/blob/master/source/ML2020/Regression/cross-entropy-vs-square-error.png" width="60%;" /></center>
+<p>这是使用 square error 代替交叉熵的计算过程，从图中可以看出，当$f_{w,b}(x^n)=1$时，函数的梯度为 0，正常。但当$f_{w,b}(x^n)=0$时，函数的梯度仍为 0，无法进行后续的更新，这就是不使用 Square error 的原因。</p>
+<p>如果我们把参数的变化对 total loss 作图的话，loss function 选择 cross entropy 或 square error，参数的变化跟 loss 的变化情况可视化出来如下所示：(黑色的是 cross entropy，红色的是 square error)</p>
+<center><img src="hhttps://cdn.jsdelivr.net/gh/Llhai/img/source/ML2020/Regression/cross-entropy-vs-square-error.png" width="60%;" /></center>
 
-<p>可以看出square error距离目标远的时候，梯度也非常小，移动的过程会非常缓慢。</p>
-<h5 id="step-3：Find-the-best-function"><a href="#step-3：Find-the-best-function" class="headerlink" title="step 3：Find the best function"></a>step 3：Find the best function</h5><p>寻找best function的过程，实际上就是寻找loss function即交叉熵之和最小的那组参数$w^<em>,b^</em>$就行了，可以使用gradient descent进行计算。</p>
-<p>通过推导可以得到，gradient descent每次update的过程：</p>
+<p>可以看出 square error 距离目标远的时候，梯度也非常小，移动的过程会非常缓慢。</p>
+<h5 id="step-3：Find-the-best-function"><a href="#step-3：Find-the-best-function" class="headerlink" title="step 3：Find the best function"></a>step 3：Find the best function</h5><p>寻找 best function 的过程，实际上就是寻找 loss function 即交叉熵之和最小的那组参数$w^<em>,b^</em>$就行了，可以使用 gradient descent 进行计算。</p>
+<p>通过推导可以得到，gradient descent 每次 update 的过程：</p>
 <p>$$<br>w_i=w_i-\eta \sum\limits_{n}-(\hat{y}^n-f_{w,b}(x^n))x_i^n<br>$$</p>
 <p>从式子可以看出，每次参数更新，只取决于三件事：</p>
 <ul>
 <li>learning rate，是你自己设定的</li>
-<li>$x_i$，来自于data</li>
-<li>$\hat{y}^n-f_{w,b}(x^n)$，代表function的output跟理想target的差距有多大，如果离目标越远，update的步伐就要越大</li>
+<li>$x_i$，来自于 data</li>
+<li>$\hat{y}^n-f_{w,b}(x^n)$，代表 function 的 output 跟理想 target 的差距有多大，如果离目标越远，update 的步伐就要越大</li>
 </ul>
-<h4 id="Discriminative-v-s-Generative"><a href="#Discriminative-v-s-Generative" class="headerlink" title="Discriminative v.s. Generative"></a>Discriminative v.s. Generative</h4><p>Logistic Regression的方法，我们把它称之为discriminative的方法；而我们用Gaussian来描述posterior Probability这件事，我们称之为Generative的方法</p>
-<h5 id="same-model-but-different-currency"><a href="#same-model-but-different-currency" class="headerlink" title="same model but different currency"></a>same model but different currency</h5><p>在Logistic Regression里面，我们<strong>没有做任何实质性的假设</strong>，没有对Probability distribution有任何的描述，我们就是单纯地去找b和w(推导过程中的假设只是便于理解和计算，对实际结果没有影响)</p>
-<p>而在Generative model里面，我们对Probability distribution是<strong>有实质性的假设</strong>的，之前我们假设的是Gaussian(高斯分布)，甚至假设在相互独立的前提下是否可以是naive bayes(朴素贝叶斯)，根据这些假设我们才找到最终的b和w</p>
-<p>通常来说，Discriminative的方法会比Generative的方法表现得更好</p>
-<h5 id="DM模型和GM模型的优劣势"><a href="#DM模型和GM模型的优劣势" class="headerlink" title="DM模型和GM模型的优劣势"></a>DM模型和GM模型的优劣势</h5><p>两个模型最大的区别在于，Generative的model由人为做了某些假设，假设data来自于某个概率模型；而Discriminative的model是完全不作任何假设的。</p>
-<p>因为Generative model人为地给数据加上了我们脑补的属性，这些属性会限制模型在某些方面的表现，所以有时GM模型的表现会出现问题。</p>
-<p>但当我们的数据量data很少时或者数据有问题时，通过对Generative model做一些脑补和假设，反而可以把data的不足或是有问题部分的影响给降到最低，因为DM模型是完全依赖于数据的，数据量少时，DM模型无法获得足够的信息，所以在这种情况下，GM模型的表现会优于DM模型。</p>
+<h4 id="Discriminative-v-s-Generative"><a href="#Discriminative-v-s-Generative" class="headerlink" title="Discriminative v.s. Generative"></a>Discriminative v.s. Generative</h4><p>Logistic Regression 的方法，我们把它称之为 discriminative 的方法；而我们用 Gaussian 来描述 posterior Probability 这件事，我们称之为 Generative 的方法</p>
+<h5 id="same-model-but-different-currency"><a href="#same-model-but-different-currency" class="headerlink" title="same model but different currency"></a>same model but different currency</h5><p>在 Logistic Regression 里面，我们<strong>没有做任何实质性的假设</strong>，没有对 Probability distribution 有任何的描述，我们就是单纯地去找 b 和 w(推导过程中的假设只是便于理解和计算，对实际结果没有影响)</p>
+<p>而在 Generative model 里面，我们对 Probability distribution 是<strong>有实质性的假设</strong>的，之前我们假设的是 Gaussian(高斯分布)，甚至假设在相互独立的前提下是否可以是 naive bayes(朴素贝叶斯)，根据这些假设我们才找到最终的 b 和 w</p>
+<p>通常来说，Discriminative 的方法会比 Generative 的方法表现得更好</p>
+<h5 id="DM-模型和-GM-模型的优劣势"><a href="#DM-模型和-GM-模型的优劣势" class="headerlink" title="DM 模型和 GM 模型的优劣势"></a>DM 模型和 GM 模型的优劣势</h5><p>两个模型最大的区别在于，Generative 的 model 由人为做了某些假设，假设 data 来自于某个概率模型；而 Discriminative 的 model 是完全不作任何假设的。</p>
+<p>因为 Generative model 人为地给数据加上了我们脑补的属性，这些属性会限制模型在某些方面的表现，所以有时 GM 模型的表现会出现问题。</p>
+<p>但当我们的数据量 data 很少时或者数据有问题时，通过对 Generative model 做一些脑补和假设，反而可以把 data 的不足或是有问题部分的影响给降到最低，因为 DM 模型是完全依赖于数据的，数据量少时，DM 模型无法获得足够的信息，所以在这种情况下，GM 模型的表现会优于 DM 模型。</p>
 
           
             <div class='article_footer'>
@@ -521,10 +523,10 @@
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-08-01T17:36:49+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-03-14T16:44:14+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：Aug 1, 2020</p>
+    <p>更新于：Mar 14, 2021</p>
   </a>
 </div>
 
@@ -650,6 +652,59 @@
 
 <!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
 
+  <script>
+  // https://github.com/theme-next/hexo-theme-next/blob/master/layout/_third-party/math/mathjax.swig
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.0/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    // 文章章节标题不能为 “MathJax” ，否则会报错。
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
 
 
   <script>
@@ -680,7 +735,7 @@
 
 
     <div class='content'>
-      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5%E5%BC%95%E5%85%A5"><span class="toc-text">概念引入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92"><span class="toc-text">逻辑回归</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Step-1%EF%BC%9Afunction-set"><span class="toc-text">Step 1：function set</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Step-2%EF%BC%9AGoodness-of-a-function"><span class="toc-text">Step 2：Goodness of a function</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#step-3%EF%BC%9AFind-the-best-function"><span class="toc-text">step 3：Find the best function</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Discriminative-v-s-Generative"><span class="toc-text">Discriminative v.s. Generative</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#same-model-but-different-currency"><span class="toc-text">same model but different currency</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#DM%E6%A8%A1%E5%9E%8B%E5%92%8CGM%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%BC%98%E5%8A%A3%E5%8A%BF"><span class="toc-text">DM模型和GM模型的优劣势</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5%E5%BC%95%E5%85%A5"><span class="toc-text">概念引入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92"><span class="toc-text">逻辑回归</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Step-1%EF%BC%9Afunction-set"><span class="toc-text">Step 1：function set</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Step-2%EF%BC%9AGoodness-of-a-function"><span class="toc-text">Step 2：Goodness of a function</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#step-3%EF%BC%9AFind-the-best-function"><span class="toc-text">step 3：Find the best function</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Discriminative-v-s-Generative"><span class="toc-text">Discriminative v.s. Generative</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#same-model-but-different-currency"><span class="toc-text">same model but different currency</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#DM-%E6%A8%A1%E5%9E%8B%E5%92%8C-GM-%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%BC%98%E5%8A%A3%E5%8A%BF"><span class="toc-text">DM 模型和 GM 模型的优劣势</span></a></li></ol></li></ol>
     </div>
   </section>
 
@@ -743,16 +798,16 @@
       
     
       
-        <div><p>博客内容遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+        <div><p>Blog content follows the <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en">Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License</a></p>
 </div>
       
     
       
-        本站使用
+        Use
         <a href="https://volantis.js.org/" target="_blank" class="codename">Volantis</a>
-        作为主题，总访问量为
+        as theme, total visits
           <span id="busuanzi_value_site_pv"><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
-          次
+          times
         
       
     
