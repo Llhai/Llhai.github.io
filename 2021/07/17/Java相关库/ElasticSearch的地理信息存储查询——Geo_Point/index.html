@@ -17,9 +17,9 @@
 
   <!-- 页面元数据 -->
   
-  <title>Tensorflow Unity尝试 - LlHai</title>
+  <title>ElasticSearch的Geo_Point - LlHai</title>
    
-  <meta name="description" content="尝试使用Tensorflow-unity组件直接加载TF模型" />
+  <meta name="description" content="ES中用于存储地理信息的数据类型" />
   
 
   <!-- feed -->
@@ -354,8 +354,8 @@
         
           
   <h1 class="title">
-    <a href="/2020/03/25/Unity-Tensorflow%E5%B0%9D%E8%AF%95/">
-      Tensorflow Unity尝试
+    <a href="/2021/07/17/Java%E7%9B%B8%E5%85%B3%E5%BA%93/ElasticSearch%E7%9A%84%E5%9C%B0%E7%90%86%E4%BF%A1%E6%81%AF%E5%AD%98%E5%82%A8%E6%9F%A5%E8%AF%A2%E2%80%94%E2%80%94Geo_Point/">
+      ElasticSearch的Geo_Point
     </a>
   </h1>
 
@@ -369,14 +369,6 @@
           
             
               
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Unity%E7%9B%B8%E5%85%B3/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Unity相关</p>
-    </a>
-  </div>
-
 
             
           
@@ -384,7 +376,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：Mar 25, 2020</p>
+    <p>发布于：Jul 17, 2021</p>
   </a>
 </div>
 
@@ -407,23 +399,57 @@
       <section class="article typo">
         <div class="article-entry" itemprop="articleBody">
           
-          <h4 id="环境配置"><a class="markdownIt-Anchor" href="#环境配置"></a> 环境配置</h4>
-<p>在Unity上使用Tensorflow需要借助ML-Agents，Unity Machine Learning Agents (ML-Agents) 是一款开源的 Unity 插件， 使得我们得以在游戏环境和模拟环境中训练智能 agents。</p>
+          <h2 id="elasticsearch-的-geo_point"><a class="markdownIt-Anchor" href="#elasticsearch-的-geo_point"></a> ElasticSearch 的 Geo_Point</h2>
+<p>Geo_Point 是 ES 用于存储地理位置的数据类型，为基于地理位置的搜索、索引、聚合、计算提供了强大的支持</p>
+<h3 id="基本概念"><a class="markdownIt-Anchor" href="#基本概念"></a> 基本概念</h3>
+<h4 id="geohash"><a class="markdownIt-Anchor" href="#geohash"></a> GeoHash</h4>
+<p>GeoHash 是将经纬度坐标编码为字符串的一种方法，它通过牺牲一定精度，来换取高效的检索性能</p>
+<p>ES 将平面预先划分为多级矩形区域，然后按照从大矩形到小矩形的顺序，将位置信息依次编码为二进制码，最后按照 Base32 编码，将二进制码转换为字符串。矩形级别越小，精度越高，字符串也就越长。在匹配时，两个位置的字符串前缀匹配度越高，代表其距离越近</p>
+<h4 id="地理计算方式"><a class="markdownIt-Anchor" href="#地理计算方式"></a> 地理计算方式</h4>
+<p>两点间的距离计算，有多种牺牲性能换取精度的算法：</p>
+<ul>
+<li>arc:这种方式把世界当作球体来处理,最慢但是最准确</li>
+<li>plane：plane 计算方式把地球当成是平坦的，速度快，但只在赤道附近准确，越靠近两极，精度越差</li>
+<li>sloppy_arc：默认的计算方式，速度为 arc 方法的 4 到 5 倍，距离精度高达 99.9%</li>
+</ul>
+<p>计算距离时，通过 distance_type 字段来显式指定</p>
+<h3 id="geo_point-的存储和查询"><a class="markdownIt-Anchor" href="#geo_point-的存储和查询"></a> geo_point 的存储和查询</h3>
+<h4 id="存储"><a class="markdownIt-Anchor" href="#存储"></a> 存储</h4>
+<p>geo_point 顾名思义，存储的是坐标点位置信息，包含经度和纬度两部分，es 无法自动将数据映射到 geo_point 格式的字段，在存储时需要指定数据类型<br />
+ES 为 geo_point 提供了三种语法，以位置：纬度-41.12，经度-71.34 为例</p>
+<ul>
+<li>对象</li>
+</ul>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index/_doc</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;id&quot;</span>:<span class="number">1</span>,</span><br><span class="line">  <span class="attr">&quot;text&quot;</span>: <span class="string">&quot;Geo-point as an object&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;location&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;lat&quot;</span>: <span class="number">41.12</span>,</span><br><span class="line">    <span class="attr">&quot;lon&quot;</span>: <span class="number">-71.34</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>数组</li>
+</ul>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index/_doc</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;id&quot;</span>:<span class="number">1</span>,</span><br><span class="line">  <span class="attr">&quot;text&quot;</span>: <span class="string">&quot;Geo-point as an array&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;location&quot;</span>: [ <span class="number">-71.34</span>, <span class="number">41.12</span> ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>字符串</li>
+</ul>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index/_doc</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;id&quot;</span>:<span class="number">3</span>,</span><br><span class="line">  <span class="attr">&quot;text&quot;</span>: <span class="string">&quot;Geo-point as a string&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;location&quot;</span>: <span class="string">&quot;41.12,-71.34&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>使用字符串存储时，顺序为”纬度，经度“，使用数组存储时，顺序是“经度，纬度”</p>
+</blockquote>
+<h4 id="查询"><a class="markdownIt-Anchor" href="#查询"></a> 查询</h4>
 <ol>
-<li>Anaconda Tensorflow配置就不写了，本着不给自己找事的原则，使用Py36，tf-1.13.1</li>
-<li>安装 mlagents环境工具，<code>pip install mlagents</code></li>
-<li>获取ml-agents，在 <a target="_blank" rel="noopener" href="https://github.com/Unity-Technologies/ml-agents">ml-agents仓库</a>页面直接download所有内容即可。</li>
-<li>进入 解压出的ml-agents目录，安装项目所需文件，有报错基本是依赖版本不符合，卸载原有版本，安装要求版本即可。</li>
+<li>geo_distance</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd ml-agents-envs</span><br><span class="line">pip install -e .&#x2F;</span><br><span class="line">cd …</span><br><span class="line">cd ml-agents</span><br><span class="line">pip install -e .&#x2F;</span><br></pre></td></tr></table></figure>
-<ol start="5">
-<li>将ml-agents/project/Assets目录下内容拖到Unity中，我在这步时报错了，然后按照官方文档的方法，<code>Select Add package from disk... and navigate into the com.unity.ml-agents folder and select the package.json folder.</code> 然后就可以了</li>
-<li>导入TensorFlowSharp包，这是tensorflowsharp的unity专用包 。该包包含一个tensorflow环境，使你不必依赖系统环境。可以直接跨平台打包。</li>
-<li>后续还有一些诸如在Edit→Player→otherSetting→DefineSymbols中加入 ENABLE_TENSORFLOW等等玄学操作，我也不知道需不需要</li>
+<p>类似于 Redis 中的 georadius，给定一个点和半径，可查询出所有在该圆圈范围内的所有数据。</p>
+<p>在查询时可自定义排序规则，如给定一个目标点，按结果中所有点与目标点的距离，对查询结果进行升序排列。</p>
+<p>下面以查询纬度-10.0，经度 18.0，半径 10km 内所有点为例，进行查询，查询语句如下</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;geo_distance&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;distance&quot;</span>: <span class="string">&quot;100km&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;location&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;lat&quot;</span>: <span class="number">10.0</span>,</span><br><span class="line">        <span class="attr">&quot;lon&quot;</span>: <span class="number">18.0</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;sort&quot;</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">&quot;_geo_distance&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;location&quot;</span>: <span class="string">&quot;10.0,18.0&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;order&quot;</span>: <span class="string">&quot;asc&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;unit&quot;</span>: <span class="string">&quot;km&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;distance_type&quot;</span>: <span class="string">&quot;plane&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>查询结果如下<br />
+<img src="https://gitee.com/Ll_hai/markdown-image/raw/master/image/20211112172534.png" alt="" /></p>
+<ol start="2">
+<li>geo_bounding_box<br />
+给定一个矩形范围，返回位于矩形内的元素，矩形范围的给定方式很灵活，通常以左上角和右下角两个点的方式给出，查询范例如下：</li>
 </ol>
-<h4 id="测试"><a class="markdownIt-Anchor" href="#测试"></a> 测试</h4>
-<p>如果你觉得你已经配置好了，可以运行以下代码，输出正常说明配置成功了</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">using System.Collections;</span><br><span class="line">using System.Collections.Generic;</span><br><span class="line">using UnityEngine;</span><br><span class="line">using TensorFlow;</span><br><span class="line"></span><br><span class="line">public class tensorflowTest : MonoBehaviour</span><br><span class="line">&#123;</span><br><span class="line">    &#x2F;&#x2F; Start is called before the first frame update</span><br><span class="line">    void Start()</span><br><span class="line">    &#123;</span><br><span class="line">        TFSession session &#x3D; new TFSession();</span><br><span class="line">        TFGraph graph &#x3D; session.Graph;</span><br><span class="line">        var a &#x3D; graph.Const(2);</span><br><span class="line">        var b &#x3D; graph.Const(3);</span><br><span class="line"></span><br><span class="line">        var addRes &#x3D; session.GetRunner().Run(graph.Add(a, b));</span><br><span class="line">        var res &#x3D; addRes.GetValue();</span><br><span class="line">        Debug.Log(res);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;geo_bounding_box&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;location&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;top_left&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;lat&quot;</span>: <span class="number">11.0</span>,</span><br><span class="line">          <span class="attr">&quot;lon&quot;</span>: <span class="number">18.0</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">&quot;bottom_right&quot;</span>: &#123;</span><br><span class="line">          <span class="attr">&quot;lat&quot;</span>: <span class="number">10.0</span>,</span><br><span class="line">          <span class="attr">&quot;lon&quot;</span>: <span class="number">19.0</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>查询结果如下：<br />
+<img src="https://gitee.com/Ll_hai/markdown-image/raw/master/image/20211112174723.png" alt="" /></p>
+
           
             <div class='article_footer'>
               
@@ -459,7 +485,7 @@
           
         
           
-            <p>本文永久链接是：<a href=http://yoursite.com/2020/03/25/Unity-Tensorflow%E5%B0%9D%E8%AF%95/>http://yoursite.com/2020/03/25/Unity-Tensorflow%E5%B0%9D%E8%AF%95/</a></p>
+            <p>本文永久链接是：<a href=http://yoursite.com/2021/07/17/Java%E7%9B%B8%E5%85%B3%E5%BA%93/ElasticSearch%E7%9A%84%E5%9C%B0%E7%90%86%E4%BF%A1%E6%81%AF%E5%AD%98%E5%82%A8%E6%9F%A5%E8%AF%A2%E2%80%94%E2%80%94Geo_Point/>http://yoursite.com/2021/07/17/Java%E7%9B%B8%E5%85%B3%E5%BA%93/ElasticSearch%E7%9A%84%E5%9C%B0%E7%90%86%E4%BF%A1%E6%81%AF%E5%AD%98%E5%82%A8%E6%9F%A5%E8%AF%A2%E2%80%94%E2%80%94Geo_Point/</a></p>
           
         
       </blockquote>
@@ -510,10 +536,10 @@
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-05-25T17:08:54+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-11-15T10:10:04+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：May 25, 2020</p>
+    <p>更新于：Nov 15, 2021</p>
   </a>
 </div>
 
@@ -521,6 +547,9 @@
       
         
           
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E2%80%9C%E5%90%8E%E7%AB%AF%E2%80%9D/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>“后端”</p></a></div>
+
 
         
       
@@ -537,7 +566,7 @@
       
         <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2020/03/25/Unity-Tensorflow%E5%B0%9D%E8%AF%95/&title=Tensorflow Unity尝试 - LlHai&summary="
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2021/07/17/Java%E7%9B%B8%E5%85%B3%E5%BA%93/ElasticSearch%E7%9A%84%E5%9C%B0%E7%90%86%E4%BF%A1%E6%81%AF%E5%AD%98%E5%82%A8%E6%9F%A5%E8%AF%A2%E2%80%94%E2%80%94Geo_Point/&title=ElasticSearch的Geo_Point - LlHai&summary="
           
           >
           
@@ -549,7 +578,7 @@
       
         <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://yoursite.com/2020/03/25/Unity-Tensorflow%E5%B0%9D%E8%AF%95/&title=Tensorflow Unity尝试 - LlHai&summary="
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://yoursite.com/2021/07/17/Java%E7%9B%B8%E5%85%B3%E5%BA%93/ElasticSearch%E7%9A%84%E5%9C%B0%E7%90%86%E4%BF%A1%E6%81%AF%E5%AD%98%E5%82%A8%E6%9F%A5%E8%AF%A2%E2%80%94%E2%80%94Geo_Point/&title=ElasticSearch的Geo_Point - LlHai&summary="
           
           >
           
@@ -561,7 +590,7 @@
       
         <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2020/03/25/Unity-Tensorflow%E5%B0%9D%E8%AF%95/&title=Tensorflow Unity尝试 - LlHai&summary="
+          target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2021/07/17/Java%E7%9B%B8%E5%85%B3%E5%BA%93/ElasticSearch%E7%9A%84%E5%9C%B0%E7%90%86%E4%BF%A1%E6%81%AF%E5%AD%98%E5%82%A8%E6%9F%A5%E8%AF%A2%E2%80%94%E2%80%94Geo_Point/&title=ElasticSearch的Geo_Point - LlHai&summary="
           
           >
           
@@ -585,24 +614,30 @@
         
           <div class="prev-next">
             
-              <a class='prev' href='/2020/03/25/VIBE%E8%BF%90%E8%A1%8C%E5%B0%9D%E8%AF%95/'>
-                <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>VIBE运行尝试</p>
-                <p class='content'>VIBE 全名 Video Inference for Human Body Pose and Shape Estimation[CVPR-2020] 官方开源代码链接:github 项目地址。...</p>
+              <a class='prev' href='/2021/07/17/SpringBoot%E5%AE%9E%E6%88%98%E6%B4%BE/%E6%B3%A8%E8%A7%A3%E5%AD%97%E5%85%B8/'>
+                <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>注解字典</p>
+                <p class='content'> 注解
+记录本书涉及到的所有注解
+ 系统注解
+
+@Override
+@Deprecated
+@SuppressWarnings
+
+ Lombok注解
+
+@Data : 自动生成Gettter/S...</p>
               </a>
             
             
-              <a class='next' href='/2020/03/25/opencvForUnityDnn/'>
-                <p class='title'>OpenCVForUnity笔记2-加载TF模型<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
-                <p class='content'> 涉及以下函数
+              <a class='next' href='/2020/08/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-7-Tips-For-Training-DNN/'>
+                <p class='title'>机器学习-7-Tips-For-Training-DNN<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+                <p class='content'> 深度学习的三个步骤
+通过之前的学习，我们了解到深度学习分为以下三个步骤:
 
-Dnn.readNetFromTensorflow()
-Dnn.blobFromImage()
-net.setInput()
-net.forward()
-
- 几个关键点
-
-Dn...</p>
+设计模型网络结构(network structure)
+定义损失函数(goodness of function)
+选...</p>
               </a>
             
           </div>
@@ -647,7 +682,7 @@ Dn...</p>
 
   <script>
     window.subData = {
-      title: 'Tensorflow Unity尝试',
+      title: 'ElasticSearch的Geo_Point',
       tools: true
     }
   </script>
@@ -673,7 +708,7 @@ Dn...</p>
 
 
     <div class='content'>
-      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-text"> 环境配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95"><span class="toc-text"> 测试</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#elasticsearch-%E7%9A%84-geo_point"><span class="toc-text"> ElasticSearch 的 Geo_Point</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-text"> 基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#geohash"><span class="toc-text"> GeoHash</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%B0%E7%90%86%E8%AE%A1%E7%AE%97%E6%96%B9%E5%BC%8F"><span class="toc-text"> 地理计算方式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#geo_point-%E7%9A%84%E5%AD%98%E5%82%A8%E5%92%8C%E6%9F%A5%E8%AF%A2"><span class="toc-text"> geo_point 的存储和查询</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%98%E5%82%A8"><span class="toc-text"> 存储</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2"><span class="toc-text"> 查询</span></a></li></ol></li></ol></li></ol>
     </div>
   </section>
 
