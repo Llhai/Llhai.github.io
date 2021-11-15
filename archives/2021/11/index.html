@@ -3,7 +3,9 @@
 <head hexo-theme="https://volantis.js.org/#2.6.6">
   <meta charset="utf-8" />
   <!-- SEO相关 -->
-    
+   
+  <meta name="robots" content="noindex,follow" />
+   
   <!-- 渲染优化 -->
   <meta name="renderer" content="webkit" />
   <meta name="force-rendering" content="webkit" />
@@ -17,10 +19,8 @@
 
   <!-- 页面元数据 -->
   
-  <title>注解字典 - LlHai</title>
+  <title>Archive: 2021/11 - LlHai</title>
    
-  <meta name="description" content="记录SpringBoot实战派书中涉及的所有注解" />
-  
 
   <!-- feed -->
   
@@ -79,7 +79,99 @@
 
 <body>
   
-  <div id="loading-bar-wrapper">
+  <div class="cover-wrapper">
+    
+      <cover class='cover  half'>
+        <div class='cover-body'>
+  <div class='a'>
+    
+    
+      <p class="title">你说的对</p>
+    
+    
+  </div>
+  <div class='b'>
+    
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <input type="text" class="input u-search-input" placeholder="" />
+          <i class="icon fas fa-search fa-fw"></i>
+        </form>
+      </div>
+    
+    <div class='menu navigation'>
+      <ul class='cover-list-h'>
+        
+          
+            <li>
+              <a class="nav home"
+                href="/"
+                
+                
+                id="home">
+                <i class='fas fa-rss fa-fw'></i>博客
+              </a>
+            </li>
+          
+            <li>
+              <a class="nav home"
+                href="/categories/"
+                
+                
+                id="categories">
+                <i class='fas fa-folder-open fa-fw'></i>分类
+              </a>
+            </li>
+          
+            <li>
+              <a class="nav home"
+                href="/tags/"
+                
+                
+                id="tags">
+                <i class='fas fa-tags fa-fw'></i>标签
+              </a>
+            </li>
+          
+            <li>
+              <a class="nav home"
+                href="/archives/"
+                
+                
+                id="archives">
+                <i class='fas fa-archive fa-fw'></i>归档
+              </a>
+            </li>
+          
+            <li>
+              <a class="nav home"
+                href="/friends/"
+                
+                
+                id="friends">
+                <i class='fas fa-link fa-fw'></i>友链
+              </a>
+            </li>
+          
+            <li>
+              <a class="nav home"
+                href="/about/"
+                
+                
+                id="about">
+                <i class='fas fa-info-circle fa-fw'></i>关于
+              </a>
+            </li>
+          
+        
+      </ul>
+    </div>
+  </div>
+</div>
+
+      </cover>
+    
+    <div id="loading-bar-wrapper">
   <div id="loading-bar"></div>
 </div>
 <header class="l_header shadow blur">
@@ -332,18 +424,30 @@
 
 <script>setLoadingBarProgress(40);</script>
 
+  </div>
 
 
-  <div class="l_body nocover">
+  <div class="l_body">
     <div class='body-wrapper'>
       
 
 <div class='l_main'>
-  
-
-  
-    <article id="post" class="post white-box reveal shadow article-type-post" itemscope itemprop="blogPost">
+	
+		
+  <section class="post-list ">
+    
       
+        
+          
+        
+      
+    
+    
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
 
 
   <section class='meta'>
@@ -353,17 +457,15 @@
       <div class="meta" id="header-meta">
         
           
-  <h1 class="title">
-    <a href="/2021/07/17/SpringBoot%E5%AE%9E%E6%88%98%E6%B4%BE/%E6%B3%A8%E8%A7%A3%E5%AD%97%E5%85%B8/">
-      注解字典
+  <h2 class="title">
+    <a href="/2021/11/12/Java%E7%9B%B8%E5%85%B3%E5%BA%93/ElasticSearch%E7%9A%84%E5%9C%B0%E7%90%86%E4%BF%A1%E6%81%AF%E5%AD%98%E5%82%A8%E6%9F%A5%E8%AF%A2%E2%80%94%E2%80%94Geo_Point/">
+      ElasticSearch的Geo_Point
     </a>
-  </h1>
+  </h2>
 
 
         
         <div class='new-meta-box'>
-          
-            
           
             
           
@@ -376,9 +478,14 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：Jul 17, 2021</p>
+    <p>发布于：Nov 12, 2021</p>
   </a>
 </div>
+
+            
+          
+            
+              
 
             
           
@@ -396,331 +503,192 @@
   </section>
 
 
-      <section class="article typo">
-        <div class="article-entry" itemprop="articleBody">
-          
-          <h2 id="注解"><a class="markdownIt-Anchor" href="#注解"></a> 注解</h2>
-<p>记录本书涉及到的所有注解</p>
-<h3 id="系统注解"><a class="markdownIt-Anchor" href="#系统注解"></a> 系统注解</h3>
-<ul>
-<li>@Override</li>
-<li>@Deprecated</li>
-<li>@SuppressWarnings</li>
-</ul>
-<h3 id="lombok注解"><a class="markdownIt-Anchor" href="#lombok注解"></a> Lombok注解</h3>
-<ul>
-<li>@Data : 自动生成Gettter/Setter、toString、equals、hashCode、无参构造函数</li>
-<li>@NonNull : 帮助处理NullPointerException</li>
-<li>@CleanUp :</li>
-<li>@Getter/@Setter :</li>
-<li>@ToString :</li>
-<li>@EqualsAndHashcode : 从对象的字段中重写hashCode和equals方法</li>
-<li>@NoArgsConstructor/@RequiredArgsConstructor/@AllArgsConstructor : 自动生成构造方法</li>
-<li>@Value : 注解final类</li>
-<li>@Builder :</li>
-<li>@SneakyThrows : 处理异常</li>
-<li>@Synchronized : 同步方法的转化</li>
-<li>@Log :</li>
-</ul>
-<h3 id="springboot注解"><a class="markdownIt-Anchor" href="#springboot注解"></a> Springboot注解</h3>
-<h4 id="用在类名上的注解"><a class="markdownIt-Anchor" href="#用在类名上的注解"></a> 用在类名上的注解</h4>
-<ul>
-<li>@Controller : 标注控制器层，用于构建MVC模式的程序，在MVC中代表C</li>
-<li>@RestController : 作用相当于@ResponseBody + @Controller</li>
-<li>@Service : 声明一个业务处理类，用于标注服务层，处理业务逻辑</li>
-<li>@Repository : 标注数据访问层</li>
-<li>@Component : 用于把普通POJO(Plain Ordinary Java Objects)实例化到Spring容器中。当类不属于注解@Controller和@Service等时，就可以使用@Component来标注这个类。</li>
-</ul>
-<blockquote>
-<p>Spring会把注解@Controller、@Service、@Repository、@Component标注的类纳入到Spring容器中进行管理</p>
-</blockquote>
-<ul>
-<li>@Configuration : 用于标注配置类，可以由Spring容器自动处理，作为Bean的载体，用来指示一个类声明或多个@Bean方法</li>
-<li>@Resource : 用于装配Bean</li>
-<li>@Autowired : 表示被修饰的类需要注入对象。Spring会扫描所有被@Autowired标注的类，然后根据类型在IoC容器中找到匹配的类进行注入。</li>
-<li>@RequestMapping : 用于处理地址映射，当用在类上时，表示类上所有相应请求的方法都以该地址作为父路径</li>
-<li>@Transactional : 表明该类的所有public方法都具有该类型的事务属性。</li>
-<li>@Qualifier : 用于标注哪一个实现类是需要注入的，它的参数名称为被注入的类中注解@Service标注的名称，常和@Autowired搭配使用</li>
-</ul>
-<h4 id="用在方法上的注解"><a class="markdownIt-Anchor" href="#用在方法上的注解"></a> 用在方法上的注解</h4>
-<ul>
-<li>@ResponseBody : 用在函数上，将函数返回值作为请求返回值，通常用来返回JSON数据或者是XML</li>
-<li>@RequestBody : 用在方法参数前，将Json/XML格式的http消息转化为指定类型参数</li>
-<li>@PathVariable : 用在方法参数前，将URL获取的参数映射到方法参数上</li>
-<li>@Bean : 用在函数上，声明该方法的返回结果是一个由Spring容器管理的Bean，交给Spring管理，在MVC模型中对应着M</li>
-</ul>
-<h4 id="其他注解"><a class="markdownIt-Anchor" href="#其他注解"></a> 其他注解</h4>
-<ul>
-<li>@SpringBootApplication : 标注Spring Boot项目入口类</li>
-<li>@EnableAutoConfiguration : 自动配置</li>
-<li>@EnableScheduling : 用于开启计划任务</li>
-<li>@EnableAsync : 用于开启异步注解功能</li>
-<li>@ComponentScan : 用来扫描组件，可自动发现和装配一些Bean</li>
-<li>@ASpec : 标注切面，用来配置事务、日志、权限验证</li>
-<li>@ControllerAdvice :</li>
-<li>@ExceptionHandler : 用在方法上，表示遇到这个异常就执行该方法</li>
-<li>@Value : 用在属性上，用于获取配置文件中的值</li>
-<li>@ConfigurationProperties :</li>
-</ul>
-
-          
-            <div class='article_footer'>
-              
-                
-  
-    
-    
-
-
-
-  
-
-  
-    
-    
-
-
-
-  
-
-  
-    
-    
-
-<section class="widget copyright  desktop mobile">
-  <div class='content'>
-    
-      <blockquote>
-        
-          
-            <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
-
-          
-        
-          
-            <p>本文永久链接是：<a href=http://yoursite.com/2021/07/17/SpringBoot%E5%AE%9E%E6%88%98%E6%B4%BE/%E6%B3%A8%E8%A7%A3%E5%AD%97%E5%85%B8/>http://yoursite.com/2021/07/17/SpringBoot%E5%AE%9E%E6%88%98%E6%B4%BE/%E6%B3%A8%E8%A7%A3%E5%AD%97%E5%85%B8/</a></p>
-          
-        
-      </blockquote>
-    
-  </div>
-</section>
-
-  
-
-  
-    
-    
-
-<section class="widget qrcode  desktop mobile">
-  
-
-  <div class='content article-entry'>
-    
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
       
-        <div class='fancybox'><img src='https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/qrcode/wiki_volantis.png'
-        
-          height='64px'
-        ></div>
-      
-    
-      
-        <div class='fancybox'><img src='https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/qrcode/wiki_volantis.png'
-        
-          height='64px'
-        ></div>
-      
-    
-  </div>
-</section>
-
-  
-
-
-              
-            </div>
-          
-        </div>
-        
-          
-
-
-  <section class='meta' id="footer-meta">
-    <div class='new-meta-box'>
-      
-        
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-07-18T21:45:27+08:00">
-  <a class='notlink'>
-    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：Jul 18, 2021</p>
-  </a>
-</div>
-
-        
-      
-        
-          
-  
-  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E2%80%9C%E5%90%8E%E7%AB%AF%E2%80%9D/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>“后端”</p></a></div>
-
-
-        
-      
-        
-          
-
-        
-      
-        
-          
-  <div class="new-meta-item share -mob-share-list">
-  <div class="-mob-share-list share-body">
-    
-      
-        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
-          
-          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2021/07/17/SpringBoot%E5%AE%9E%E6%88%98%E6%B4%BE/%E6%B3%A8%E8%A7%A3%E5%AD%97%E5%85%B8/&title=注解字典 - LlHai&summary="
-          
-          >
-          
-            <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/logo/128/qq.png">
-          
-        </a>
-      
-    
-      
-        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
-          
-          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://yoursite.com/2021/07/17/SpringBoot%E5%AE%9E%E6%88%98%E6%B4%BE/%E6%B3%A8%E8%A7%A3%E5%AD%97%E5%85%B8/&title=注解字典 - LlHai&summary="
-          
-          >
-          
-            <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/logo/128/qzone.png">
-          
-        </a>
-      
-    
-      
-        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
-          
-          target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2021/07/17/SpringBoot%E5%AE%9E%E6%88%98%E6%B4%BE/%E6%B3%A8%E8%A7%A3%E5%AD%97%E5%85%B8/&title=注解字典 - LlHai&summary="
-          
-          >
-          
-            <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/logo/128/weibo.png">
-          
-        </a>
-      
-    
-  </div>
-</div>
-
-
-
-        
+        <p>ES中用于存储地理信息的数据类型</p>
       
     </div>
+    
+      
+        <div class="button readmore">
+          <a href="/2021/11/12/Java%E7%9B%B8%E5%85%B3%E5%BA%93/ElasticSearch%E7%9A%84%E5%9C%B0%E7%90%86%E4%BF%A1%E6%81%AF%E5%AD%98%E5%82%A8%E6%9F%A5%E8%AF%A2%E2%80%94%E2%80%94Geo_Point/">
+            阅读全文 <i class="fas fa-chevron-right"></i>
+          </a>
+        </div>
+      
+    
   </section>
+</article>
 
-
-        
-        
-          <div class="prev-next">
-            
-              <a class='prev' href='/2021/07/17/%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6%E6%A1%86%E6%9E%B6Quartz/'>
-                <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Quartz调度框架学习笔记</p>
-                <p class='content'> Quartz
-Quartz是一个开源的任务调度库
- 涉及API
-
-Scheduler ：负责任务调度的调度器
-
-负责任何有关任务调度的事，包括：添加、删除、列举所有Jobs和Triggers，...</p>
-              </a>
-            
-            
-              <a class='next' href='/2020/08/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-7-Tips-For-Training-DNN/'>
-                <p class='title'>机器学习-7-Tips-For-Training-DNN<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
-                <p class='content'> 深度学习的三个步骤
-通过之前的学习，我们了解到深度学习分为以下三个步骤:
-
-设计模型网络结构(network structure)
-定义损失函数(goodness of function)
-选...</p>
-              </a>
-            
           </div>
         
-      </section>
-    </article>
+      
+    
+  </section>
   
-
-  
-    <!-- 显示推荐文章和评论 -->
-
-
-
-  <article class="post white-box reveal comments shadow">
-    <section class="article typo">
-      <p ct><i class='fas fa-comments'></i> 评论</p>
-      
-      
-      
-      
-      
-      
-        <section id="comments">
-          <div id="valine_container" class="valine_thread">
-            <i class="fas fa-cog fa-spin fa-fw fa-2x"></i>
-          </div>
-        </section>
-      
-      
-    </section>
-  </article>
-
+    
+    <!-- 根据主题中的设置决定是否在archive中针对摘要部分的MathJax公式加载mathjax.js文件 -->
+    
+    
 
   
 
 
-
-
-<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
-
-
-
-  <script>
-    window.subData = {
-      title: '注解字典',
-      tools: true
-    }
-  </script>
-
-
+	
 </div>
 <aside class='l_side'>
   
   
+    
+    
+
+<section class="widget blogger shadow desktop mobile">
+  <div class='content'>
+    
+      
+        <a class='avatar flat-box' href='/about/'>
+          <img no-lazy src='https://cdn.jsdelivr.net/gh/Llhai/img/source/avatar.jpg'/>
+        </a>
+      
+    
+    
+      <div class='text'>
+        
+        
+        
+          <p><span id="jinrishici-sentence">LlHai</span></p>
+          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+        
+      </div>
+    
+    
+      <div class="social-wrapper">
+        
+          
+            <a href="/atom.xml"
+              class="social fas fa-rss flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+          
+            <a href="mailto:me@xaoxuu.com"
+              class="social fas fa-envelope flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+          
+            <a href="https://github.com/xaoxuu"
+              class="social fab fa-github flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+          
+            <a href="https://music.163.com/#/user/home?id=63035382"
+              class="social fas fa-headphones-alt flat-btn"
+              target="_blank"
+              rel="external nofollow noopener noreferrer">
+            </a>
+          
+        
+      </div>
+    
+  </div>
+</section>
+
+  
 
   
     
     
+  
 
-
-  <section class="widget toc-wrapper shadow desktop mobile">
+  <section class="widget category shadow desktop">
     
   <header>
     
-      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+      <a href='/blog/categories/'><i class="fas fa-folder-open fa-fw" aria-hidden="true"></i><span class='name'>文章分类</span></a>
     
   </header>
 
 
     <div class='content'>
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%E8%A7%A3"><span class="toc-text"> 注解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E6%B3%A8%E8%A7%A3"><span class="toc-text"> 系统注解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lombok%E6%B3%A8%E8%A7%A3"><span class="toc-text"> Lombok注解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#springboot%E6%B3%A8%E8%A7%A3"><span class="toc-text"> Springboot注解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%A8%E5%9C%A8%E7%B1%BB%E5%90%8D%E4%B8%8A%E7%9A%84%E6%B3%A8%E8%A7%A3"><span class="toc-text"> 用在类名上的注解</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%A8%E5%9C%A8%E6%96%B9%E6%B3%95%E4%B8%8A%E7%9A%84%E6%B3%A8%E8%A7%A3"><span class="toc-text"> 用在方法上的注解</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%B3%A8%E8%A7%A3"><span class="toc-text"> 其他注解</span></a></li></ol></li></ol></li></ol>
+      <ul class="entry navigation">
+        
+          <li><a class="flat-box"
+            title="/categories/CVPR2020%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/" href="/categories/CVPR2020%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/"
+            id="categoriesCVPR2020E5BC80E6BA90E9A1B9E79BAE"
+            ><div class='name'>CVPR2020开源项目</div><div class='badge'>(2)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/ML2020%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/" href="/categories/ML2020%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/"
+            id="categoriesML2020E8AFBEE7A88BE7AC94E8AEB0"
+            ><div class='name'>ML2020课程笔记</div><div class='badge'>(7)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/OpenCvForUnity/" href="/categories/OpenCvForUnity/"
+            id="categoriesOpenCvForUnity"
+            ><div class='name'>OpenCvForUnity</div><div class='badge'>(2)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/Tensorflow/" href="/categories/Tensorflow/"
+            id="categoriesTensorflow"
+            ><div class='name'>Tensorflow</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/Unity%E7%9B%B8%E5%85%B3/" href="/categories/Unity%E7%9B%B8%E5%85%B3/"
+            id="categoriesUnityE79BB8E585B3"
+            ><div class='name'>Unity相关</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%AB/" href="/categories/%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%AB/"
+            id="categoriesE4BABAE884B8E8AF86E588AB"
+            ><div class='name'>人脸识别</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/%E5%90%8E%E7%AB%AF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" href="/categories/%E5%90%8E%E7%AB%AF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"
+            id="categoriesE5908EE7ABAFE5ADA6E4B9A0E7AC94E8AEB0"
+            ><div class='name'>后端学习笔记</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/%E8%B8%A9%E5%9D%91/" href="/categories/%E8%B8%A9%E5%9D%91/"
+            id="categoriesE8B8A9E59D91"
+            ><div class='name'>踩坑</div><div class='badge'>(1)</div></a></li>
+        
+      </ul>
     </div>
   </section>
 
+
+  
+
+  
+    
+    
+  
+
+  <section class="widget tagcloud shadow desktop mobile">
+    
+  <header>
+    
+      <a href='/blog/tags/'><i class="fas fa-tags fa-fw" aria-hidden="true"></i><span class='name'>热门标签</span></a>
+    
+  </header>
+
+
+    <div class='content'>
+      <a href="/tags/%E2%80%9C%E5%90%8E%E7%AB%AF%E2%80%9D/" style="font-size: 14px; color: #999">“后端”</a> <a href="/tags/%E2%80%9C%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E2%80%9D/" style="font-size: 24px; color: #555">“机器学习”</a>
+    </div>
+  </section>
+
+
+  
 
   
 
@@ -803,6 +771,14 @@ Scheduler ：负责任务调度的调度器
   </footer>
 
 <script>setLoadingBarProgress(80);</script>
+
+
+
+
+	<!-- 根据主题中的设置决定是否在archive中针对摘要部分的MathJax公式加载mathjax.js文件 -->
+	
+
+	
 
 
       <script>setLoadingBarProgress(60);</script>
@@ -907,60 +883,6 @@ Scheduler ：负责任务调度的调度器
 
 
 
-
-  
-    
-<script src="https://cdn.jsdelivr.net/npm/valine@1.4/dist/Valine.min.js"></script>
-
-  
-  <script>
-  var GUEST_INFO = ['nick','mail','link'];
-  var meta = 'nick,mail,link'.split(',').filter(function(item){
-    return GUEST_INFO.indexOf(item) > -1
-  });
-  var REQUIRED_FIELDS = ['nick','mail','link'];
-  var requiredFields = 'nick,mail'.split(',').filter(function(item){
-    return REQUIRED_FIELDS.indexOf(item) > -1
-  });
-  var valine = new Valine();
-  function emoji(path, idx, ext) {
-      return path + "/" + path + "-" + idx + "." + ext;
-  }
-  var emojiMaps = {};
-  for (var i = 1; i <= 54; i++) {
-    emojiMaps['tieba-' + i] = emoji('tieba', i, 'png');
-  }
-  for (var i = 1; i <= 101; i++) {
-    emojiMaps['qq-' + i] = emoji('qq', i, 'gif');
-  }
-  for (var i = 1; i <= 116; i++) {
-    emojiMaps['aru-' + i] = emoji('aru', i, 'gif');
-  }
-  for (var i = 1; i <= 125; i++) {
-    emojiMaps['twemoji-' + i] = emoji('twemoji', i, 'png');
-  }
-  for (var i = 1; i <= 4; i++) {
-    emojiMaps['weibo-' + i] = emoji('weibo', i, 'png');
-  }
-  valine.init({
-    el: '#valine_container',
-    meta: meta,
-    
-    appId: "8oYFiSOBgumF6fqO7mxHYSbt-gzGzoHsz",
-    appKey: "4YfG5ENRdUo42aYxkI1Ds2Aj",
-    placeholder: "快来评论吧~",
-    pageSize:'10',
-    avatar:'robohash',
-    lang:'zh-cn',
-    visitor: 'true',
-    highlight: 'true',
-    mathJax: 'false',
-    enableQQ: 'true',
-    requiredFields: requiredFields,
-    emojiCDN: 'https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/emoji/valine/',
-    emojiMaps: emojiMaps
-  })
-  </script>
 
 
 
