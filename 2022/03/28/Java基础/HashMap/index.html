@@ -17,9 +17,9 @@
 
   <!-- 页面元数据 -->
   
-  <title>注解字典 - LlHai</title>
+  <title>深入了解HashMap - LlHai</title>
    
-  <meta name="description" content="记录SpringBoot实战派书中涉及的所有注解" />
+  <meta name="description" content="看了这篇,再也不怕面试官问HashMap了" />
   
 
   <!-- feed -->
@@ -354,8 +354,8 @@
         
           
   <h1 class="title">
-    <a href="/2021/07/17/SpringBoot%E5%AE%9E%E6%88%98%E6%B4%BE/%E6%B3%A8%E8%A7%A3%E5%AD%97%E5%85%B8/">
-      注解字典
+    <a href="/2022/03/28/Java%E5%9F%BA%E7%A1%80/HashMap/">
+      深入了解HashMap
     </a>
   </h1>
 
@@ -369,6 +369,14 @@
           
             
               
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java</p>
+    </a>
+  </div>
+
 
             
           
@@ -376,7 +384,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：Jul 17, 2021</p>
+    <p>发布于：Mar 28, 2022</p>
   </a>
 </div>
 
@@ -399,69 +407,96 @@
       <section class="article typo">
         <div class="article-entry" itemprop="articleBody">
           
-          <h2 id="注解"><a class="markdownIt-Anchor" href="#注解"></a> 注解</h2>
-<p>记录本书涉及到的所有注解</p>
-<h3 id="系统注解"><a class="markdownIt-Anchor" href="#系统注解"></a> 系统注解</h3>
+          <h2 id="hashmap-简介"><a class="markdownIt-Anchor" href="#hashmap-简介"></a> HashMap 简介</h2>
+<p>HashMap 是实现了 Map 接口的 K,V 型容器, 可以根据 Key 进行高效的数据访问</p>
+<h2 id="hashmap-底层实现"><a class="markdownIt-Anchor" href="#hashmap-底层实现"></a> HashMap 底层实现</h2>
+<h3 id="hashmap-的数据结构"><a class="markdownIt-Anchor" href="#hashmap-的数据结构"></a> HashMap 的数据结构</h3>
+<p>HashMap 的底层数据结构是数组+链表+红黑树</p>
+<h4 id="数组"><a class="markdownIt-Anchor" href="#数组"></a> 数组</h4>
+<p>数组是 HashMap 实现 O(1)元素访问的核心，常规的数组是顺序存储的，但 hashMap 的数组是离散的，通过 hash 函数为每个 Key 计算一个唯一的 hash 值(即数组索引),即可实现快速的访问，这也是 HashMap 被称为散列表的原因。</p>
+<h4 id="链表"><a class="markdownIt-Anchor" href="#链表"></a> 链表</h4>
+<p>散列表不可避免的会出现哈希冲突，HashMap 使用拉链法解决哈希冲突，即将发生哈希冲突的元素，都存储在链表中，查找的时候，从前向后遍历链表</p>
+<h4 id="红黑树"><a class="markdownIt-Anchor" href="#红黑树"></a> 红黑树</h4>
+<p>链表遍历的时间复杂度是 O(n), 当数组某个位置上的链表长度过长时，HashMap 的性能会出现退化，为此需要将链表转换为红黑树，来减少搜索时间。</p>
+<h3 id="hashmap-的参数"><a class="markdownIt-Anchor" href="#hashmap-的参数"></a> HashMap 的参数</h3>
+<p>HashMap 的类属性如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HashMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">implements</span> <span class="title">Map</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;, <span class="title">Cloneable</span>, <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 序列号</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">362498820763181265L</span>;</span><br><span class="line">    <span class="comment">// 默认的初始容量是16</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_INITIAL_CAPACITY = <span class="number">1</span> &lt;&lt; <span class="number">4</span>;</span><br><span class="line">    <span class="comment">// 最大容量</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAXIMUM_CAPACITY = <span class="number">1</span> &lt;&lt; <span class="number">30</span>;</span><br><span class="line">    <span class="comment">// 默认的填充因子</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">float</span> DEFAULT_LOAD_FACTOR = <span class="number">0.75f</span>;</span><br><span class="line">    <span class="comment">// 当桶(bucket)上的结点数大于这个值时会转成红黑树</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TREEIFY_THRESHOLD = <span class="number">8</span>;</span><br><span class="line">    <span class="comment">// 当桶(bucket)上的结点数小于这个值时树转链表</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> UNTREEIFY_THRESHOLD = <span class="number">6</span>;</span><br><span class="line">    <span class="comment">// 桶中结构转化为红黑树对应的table的最小容量</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MIN_TREEIFY_CAPACITY = <span class="number">64</span>;</span><br><span class="line">    <span class="comment">// 存储元素的数组，总是2的幂次倍</span></span><br><span class="line">    <span class="keyword">transient</span> Node&lt;k,v&gt;[] table;</span><br><span class="line">    <span class="comment">// 存放具体元素的集</span></span><br><span class="line">    <span class="keyword">transient</span> Set&lt;map.entry&lt;k,v&gt;&gt; entrySet;</span><br><span class="line">    <span class="comment">// 存放元素的个数，注意这个不等于数组的长度。</span></span><br><span class="line">    <span class="keyword">transient</span> <span class="keyword">int</span> size;</span><br><span class="line">    <span class="comment">// 每次扩容和更改map结构的计数器</span></span><br><span class="line">    <span class="keyword">transient</span> <span class="keyword">int</span> modCount;</span><br><span class="line">    <span class="comment">// 临界值(容量*填充因子) 当实际大小超过临界值时，会进行扩容</span></span><br><span class="line">    <span class="keyword">int</span> threshold;</span><br><span class="line">    <span class="comment">// 加载因子</span></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">float</span> loadFactor;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中有两个核心参数:</p>
+<ol>
+<li>loadFactor 加载因子
 <ul>
-<li>@Override</li>
-<li>@Deprecated</li>
-<li>@SuppressWarnings</li>
+<li>加载因子用于控制数组中数据的疏密程度，范围在 0-1 之间，loadFactor 越大，数组中的数据越密集</li>
+<li>loadFactor 太大会导致查询效率降低，太小会导致数据利用率低</li>
+<li>默认值为 0.75f，是官方基于时间与空间给出的合适临界值，一般 loadFactor 不做修改</li>
 </ul>
-<h3 id="lombok注解"><a class="markdownIt-Anchor" href="#lombok注解"></a> Lombok注解</h3>
+</li>
+<li>threshold 扩容阈值
 <ul>
-<li>@Data : 自动生成Gettter/Setter、toString、equals、hashCode、无参构造函数</li>
-<li>@NonNull : 帮助处理NullPointerException</li>
-<li>@CleanUp :</li>
-<li>@Getter/@Setter :</li>
-<li>@ToString :</li>
-<li>@EqualsAndHashcode : 从对象的字段中重写hashCode和equals方法</li>
-<li>@NoArgsConstructor/@RequiredArgsConstructor/@AllArgsConstructor : 自动生成构造方法</li>
-<li>@Value : 注解final类</li>
-<li>@Builder :</li>
-<li>@SneakyThrows : 处理异常</li>
-<li>@Synchronized : 同步方法的转化</li>
-<li>@Log :</li>
+<li>threshold 用于衡量数组是否需要扩容</li>
+<li>threshold = loadFactor * capacity</li>
 </ul>
-<h3 id="springboot注解"><a class="markdownIt-Anchor" href="#springboot注解"></a> Springboot注解</h3>
-<h4 id="用在类名上的注解"><a class="markdownIt-Anchor" href="#用在类名上的注解"></a> 用在类名上的注解</h4>
+</li>
+</ol>
+<h3 id="hashmap-的-hash-函数"><a class="markdownIt-Anchor" href="#hashmap-的-hash-函数"></a> HashMap 的 hash 函数</h3>
+<p>HashMap 在计算索引位置时，经过两步:</p>
+<ol>
+<li>
+<p>对 key 的 hashCode 进行哈希扰动得到 hash 值</p>
+</li>
+<li>
+<p>对 hash 值进行(n-1) &amp; hash 的操作，得到索引位置</p>
+</li>
+</ol>
+<h4 id="扰动函数的具体实现如下"><a class="markdownIt-Anchor" href="#扰动函数的具体实现如下"></a> 扰动函数的具体实现如下:</h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">hash</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> h;</span><br><span class="line">    <span class="keyword">return</span> (key == <span class="keyword">null</span>) ? <span class="number">0</span> : (h = key.hashCode()) ^ (h &gt;&gt;&gt; <span class="number">16</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因为在进行第二步时，只取了 hashCode 的低位参与运算，对于设计不好的 hashCode 很容易造成碰撞，因此引入了扰动函数，扰动函数通过混合 hashCode 的低位和高位，减小了 hashCode 发生碰撞的可能性</p>
+<h2 id="hashmap-的小-tip"><a class="markdownIt-Anchor" href="#hashmap-的小-tip"></a> HashMap 的小 tip</h2>
+<ol>
+<li>HashMap 允许 Key 为 null，value 为 null</li>
+<li>HashMap 在遍历时的顺序时按照哈希桶从低到高、链表从前向后依次遍历的</li>
+<li>HashMap 的数组长度必须为 2 的 n 次方，这样设计的好处在于使用位运算代替取模运算，优化 HashMap 的性能表现</li>
+</ol>
+<h2 id="hashmap-扩容"><a class="markdownIt-Anchor" href="#hashmap-扩容"></a> HashMap 扩容</h2>
 <ul>
-<li>@Controller : 标注控制器层，用于构建MVC模式的程序，在MVC中代表C</li>
-<li>@RestController : 作用相当于@ResponseBody + @Controller</li>
-<li>@Service : 声明一个业务处理类，用于标注服务层，处理业务逻辑</li>
-<li>@Repository : 标注数据访问层</li>
-<li>@Component : 用于把普通POJO(Plain Ordinary Java Objects)实例化到Spring容器中。当类不属于注解@Controller和@Service等时，就可以使用@Component来标注这个类。</li>
-</ul>
-<blockquote>
-<p>Spring会把注解@Controller、@Service、@Repository、@Component标注的类纳入到Spring容器中进行管理</p>
-</blockquote>
+<li>HashMap 的扩容函数是 resize, 只有在执行 putVal 方法时才会触发扩容</li>
+<li>扩容的发生有两个原因：
 <ul>
-<li>@Configuration : 用于标注配置类，可以由Spring容器自动处理，作为Bean的载体，用来指示一个类声明或多个@Bean方法</li>
-<li>@Resource : 用于装配Bean</li>
-<li>@Autowired : 表示被修饰的类需要注入对象。Spring会扫描所有被@Autowired标注的类，然后根据类型在IoC容器中找到匹配的类进行注入。</li>
-<li>@RequestMapping : 用于处理地址映射，当用在类上时，表示类上所有相应请求的方法都以该地址作为父路径</li>
-<li>@Transactional : 表明该类的所有public方法都具有该类型的事务属性。</li>
-<li>@Qualifier : 用于标注哪一个实现类是需要注入的，它的参数名称为被注入的类中注解@Service标注的名称，常和@Autowired搭配使用</li>
+<li>初始化</li>
+<li>元素数量超过阈值（容量*负载因子）时，一般就会发生扩容，每次扩容的容量都是之前容量的 2 倍数。</li>
 </ul>
-<h4 id="用在方法上的注解"><a class="markdownIt-Anchor" href="#用在方法上的注解"></a> 用在方法上的注解</h4>
-<ul>
-<li>@ResponseBody : 用在函数上，将函数返回值作为请求返回值，通常用来返回JSON数据或者是XML</li>
-<li>@RequestBody : 用在方法参数前，将Json/XML格式的http消息转化为指定类型参数</li>
-<li>@PathVariable : 用在方法参数前，将URL获取的参数映射到方法参数上</li>
-<li>@Bean : 用在函数上，声明该方法的返回结果是一个由Spring容器管理的Bean，交给Spring管理，在MVC模型中对应着M</li>
+</li>
+<li>HashMap 的容量是有上限的，必须小于 1&lt;&lt;30。如果容量超出了这个数，不会扩容，且阈值会被设置为 Integer.MAX_VALUE。</li>
 </ul>
-<h4 id="其他注解"><a class="markdownIt-Anchor" href="#其他注解"></a> 其他注解</h4>
-<ul>
-<li>@SpringBootApplication : 标注Spring Boot项目入口类</li>
-<li>@EnableAutoConfiguration : 自动配置</li>
-<li>@EnableScheduling : 用于开启计划任务</li>
-<li>@EnableAsync : 用于开启异步注解功能</li>
-<li>@ComponentScan : 用来扫描组件，可自动发现和装配一些Bean</li>
-<li>@ASpec : 标注切面，用来配置事务、日志、权限验证</li>
-<li>@ControllerAdvice :</li>
-<li>@ExceptionHandler : 用在方法上，表示遇到这个异常就执行该方法</li>
-<li>@Value : 用在属性上，用于获取配置文件中的值</li>
-<li>@ConfigurationProperties :</li>
-</ul>
+<p>扩容需要做以下几步;</p>
+<ol>
+<li>计算出新的数组容量，创建新的数组，并将原来所有元素拷贝到新的数组中，释放掉旧数组的数据</li>
+<li>因为扩容后数组变为原来的两倍，所以元素 rehash 得到的新下标只有两种情况，一种是没有影响还在当前数组下标位置， 另一种时位于原位置+扩容长度。</li>
+<li>当元素迁移时，如果当前数组位置存储的是链表，那么则将原链表，拆分计算得到两个新链表，再统一将链表放到数组对应下标位置</li>
+</ol>
+<h2 id="concurrenthashmap"><a class="markdownIt-Anchor" href="#concurrenthashmap"></a> ConcurrentHashMap</h2>
+<p>ConcurrentHashMap 是多线程安全的 HashMap，它对 ConcurrentHashMap 的 put/remove 方法做了同步来保证多线程安全</p>
+<h3 id="保证并发安全的原理"><a class="markdownIt-Anchor" href="#保证并发安全的原理"></a> 保证并发安全的原理</h3>
+<p>在 JDK1.7 中，ConcurrentHashMap 是通过 ReentrantLock+CAS+分段思想来保证的并发安全的，在 put 时会通过 CAS 的方式，把一个把一个 Segment 对象存到 Segment 数组中，每个 Segment 对象中存在一个 HashEntry 数组，Segment 继承了 ReentrantLock，每段 put 开始会加锁。</p>
+<p>在 JDK1.8 中，通过 synchronized+cas 来实现，没有分段的概念，只有一个 Node 数组，数组上每个位置的元素一定是链表的头结点或者红黑树的根结点，所以只对这个位置上的元素使用 synchronized 加锁</p>
+<h3 id="使用-synchronized-的好处"><a class="markdownIt-Anchor" href="#使用-synchronized-的好处"></a> 使用 synchronized 的好处</h3>
+<p>synchronized 更节省内存，并且 jdk1.8 对 synchronized 的性能进行了优化</p>
+<h3 id="concurrenthashmap-2"><a class="markdownIt-Anchor" href="#concurrenthashmap-2"></a> ConcurrentHashMap</h3>
+<p>ConcurrentHashMap 的扩容是支持多线程扩容的，扩容时如果有线程在 put，那个这个 put 线程会先帮助进行元素的转移，在元素转移过程中，原数组上的 Node 信息不会消失，以便于其他线程进行 get 操作</p>
+<h2 id="hashmap-的兄弟们"><a class="markdownIt-Anchor" href="#hashmap-的兄弟们"></a> HashMap 的兄弟们</h2>
+<h3 id="hashtable"><a class="markdownIt-Anchor" href="#hashtable"></a> Hashtable</h3>
+<p>Hashtable 是古老的哈希容器与 HashMap 的区别如下：</p>
+<ol>
+<li>支持多线程，但是在几乎所有的方法上都加上了 synchronized 锁，导致效率十分低下</li>
+<li>不允许键或值为 null</li>
+<li>容量随机，导致哈希算法不均匀，hash 映射也只能使用低效率的取模</li>
+</ol>
+<h3 id="linkedhashmap"><a class="markdownIt-Anchor" href="#linkedhashmap"></a> LinkedHashMap</h3>
+<ol>
+<li>是 HashMap 和 LinkedList 的结合体，通过在 HashMap 的基础上维护一个额外的 LinkedList 来保证迭代顺序</li>
+<li>适合实现 LRU 算法</li>
+</ol>
+<h3 id="treemap"><a class="markdownIt-Anchor" href="#treemap"></a> TreeMap</h3>
+<p>TreeMap 底层是红黑树结构，而非数组，来保证元素的可排序性</p>
 
           
             <div class='article_footer'>
@@ -498,7 +533,7 @@
           
         
           
-            <p>本文永久链接是：<a href=http://yoursite.com/2021/07/17/SpringBoot%E5%AE%9E%E6%88%98%E6%B4%BE/%E6%B3%A8%E8%A7%A3%E5%AD%97%E5%85%B8/>http://yoursite.com/2021/07/17/SpringBoot%E5%AE%9E%E6%88%98%E6%B4%BE/%E6%B3%A8%E8%A7%A3%E5%AD%97%E5%85%B8/</a></p>
+            <p>本文永久链接是：<a href=http://yoursite.com/2022/03/28/Java%E5%9F%BA%E7%A1%80/HashMap/>http://yoursite.com/2022/03/28/Java%E5%9F%BA%E7%A1%80/HashMap/</a></p>
           
         
       </blockquote>
@@ -549,10 +584,10 @@
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-07-18T21:45:27+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2022-03-29T21:58:12+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：Jul 18, 2021</p>
+    <p>更新于：Mar 29, 2022</p>
   </a>
 </div>
 
@@ -561,7 +596,7 @@
         
           
   
-  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E2%80%9C%E5%90%8E%E7%AB%AF%E2%80%9D/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>“后端”</p></a></div>
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Java/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Java</p></a></div>
 
 
         
@@ -579,7 +614,7 @@
       
         <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2021/07/17/SpringBoot%E5%AE%9E%E6%88%98%E6%B4%BE/%E6%B3%A8%E8%A7%A3%E5%AD%97%E5%85%B8/&title=注解字典 - LlHai&summary="
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2022/03/28/Java%E5%9F%BA%E7%A1%80/HashMap/&title=深入了解HashMap - LlHai&summary="
           
           >
           
@@ -591,7 +626,7 @@
       
         <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://yoursite.com/2021/07/17/SpringBoot%E5%AE%9E%E6%88%98%E6%B4%BE/%E6%B3%A8%E8%A7%A3%E5%AD%97%E5%85%B8/&title=注解字典 - LlHai&summary="
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://yoursite.com/2022/03/28/Java%E5%9F%BA%E7%A1%80/HashMap/&title=深入了解HashMap - LlHai&summary="
           
           >
           
@@ -603,7 +638,7 @@
       
         <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2021/07/17/SpringBoot%E5%AE%9E%E6%88%98%E6%B4%BE/%E6%B3%A8%E8%A7%A3%E5%AD%97%E5%85%B8/&title=注解字典 - LlHai&summary="
+          target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2022/03/28/Java%E5%9F%BA%E7%A1%80/HashMap/&title=深入了解HashMap - LlHai&summary="
           
           >
           
@@ -627,26 +662,32 @@
         
           <div class="prev-next">
             
-              <a class='prev' href='/2021/07/17/%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6%E6%A1%86%E6%9E%B6Quartz/'>
-                <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Quartz调度框架学习笔记</p>
-                <p class='content'> Quartz
-Quartz是一个开源的任务调度库
- 涉及API
+              <a class='prev' href='/2022/03/29/Java%E5%9F%BA%E7%A1%80/Java%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E6%9C%BA%E5%88%B6/'>
+                <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Java中的并发机制</p>
+                <p class='content'> CAS
+CAS 是 Compare And Swap 的缩写，也就是比较并替换，它是一种乐观锁操作，所以在介绍 CAS 之前，首先介绍一下悲观锁和乐观锁
+ 悲观锁和乐观锁
 
-Scheduler ：负责任务调度的调度器
-
-负责任何有关任务调度的事，包括：添加、删除、列举所有Jobs和Triggers，...</p>
+悲观锁的常见用例就...</p>
               </a>
             
             
-              <a class='next' href='/2020/08/09/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-7-Tips-For-Training-DNN/'>
-                <p class='title'>机器学习-7-Tips-For-Training-DNN<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
-                <p class='content'> 深度学习的三个步骤
-通过之前的学习，我们了解到深度学习分为以下三个步骤:
+              <a class='next' href='/2022/03/26/%E9%9D%A2%E8%AF%95%E8%AE%B0%E5%BD%95/%E5%AD%97%E8%8A%82%E5%AE%9E%E4%B9%A0%E4%B8%80%E9%9D%A2/'>
+                <p class='title'>字节实习一面记录<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+                <p class='content'> 字节实习一面记录
 
-设计模型网络结构(network structure)
-定义损失函数(goodness of function)
-选...</p>
+岗位：支付业务——后端开发工程师
+位置：武汉
+类型：暑假实习
+
+ 问题记录
+ Java 相关
+
+HashMap
+
+HashMap 的底层原理
+哈希扰动的具体实现
+HashM...</p>
               </a>
             
           </div>
@@ -691,7 +732,7 @@ Scheduler ：负责任务调度的调度器
 
   <script>
     window.subData = {
-      title: '注解字典',
+      title: '深入了解HashMap',
       tools: true
     }
   </script>
@@ -717,7 +758,7 @@ Scheduler ：负责任务调度的调度器
 
 
     <div class='content'>
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%E8%A7%A3"><span class="toc-text"> 注解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E6%B3%A8%E8%A7%A3"><span class="toc-text"> 系统注解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lombok%E6%B3%A8%E8%A7%A3"><span class="toc-text"> Lombok注解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#springboot%E6%B3%A8%E8%A7%A3"><span class="toc-text"> Springboot注解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%A8%E5%9C%A8%E7%B1%BB%E5%90%8D%E4%B8%8A%E7%9A%84%E6%B3%A8%E8%A7%A3"><span class="toc-text"> 用在类名上的注解</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%A8%E5%9C%A8%E6%96%B9%E6%B3%95%E4%B8%8A%E7%9A%84%E6%B3%A8%E8%A7%A3"><span class="toc-text"> 用在方法上的注解</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%B3%A8%E8%A7%A3"><span class="toc-text"> 其他注解</span></a></li></ol></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#hashmap-%E7%AE%80%E4%BB%8B"><span class="toc-text"> HashMap 简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hashmap-%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0"><span class="toc-text"> HashMap 底层实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#hashmap-%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-text"> HashMap 的数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E7%BB%84"><span class="toc-text"> 数组</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%93%BE%E8%A1%A8"><span class="toc-text"> 链表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BA%A2%E9%BB%91%E6%A0%91"><span class="toc-text"> 红黑树</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hashmap-%E7%9A%84%E5%8F%82%E6%95%B0"><span class="toc-text"> HashMap 的参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hashmap-%E7%9A%84-hash-%E5%87%BD%E6%95%B0"><span class="toc-text"> HashMap 的 hash 函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%B0%E5%8A%A8%E5%87%BD%E6%95%B0%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0%E5%A6%82%E4%B8%8B"><span class="toc-text"> 扰动函数的具体实现如下:</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hashmap-%E7%9A%84%E5%B0%8F-tip"><span class="toc-text"> HashMap 的小 tip</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hashmap-%E6%89%A9%E5%AE%B9"><span class="toc-text"> HashMap 扩容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#concurrenthashmap"><span class="toc-text"> ConcurrentHashMap</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%9D%E8%AF%81%E5%B9%B6%E5%8F%91%E5%AE%89%E5%85%A8%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-text"> 保证并发安全的原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-synchronized-%E7%9A%84%E5%A5%BD%E5%A4%84"><span class="toc-text"> 使用 synchronized 的好处</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#concurrenthashmap-2"><span class="toc-text"> ConcurrentHashMap</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hashmap-%E7%9A%84%E5%85%84%E5%BC%9F%E4%BB%AC"><span class="toc-text"> HashMap 的兄弟们</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#hashtable"><span class="toc-text"> Hashtable</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#linkedhashmap"><span class="toc-text"> LinkedHashMap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#treemap"><span class="toc-text"> TreeMap</span></a></li></ol></li></ol>
     </div>
   </section>
 

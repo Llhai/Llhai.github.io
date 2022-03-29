@@ -17,8 +17,10 @@
 
   <!-- 页面元数据 -->
   
-  <title>tags - LlHai</title>
+  <title>Java中的并发机制 - LlHai</title>
    
+  <meta name="description" content="介绍Java的CAS、AQS、ReentrantLock、Semaphore与Synchronized" />
+  
 
   <!-- feed -->
   
@@ -340,7 +342,7 @@
   
 
   
-    <article id="page" class="post white-box reveal shadow article-type-page" itemscope itemprop="blogPost">
+    <article id="post" class="post white-box reveal shadow article-type-post" itemscope itemprop="blogPost">
       
 
 
@@ -352,8 +354,8 @@
         
           
   <h1 class="title">
-    <a href="/tags/index.html">
-      tags
+    <a href="/2022/03/29/Java%E5%9F%BA%E7%A1%80/Java%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E6%9C%BA%E5%88%B6/">
+      Java中的并发机制
     </a>
   </h1>
 
@@ -367,6 +369,14 @@
           
             
               
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java</p>
+    </a>
+  </div>
+
 
             
           
@@ -374,7 +384,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：Dec 17, 2019</p>
+    <p>发布于：Mar 29, 2022</p>
   </a>
 </div>
 
@@ -397,7 +407,178 @@
       <section class="article typo">
         <div class="article-entry" itemprop="articleBody">
           
+          <h2 id="cas"><a class="markdownIt-Anchor" href="#cas"></a> CAS</h2>
+<p>CAS 是 Compare And Swap 的缩写，也就是比较并替换，它是一种乐观锁操作，所以在介绍 CAS 之前，首先介绍一下悲观锁和乐观锁</p>
+<h3 id="悲观锁和乐观锁"><a class="markdownIt-Anchor" href="#悲观锁和乐观锁"></a> 悲观锁和乐观锁</h3>
+<ul>
+<li>悲观锁的常见用例就是 Synchronized，这种条件下，一旦某个线程得到锁，其他需要锁的线程就挂起</li>
+</ul>
+<ul>
+<li>
+<p>乐观锁则每次不加锁，假设完成某种操作没有冲突，如果发生冲突则重试，直到成功</p>
+</li>
+<li>
+<p>从二者名字上看，悲观锁悲观地认为程序中并发情况严重，所以严防死守。而乐观锁则认为并发情况不那么严重，所以让线程不断尝试</p>
+</li>
+</ul>
+<h3 id="cas-机制"><a class="markdownIt-Anchor" href="#cas-机制"></a> CAS 机制</h3>
+<p>CAS 机制中使用了 3 个基本操作数：内存地址 V、旧的预期值 A、要修改的新值 B</p>
+<p>当想要更新一个变量时，只有当变量的预期值 A 和内存地址 V 中实际值相同时，才会将内存地址 V 对应的值修改为 B，这种机制的内存实现是依靠原子操作实现的</p>
+<h3 id="cas-的缺点"><a class="markdownIt-Anchor" href="#cas-的缺点"></a> CAS 的缺点</h3>
+<ol>
+<li>CPU 开销大，当并发量比较高时，如果很多线程反复尝试更新某一个变量，却又不成功，会给 CPU 带来很大的压力</li>
+<li>不能保证代码块的原子性：CAS 只能保证一个变量的原子性操作，不能保证整个代码块的原子性</li>
+<li>ABA 问题：
+<ul>
+<li>就是如果 V 的值一开始为 A，在准备修改为新值前的期间曾经被改成了 B，后来又被改回为 A，经过两次的线程修改对象的值还是旧值，那么 CAS 操作就会误任务该变量从来没被修改过。这就是 CAS 中的“ABA”问题。</li>
+<li>Java 并发包中提供了一个带有时间戳的对象引用 AtomicStampedReference，其内部不仅维护了一个对象值，还维护了一个时间戳，当 AtomicStampedReference 对应的数值被修改时</li>
+</ul>
+</li>
+</ol>
+<h3 id="cas-的应用"><a class="markdownIt-Anchor" href="#cas-的应用"></a> CAS 的应用</h3>
+<p>Java 的原子操作类，Atomic 的底层机制就是利用的 CAS 机制 + volatile + native 方法</p>
+<h2 id="aqs"><a class="markdownIt-Anchor" href="#aqs"></a> AQS</h2>
+<p>AQS 全称 AbstractQueuedSynchronizer，是一个用来构建锁和同步器的框架，使用 AQS 可以简单高效的构造出大量应用广泛的同步器，如 ReentrantLock，Semaphore 等</p>
+<h3 id="aqs-的原理"><a class="markdownIt-Anchor" href="#aqs-的原理"></a> AQS 的原理</h3>
+<p>AQS 的核心思想是，如果被请求的共享资源空闲，就将当前请求资源的线程变为工作线程，将共享资源设置为被占用状态。如果被请求的资源状态被占用，则将请求当前资源的线程阻塞等待，加入到 CLH 队列中，等待唤醒并分配锁</p>
+<h3 id="aqs-的实现"><a class="markdownIt-Anchor" href="#aqs-的实现"></a> AQS 的实现</h3>
+<ol>
+<li>AQS 使用 int 成员变量来表示同步状态，通过内置的 FIFO 队列来完成获取资源线程的排队工作，使用 CAS 对该同步状态进行原子操作实现对值得修改。</li>
+<li>AQS 中定义两种资源共享方式
+<ol>
+<li>Exclusive(独占)：只有一个线程能执行，如 ReentrantLock，又可分为公平锁和非公平锁
+<ol>
+<li>公平锁：按照线程在队列中得排队顺序，先到者先拿到锁</li>
+<li>非公平锁：当线程要获取锁时，无视队列顺序去抢锁</li>
+</ol>
+</li>
+<li>Share(共享)：多个线程可同时执行，如 CountDownLatch、Semaphore、 CyclicBarrier、ReadWriteLock</li>
+</ol>
+</li>
+</ol>
+<h3 id="使用-aqs-自定义同步器"><a class="markdownIt-Anchor" href="#使用-aqs-自定义同步器"></a> 使用 AQS 自定义同步器</h3>
+<ol>
+<li>自定义同步器时，需要继承 AbstractQueuedSynchronizer 并重写指定的方法</li>
+<li>我们只需要重写获取/释放资源的方法，对于队列排队、唤醒、阻塞的复杂实现无需关心</li>
+<li>需要重写的方法有如下几个：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">int</span>)</span><span class="comment">//独占方式。尝试获取资源，成功则返回true，失败则返回false。</span></span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">tryRelease</span><span class="params">(<span class="keyword">int</span>)</span><span class="comment">//独占方式。尝试释放资源，成功则返回true，失败则返回false。</span></span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">int</span> <span class="title">tryAcquireShared</span><span class="params">(<span class="keyword">int</span>)</span><span class="comment">//共享方式。尝试获取资源。负数表示失败；0表示成功，但没有剩余可用资源；正数表示成功，且有剩余资源。</span></span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">tryReleaseShared</span><span class="params">(<span class="keyword">int</span>)</span><span class="comment">//共享方式。尝试释放资源，成功则返回true，失败则返回false。</span></span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">isHeldExclusively</span><span class="params">()</span><span class="comment">//该线程是否正在独占资源。只有用到condition才需要去实现它。</span></span></span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>通常自定义同步器要么是是独占方法，要么是共享方式，他们也只需实现 tryAcquire-tryRelease、tryAcquireShared-tryReleaseShared 中的一种即可</li>
+</ol>
+<h3 id="常见-aqs-组件"><a class="markdownIt-Anchor" href="#常见-aqs-组件"></a> 常见 AQS 组件</h3>
+<ol>
+<li>ReentrantLock：基于 AQS 实现的一个互斥锁，具有可重入的概念，具体原理如下：<br />
+每一个锁关联一个线程持有者和计数器，当计数器为 0 时表示该锁没有被任何线程持有，那么任何线程都可能获得该锁而调用相应的方法；当某一线程请求成功后，JVM 会记下锁的持有线程，并且将计数器置为 1；此时其它线程请求该锁，则必须等待；而该持有锁的线程如果再次请求这个锁，就可以再次拿到这个锁，同时计数器会递增；当线程退出同步代码块时，计数器会递减，如果计数器为 0，则释放该锁。</li>
+<li>Semaphore 信号量：可以指定多个线程访问某个资源</li>
+<li>CountDownLatch 倒计时器：允许 线程阻塞在一个地方，直至 count 个线程的任务都执行完毕</li>
+<li>CyclicBarrier：可以实现线程间的技术等待，指定一个同步点，直到所有线程都达到同步点后，所有被拦截的线程才能继续干活</li>
+</ol>
+<h2 id="synchronized-关键字"><a class="markdownIt-Anchor" href="#synchronized-关键字"></a> Synchronized 关键字</h2>
+<p>Synchronized 用于解决多个线程之前访问资源的同步性，保证每次被它修饰的方法或者代码块在任意时刻只能有一个线程访问</p>
+<h3 id="原理"><a class="markdownIt-Anchor" href="#原理"></a> 原理</h3>
+<p>Synchronized 关键字底层原理属于 JVM 层面</p>
+<ol>
+<li>synchronized 同步语句块的实现使用的是 monitorenter 和 monitorexit 指令，其中 monitorenter 指令指向同步代码块的开始位置，monitorexit 指令则指明同步代码块的结束位置</li>
+<li>synchronized 修饰方法，使用 ACC_SYNCHRONIZED 标识，该标识指明了该方法是一个同步方法。JVM 通过该 ACC_SYNCHRONIZED 访问标志来辨别一个方法是否声明为同步方法，从而执行相应的同步调用。</li>
+</ol>
+<p>这两种方式的原理本质上都是对对象监视器 monitor 的获取</p>
+<h3 id="使用方法"><a class="markdownIt-Anchor" href="#使用方法"></a> 使用方法</h3>
+<p>Synchronized 有三种使用方式</p>
+<ol>
+<li>修饰实例方法，对对象实例加锁</li>
+<li>修饰静态方法，对类对象加锁</li>
+<li>修饰代码块，需要指定加锁对象，synchronized(this|object) or synchronized(类.class)</li>
+</ol>
+<h3 id="与-reentranlock-的区别"><a class="markdownIt-Anchor" href="#与-reentranlock-的区别"></a> 与 ReentranLock 的区别</h3>
+<ol>
+<li>二者都是可重入锁</li>
+<li>Synchronized 依赖于 JVM 实现，ReentranLock 依赖于 API 实现</li>
+<li>ReentrantLock 比 ReentrantLock 增加了三点高级功能：
+<ol>
+<li>等待可中断</li>
+<li>可实现公平锁或者非公平锁</li>
+<li>可实现选择性通知</li>
+</ol>
+</li>
+</ol>
+
           
+            <div class='article_footer'>
+              
+                
+  
+    
+    
+
+
+
+  
+
+  
+    
+    
+
+
+
+  
+
+  
+    
+    
+
+<section class="widget copyright  desktop mobile">
+  <div class='content'>
+    
+      <blockquote>
+        
+          
+            <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+          
+        
+          
+            <p>本文永久链接是：<a href=http://yoursite.com/2022/03/29/Java%E5%9F%BA%E7%A1%80/Java%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E6%9C%BA%E5%88%B6/>http://yoursite.com/2022/03/29/Java%E5%9F%BA%E7%A1%80/Java%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E6%9C%BA%E5%88%B6/</a></p>
+          
+        
+      </blockquote>
+    
+  </div>
+</section>
+
+  
+
+  
+    
+    
+
+<section class="widget qrcode  desktop mobile">
+  
+
+  <div class='content article-entry'>
+    
+      
+        <div class='fancybox'><img src='https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/qrcode/wiki_volantis.png'
+        
+          height='64px'
+        ></div>
+      
+    
+      
+        <div class='fancybox'><img src='https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/qrcode/wiki_volantis.png'
+        
+          height='64px'
+        ></div>
+      
+    
+  </div>
+</section>
+
+  
+
+
+              
+            </div>
           
         </div>
         
@@ -408,10 +589,10 @@
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-05-26T14:20:25+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2022-03-29T21:28:02+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：May 26, 2020</p>
+    <p>更新于：Mar 29, 2022</p>
   </a>
 </div>
 
@@ -419,6 +600,9 @@
       
         
           
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Java/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Java</p></a></div>
+
 
         
       
@@ -435,7 +619,7 @@
       
         <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/tags/index.html&title=tags - LlHai&summary="
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2022/03/29/Java%E5%9F%BA%E7%A1%80/Java%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E6%9C%BA%E5%88%B6/&title=Java中的并发机制 - LlHai&summary="
           
           >
           
@@ -447,7 +631,7 @@
       
         <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://yoursite.com/tags/index.html&title=tags - LlHai&summary="
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://yoursite.com/2022/03/29/Java%E5%9F%BA%E7%A1%80/Java%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E6%9C%BA%E5%88%B6/&title=Java中的并发机制 - LlHai&summary="
           
           >
           
@@ -459,7 +643,7 @@
       
         <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/tags/index.html&title=tags - LlHai&summary="
+          target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2022/03/29/Java%E5%9F%BA%E7%A1%80/Java%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E6%9C%BA%E5%88%B6/&title=Java中的并发机制 - LlHai&summary="
           
           >
           
@@ -481,6 +665,20 @@
 
         
         
+          <div class="prev-next">
+            
+            
+              <a class='next' href='/2022/03/28/Java%E5%9F%BA%E7%A1%80/HashMap/'>
+                <p class='title'>深入了解HashMap<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+                <p class='content'> HashMap 简介
+HashMap 是实现了 Map 接口的 K,V 型容器, 可以根据 Key 进行高效的数据访问
+ HashMap 底层实现
+ HashMap 的数据结构
+HashMap...</p>
+              </a>
+            
+          </div>
+        
       </section>
     </article>
   
@@ -490,7 +688,24 @@
 
 
 
-  
+  <article class="post white-box reveal comments shadow">
+    <section class="article typo">
+      <p ct><i class='fas fa-comments'></i> 评论</p>
+      
+      
+      
+      
+      
+      
+        <section id="comments">
+          <div id="valine_container" class="valine_thread">
+            <i class="fas fa-cog fa-spin fa-fw fa-2x"></i>
+          </div>
+        </section>
+      
+      
+    </section>
+  </article>
 
 
   
@@ -502,6 +717,13 @@
 
 
 
+  <script>
+    window.subData = {
+      title: 'Java中的并发机制',
+      tools: true
+    }
+  </script>
+
 
 </div>
 <aside class='l_side'>
@@ -512,6 +734,20 @@
     
     
 
+
+  <section class="widget toc-wrapper shadow desktop mobile">
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#cas"><span class="toc-text"> CAS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%82%B2%E8%A7%82%E9%94%81%E5%92%8C%E4%B9%90%E8%A7%82%E9%94%81"><span class="toc-text"> 悲观锁和乐观锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cas-%E6%9C%BA%E5%88%B6"><span class="toc-text"> CAS 机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cas-%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="toc-text"> CAS 的缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cas-%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-text"> CAS 的应用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#aqs"><span class="toc-text"> AQS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#aqs-%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-text"> AQS 的原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#aqs-%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-text"> AQS 的实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-aqs-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%90%8C%E6%AD%A5%E5%99%A8"><span class="toc-text"> 使用 AQS 自定义同步器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81-aqs-%E7%BB%84%E4%BB%B6"><span class="toc-text"> 常见 AQS 组件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronized-%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-text"> Synchronized 关键字</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-text"> 原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-text"> 使用方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8E-reentranlock-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text"> 与 ReentranLock 的区别</span></a></li></ol></li></ol>
+    </div>
+  </section>
 
 
   
@@ -699,6 +935,60 @@
 
 
 
+
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4/dist/Valine.min.js"></script>
+
+  
+  <script>
+  var GUEST_INFO = ['nick','mail','link'];
+  var meta = 'nick,mail,link'.split(',').filter(function(item){
+    return GUEST_INFO.indexOf(item) > -1
+  });
+  var REQUIRED_FIELDS = ['nick','mail','link'];
+  var requiredFields = 'nick,mail'.split(',').filter(function(item){
+    return REQUIRED_FIELDS.indexOf(item) > -1
+  });
+  var valine = new Valine();
+  function emoji(path, idx, ext) {
+      return path + "/" + path + "-" + idx + "." + ext;
+  }
+  var emojiMaps = {};
+  for (var i = 1; i <= 54; i++) {
+    emojiMaps['tieba-' + i] = emoji('tieba', i, 'png');
+  }
+  for (var i = 1; i <= 101; i++) {
+    emojiMaps['qq-' + i] = emoji('qq', i, 'gif');
+  }
+  for (var i = 1; i <= 116; i++) {
+    emojiMaps['aru-' + i] = emoji('aru', i, 'gif');
+  }
+  for (var i = 1; i <= 125; i++) {
+    emojiMaps['twemoji-' + i] = emoji('twemoji', i, 'png');
+  }
+  for (var i = 1; i <= 4; i++) {
+    emojiMaps['weibo-' + i] = emoji('weibo', i, 'png');
+  }
+  valine.init({
+    el: '#valine_container',
+    meta: meta,
+    
+    appId: "8oYFiSOBgumF6fqO7mxHYSbt-gzGzoHsz",
+    appKey: "4YfG5ENRdUo42aYxkI1Ds2Aj",
+    placeholder: "快来评论吧~",
+    pageSize:'10',
+    avatar:'robohash',
+    lang:'zh-cn',
+    visitor: 'true',
+    highlight: 'true',
+    mathJax: 'false',
+    enableQQ: 'true',
+    requiredFields: requiredFields,
+    emojiCDN: 'https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/emoji/valine/',
+    emojiMaps: emojiMaps
+  })
+  </script>
 
 
 
