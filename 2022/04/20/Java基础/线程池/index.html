@@ -17,9 +17,9 @@
 
   <!-- 页面元数据 -->
   
-  <title>Java中的并发机制 - LlHai</title>
+  <title>线程池 - LlHai</title>
    
-  <meta name="description" content="介绍Java的CAS、AQS、ReentrantLock、Semaphore与Synchronized" />
+  <meta name="description" content="介绍Java线程池的原理、使用场景" />
   
 
   <!-- feed -->
@@ -354,8 +354,8 @@
         
           
   <h1 class="title">
-    <a href="/2022/03/29/Java%E5%9F%BA%E7%A1%80/Java%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E6%9C%BA%E5%88%B6/">
-      Java中的并发机制
+    <a href="/2022/04/20/Java%E5%9F%BA%E7%A1%80/%E7%BA%BF%E7%A8%8B%E6%B1%A0/">
+      线程池
     </a>
   </h1>
 
@@ -384,7 +384,7 @@
               <div class="new-meta-item date">
   <a class='notlink'>
     <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：Mar 29, 2022</p>
+    <p>发布于：Apr 20, 2022</p>
   </a>
 </div>
 
@@ -407,101 +407,125 @@
       <section class="article typo">
         <div class="article-entry" itemprop="articleBody">
           
-          <h2 id="cas"><a class="markdownIt-Anchor" href="#cas"></a> CAS</h2>
-<p>CAS 是 Compare And Swap 的缩写，也就是比较并替换，它是一种乐观锁操作，所以在介绍 CAS 之前，首先介绍一下悲观锁和乐观锁</p>
-<h3 id="悲观锁和乐观锁"><a class="markdownIt-Anchor" href="#悲观锁和乐观锁"></a> 悲观锁和乐观锁</h3>
-<ul>
-<li>悲观锁的常见用例就是 Synchronized，这种条件下，一旦某个线程得到锁，其他需要锁的线程就挂起</li>
-</ul>
-<ul>
-<li>
-<p>乐观锁则每次不加锁，假设完成某种操作没有冲突，如果发生冲突则重试，直到成功</p>
-</li>
-<li>
-<p>从二者名字上看，悲观锁悲观地认为程序中并发情况严重，所以严防死守。而乐观锁则认为并发情况不那么严重，所以让线程不断尝试</p>
-</li>
-</ul>
-<h3 id="cas-机制"><a class="markdownIt-Anchor" href="#cas-机制"></a> CAS 机制</h3>
-<p>CAS 机制中使用了 3 个基本操作数：内存地址 V、旧的预期值 A、要修改的新值 B</p>
-<p>当想要更新一个变量时，只有当变量的预期值 A 和内存地址 V 中实际值相同时，才会将内存地址 V 对应的值修改为 B，这种机制的内存实现是依靠原子操作实现的</p>
-<h3 id="cas-的缺点"><a class="markdownIt-Anchor" href="#cas-的缺点"></a> CAS 的缺点</h3>
+          <h3 id="1-概念和优势"><a class="markdownIt-Anchor" href="#1-概念和优势"></a> 1. 概念和优势</h3>
+<p>线程池是池化思想在线程管理方面的应用，使用线程池有以下三个优势：</p>
 <ol>
-<li>CPU 开销大，当并发量比较高时，如果很多线程反复尝试更新某一个变量，却又不成功，会给 CPU 带来很大的压力</li>
-<li>不能保证代码块的原子性：CAS 只能保证一个变量的原子性操作，不能保证整个代码块的原子性</li>
-<li>ABA 问题：
-<ul>
-<li>就是如果 V 的值一开始为 A，在准备修改为新值前的期间曾经被改成了 B，后来又被改回为 A，经过两次的线程修改对象的值还是旧值，那么 CAS 操作就会误任务该变量从来没被修改过。这就是 CAS 中的“ABA”问题。</li>
-<li>Java 并发包中提供了一个带有时间戳的对象引用 AtomicStampedReference，其内部不仅维护了一个对象值，还维护了一个时间戳，当 AtomicStampedReference 对应的数值被修改时</li>
-</ul>
-</li>
+<li>降低资源消耗，重复利用已创建的线程，以降低线程创建和销毁造成的消耗</li>
+<li>提高相应速度，当任务到达时，可以直接分配进程来运行，不需要等待线程创建</li>
+<li>提供对线程的管理，可以进行线程的监控和调优</li>
 </ol>
-<h3 id="cas-的应用"><a class="markdownIt-Anchor" href="#cas-的应用"></a> CAS 的应用</h3>
-<p>Java 的原子操作类，Atomic 的底层机制就是利用的 CAS 机制 + volatile + native 方法</p>
-<h2 id="aqs"><a class="markdownIt-Anchor" href="#aqs"></a> AQS</h2>
-<p>AQS 全称 AbstractQueuedSynchronizer，是一个用来构建锁和同步器的框架，使用 AQS 可以简单高效的构造出大量应用广泛的同步器，如 ReentrantLock，Semaphore 等</p>
-<h3 id="aqs-的原理"><a class="markdownIt-Anchor" href="#aqs-的原理"></a> AQS 的原理</h3>
-<p>AQS 的核心思想是，如果被请求的共享资源空闲，就将当前请求资源的线程变为工作线程，将共享资源设置为被占用状态。如果被请求的资源状态被占用，则将请求当前资源的线程阻塞等待，加入到 CLH 队列中，等待唤醒并分配锁</p>
-<h3 id="aqs-的实现"><a class="markdownIt-Anchor" href="#aqs-的实现"></a> AQS 的实现</h3>
+<h3 id="2-七个核心参数"><a class="markdownIt-Anchor" href="#2-七个核心参数"></a> 2. 七个核心参数</h3>
 <ol>
-<li>AQS 使用 int 成员变量来表示同步状态，通过内置的 FIFO 队列来完成获取资源线程的排队工作，使用 CAS 对该同步状态进行原子操作实现对值得修改。</li>
-<li>AQS 中定义两种资源共享方式
+<li>corePoolSize：核心线程数</li>
+<li>maximumPoolSize：最大线程数</li>
+<li>keepAliveTime：非核心线程空闲时的存活时间大小</li>
+<li>unit：线程空闲存活时间单位</li>
+<li>workQueue：存放任务的等待队列</li>
+<li>threadFactory：创建线程的工厂，可以给创建线程设置名字，便于问题排查</li>
+<li>handle：饱和策略</li>
+</ol>
+<h3 id="3-运行机制"><a class="markdownIt-Anchor" href="#3-运行机制"></a> 3. 运行机制</h3>
+<p><img src="https://gitee.com/Ll_hai/markdown-image/raw/master/image/20220420200224.png" alt="" /></p>
+<h3 id="4-异常处理"><a class="markdownIt-Anchor" href="#4-异常处理"></a> 4. 异常处理</h3>
 <ol>
-<li>Exclusive(独占)：只有一个线程能执行，如 ReentrantLock，又可分为公平锁和非公平锁
+<li>使用 try-catch 在线程运行时捕获异常</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    ExecutorService executorService = Executors.newFixedThreadPool(<span class="number">1</span>);</span><br><span class="line">    executorService.submit(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;current thread name&quot;</span> + Thread.currentThread().getName());</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Object object = <span class="keyword">null</span>;</span><br><span class="line">                System.out.println(<span class="string">&quot;Error: &quot;</span>+object.toString());</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;异常捕获 &quot;</span>+e.toString());</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>使用 submit 提交任务，使用 Future.get 获取异常</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">    ExecutorService executorService = Executors.newFixedThreadPool(<span class="number">1</span>);</span><br><span class="line">    Future&lt;String&gt; future =  executorService.submit(<span class="keyword">new</span> Callable&lt;String&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;current thread name&quot;</span> + Thread.currentThread().getName());</span><br><span class="line">            Object object = <span class="keyword">null</span>;</span><br><span class="line">            System.out.println(<span class="string">&quot;Error: &quot;</span>+object.toString());</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;success&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        future.get();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;异常捕获 &quot;</span>+e.toString());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>为工作线程设置 UncaughtExceptionHandler，在 uncaughtException 方法中处理异常</li>
+<li>重写 ThreadPoolExecutor 的 afterExecute 方法，处理传递的异常引用</li>
+</ol>
+<h3 id="5-四种饱和策略"><a class="markdownIt-Anchor" href="#5-四种饱和策略"></a> 5. 四种饱和策略</h3>
 <ol>
-<li>公平锁：按照线程在队列中得排队顺序，先到者先拿到锁</li>
-<li>非公平锁：当线程要获取锁时，无视队列顺序去抢锁</li>
+<li>AbortPolicy : 默认的饱和策略，抛出异常</li>
+<li>DiscardPolicy : 丢弃任务</li>
+<li>DiscardOldestPolicy : 丢弃队列里最老的任务，将当前这个任务提交给线程池</li>
+<li>CallerRunsPolicy : 交给线程池调用所在的线程进行处理</li>
 </ol>
-</li>
-<li>Share(共享)：多个线程可同时执行，如 CountDownLatch、Semaphore、 CyclicBarrier、ReadWriteLock</li>
-</ol>
-</li>
-</ol>
-<h3 id="使用-aqs-自定义同步器"><a class="markdownIt-Anchor" href="#使用-aqs-自定义同步器"></a> 使用 AQS 自定义同步器</h3>
+<h3 id="6-阻塞队列类型"><a class="markdownIt-Anchor" href="#6-阻塞队列类型"></a> 6. 阻塞队列类型</h3>
 <ol>
-<li>自定义同步器时，需要继承 AbstractQueuedSynchronizer 并重写指定的方法</li>
-<li>我们只需要重写获取/释放资源的方法，对于队列排队、唤醒、阻塞的复杂实现无需关心</li>
-<li>需要重写的方法有如下几个：</li>
+<li>ArrayBlockingQueue<br />
+基于数组的有界队列，需要指定队列大小，按照 FIFO 排序</li>
+<li>LinkedBlockingQueue<br />
+基于链表的队列，如果不设置容量，容量默认为 Integer.MAX_VALUE，此时为无界队列，吞吐量通常要高于 ArrayBlockingQuene；newFixedThreadPool 线程池使用了这个队列</li>
+<li>DelayQueue<br />
+任务定时周期的延迟执行的队列，根据指定的执行时间从小到大排序，否则根据插入到队列的先后排序。newScheduledThreadPool 线程池使用了这个队列。</li>
+<li>PriorityBlockingQueue<br />
+PriorityBlockingQueue（优先级队列）是具有优先级的无界阻塞队列，可以自定义比较器。</li>
+<li>SynchronousQueue<br />
+一个不存储元素(内部容量为 0)的阻塞队列，每个插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态，吞吐量通常要高于 LinkedBlockingQuene，newCachedThreadPool 线程池使用了这个队列。</li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">int</span>)</span><span class="comment">//独占方式。尝试获取资源，成功则返回true，失败则返回false。</span></span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">tryRelease</span><span class="params">(<span class="keyword">int</span>)</span><span class="comment">//独占方式。尝试释放资源，成功则返回true，失败则返回false。</span></span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">int</span> <span class="title">tryAcquireShared</span><span class="params">(<span class="keyword">int</span>)</span><span class="comment">//共享方式。尝试获取资源。负数表示失败；0表示成功，但没有剩余可用资源；正数表示成功，且有剩余资源。</span></span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">tryReleaseShared</span><span class="params">(<span class="keyword">int</span>)</span><span class="comment">//共享方式。尝试释放资源，成功则返回true，失败则返回false。</span></span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">isHeldExclusively</span><span class="params">()</span><span class="comment">//该线程是否正在独占资源。只有用到condition才需要去实现它。</span></span></span><br></pre></td></tr></table></figure>
-<ol start="4">
-<li>通常自定义同步器要么是是独占方法，要么是共享方式，他们也只需实现 tryAcquire-tryRelease、tryAcquireShared-tryReleaseShared 中的一种即可</li>
-</ol>
-<h3 id="常见-aqs-组件"><a class="markdownIt-Anchor" href="#常见-aqs-组件"></a> 常见 AQS 组件</h3>
+<h3 id="7-几种常见线程池"><a class="markdownIt-Anchor" href="#7-几种常见线程池"></a> 7. 几种常见线程池</h3>
+<h4 id="newfixedthreadpool"><a class="markdownIt-Anchor" href="#newfixedthreadpool"></a> newFixedThreadPool</h4>
+<p>源码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newFixedThreadPool</span><span class="params">(<span class="keyword">int</span> nThreads)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ThreadPoolExecutor(nThreads, nThreads,</span><br><span class="line">                                  <span class="number">0L</span>, TimeUnit.MILLISECONDS,</span><br><span class="line">                                  <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参数：</p>
 <ol>
-<li>ReentrantLock：基于 AQS 实现的一个互斥锁，具有可重入的概念，具体原理如下：<br />
-每一个锁关联一个线程持有者和计数器，当计数器为 0 时表示该锁没有被任何线程持有，那么任何线程都可能获得该锁而调用相应的方法；当某一线程请求成功后，JVM 会记下锁的持有线程，并且将计数器置为 1；此时其它线程请求该锁，则必须等待；而该持有锁的线程如果再次请求这个锁，就可以再次拿到这个锁，同时计数器会递增；当线程退出同步代码块时，计数器会递减，如果计数器为 0，则释放该锁。</li>
-<li>Semaphore 信号量：可以指定多个线程访问某个资源</li>
-<li>CountDownLatch 倒计时器：允许 线程阻塞在一个地方，直至 count 个线程的任务都执行完毕</li>
-<li>CyclicBarrier：可以实现线程间的技术等待，指定一个同步点，直到所有线程都达到同步点后，所有被拦截的线程才能继续干活</li>
+<li>核心线程数和最大线程数相同</li>
+<li>阻塞队列为 LinkedBlockingQueue，导致最大线程数、饱和策略、存活时间参数失效</li>
 </ol>
-<h2 id="synchronized-关键字"><a class="markdownIt-Anchor" href="#synchronized-关键字"></a> Synchronized 关键字</h2>
-<p>Synchronized 用于解决多个线程之前访问资源的同步性，保证每次被它修饰的方法或者代码块在任意时刻只能有一个线程访问</p>
-<h3 id="原理"><a class="markdownIt-Anchor" href="#原理"></a> 原理</h3>
-<p>Synchronized 关键字底层原理属于 JVM 层面</p>
+<p>特点：</p>
 <ol>
-<li>synchronized 同步语句块的实现使用的是 monitorenter 和 monitorexit 指令，其中 monitorenter 指令指向同步代码块的开始位置，monitorexit 指令则指明同步代码块的结束位置</li>
-<li>synchronized 修饰方法，使用 ACC_SYNCHRONIZED 标识，该标识指明了该方法是一个同步方法。JVM 通过该 ACC_SYNCHRONIZED 访问标志来辨别一个方法是否声明为同步方法，从而执行相应的同步调用。</li>
+<li>可以无限制的添加任务到队列，可能会造成 OOM</li>
+<li>适合执行长期的任务，确保 CPU 在长期被工作线程使用的情况下，尽可能的少的分配线程</li>
 </ol>
-<p>这两种方式的原理本质上都是对对象监视器 monitor 的获取</p>
-<h3 id="使用方法"><a class="markdownIt-Anchor" href="#使用方法"></a> 使用方法</h3>
-<p>Synchronized 有三种使用方式</p>
+<h3 id="newcachedthreadpool"><a class="markdownIt-Anchor" href="#newcachedthreadpool"></a> newCachedThreadPool</h3>
+<p>源码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newCachedThreadPool</span><span class="params">(ThreadFactory threadFactory)</span> </span>&#123;</span><br><span class="line">     <span class="keyword">return</span> <span class="keyword">new</span> ThreadPoolExecutor(<span class="number">0</span>, Integer.MAX_VALUE,</span><br><span class="line">                                   <span class="number">60L</span>, TimeUnit.SECONDS,</span><br><span class="line">                                   <span class="keyword">new</span> SynchronousQueue&lt;Runnable&gt;(),</span><br><span class="line">                                   threadFactory);</span><br><span class="line"> &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>参数：</p>
 <ol>
-<li>修饰实例方法，对对象实例加锁</li>
-<li>修饰静态方法，对类对象加锁</li>
-<li>修饰代码块，需要指定加锁对象，synchronized(this|object) or synchronized(类.class)</li>
+<li>核心线程数为 0，最大线程数为 Integer.MAX_VALUE</li>
+<li>阻塞队列为 SynchronousQueue</li>
+<li>非核心线程空闲存活时间为 60 秒</li>
 </ol>
-<h3 id="与-reentranlock-的区别"><a class="markdownIt-Anchor" href="#与-reentranlock-的区别"></a> 与 ReentranLock 的区别</h3>
+<p>特点：</p>
 <ol>
-<li>二者都是可重入锁</li>
-<li>Synchronized 依赖于 JVM 实现，ReentranLock 依赖于 API 实现</li>
-<li>ReentrantLock 比 ReentrantLock 增加了三点高级功能：
-<ol>
-<li>等待可中断</li>
-<li>可实现公平锁或者非公平锁</li>
-<li>可实现选择性通知</li>
+<li>当提交任务的速度大于处理任务速度时，每次提交一个新任务，都会创建一个新线程。</li>
+<li>适合执行任务量大，任务执行时间短的场景</li>
 </ol>
+<h4 id="newsinglethreadexecutor"><a class="markdownIt-Anchor" href="#newsinglethreadexecutor"></a> newSingleThreadExecutor</h4>
+<p>源码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newSingleThreadExecutor</span><span class="params">(ThreadFactory threadFactory)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> FinalizableDelegatedExecutorService</span><br><span class="line">          (<span class="keyword">new</span> ThreadPoolExecutor(<span class="number">1</span>, <span class="number">1</span>,</span><br><span class="line">                                  <span class="number">0L</span>, TimeUnit.MILLISECONDS,</span><br><span class="line">                                  <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;(),</span><br><span class="line">                                  threadFactory));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ol>
+<li>newFixedThreadPool 的派生版本，核心线程数为 1，适合串行执行任务的场景</li>
+<li>与 newFixedThreadPool(1)的区别在于，newSingleThreadExecutor 不能被重新配置来使用新增的线程,以下为 jdk 源码中的注释
+<blockquote>
+<p>Unlike the otherwise equivalent newFixedThreadPool(1, threadFactory) the returned executor is guaranteed not to be reconfigurable to use additional threads.</p>
+</blockquote>
 </li>
 </ol>
+<p>具体可参考 ： <a target="_blank" rel="noopener" href="https://blog.csdn.net/lisheng19870305/article/details/118386729">https://blog.csdn.net/lisheng19870305/article/details/118386729</a></p>
+<h4 id="newscheduledthreadpool"><a class="markdownIt-Anchor" href="#newscheduledthreadpool"></a> newScheduledThreadPool</h4>
+<p>源码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ScheduledThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(corePoolSize, Integer.MAX_VALUE, <span class="number">0</span>, NANOSECONDS,</span><br><span class="line">          <span class="keyword">new</span> DelayedWorkQueue());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参数：</p>
+<ol>
+<li>最大线程数为 Integer.MAX_VALUE</li>
+<li>阻塞队列是 DelayedWorkQueue</li>
+<li>keepAliveTime 为 0</li>
+</ol>
+<p>特点：</p>
+<ol>
+<li>定时及周期执行的线程池地执行任务</li>
+</ol>
+<h3 id="8-线程池状态"><a class="markdownIt-Anchor" href="#8-线程池状态"></a> 8. 线程池状态</h3>
+<p>线程池有以下几种状态：</p>
+<ol>
+<li>RUNNING : 该状态的线程池会接收新任务，并且会处理阻塞队列中的任务;</li>
+<li>SHUTDOWN ：该状态的线程池不会接收新任务，但会处理阻塞队列中的任务；</li>
+<li>STOP ：该状态的线程不会接收新任务，也不会处理阻塞队列中的任务，而且会中断正在运行的任务；</li>
+<li>TIDYING ： 表明所有的任务已经运行终止，记录的任务数量为 0。</li>
+<li>TERMINATED: 表示该线程池彻底终止</li>
+</ol>
+<p>状态切换过程如图</p>
+<p><img src="https://gitee.com/Ll_hai/markdown-image/raw/master/image/20220420212713.png" alt="" /></p>
+<h3 id="9-为什么阿里巴巴-java-开发手册上要禁止使用-executors-来创建线程池"><a class="markdownIt-Anchor" href="#9-为什么阿里巴巴-java-开发手册上要禁止使用-executors-来创建线程池"></a> 9. 为什么《阿里巴巴 Java 开发手册》上要禁止使用 Executors 来创建线程池</h3>
+<p>从第 7 节可以看出，使用 Executors 创建出来的线程池使用的全都是无界队列，无界队列可以无限制地接受并保存任务，很可能造成 OOM 异常，并且会造成 maxinumPoolSize、keepAliveTime、handler 等参数失效</p>
 
           
             <div class='article_footer'>
@@ -538,7 +562,7 @@
           
         
           
-            <p>本文永久链接是：<a href=http://yoursite.com/2022/03/29/Java%E5%9F%BA%E7%A1%80/Java%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E6%9C%BA%E5%88%B6/>http://yoursite.com/2022/03/29/Java%E5%9F%BA%E7%A1%80/Java%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E6%9C%BA%E5%88%B6/</a></p>
+            <p>本文永久链接是：<a href=http://yoursite.com/2022/04/20/Java%E5%9F%BA%E7%A1%80/%E7%BA%BF%E7%A8%8B%E6%B1%A0/>http://yoursite.com/2022/04/20/Java%E5%9F%BA%E7%A1%80/%E7%BA%BF%E7%A8%8B%E6%B1%A0/</a></p>
           
         
       </blockquote>
@@ -589,10 +613,10 @@
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2022-03-29T21:28:02+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2022-04-20T21:28:01+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：Mar 29, 2022</p>
+    <p>更新于：Apr 20, 2022</p>
   </a>
 </div>
 
@@ -619,7 +643,7 @@
       
         <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2022/03/29/Java%E5%9F%BA%E7%A1%80/Java%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E6%9C%BA%E5%88%B6/&title=Java中的并发机制 - LlHai&summary="
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2022/04/20/Java%E5%9F%BA%E7%A1%80/%E7%BA%BF%E7%A8%8B%E6%B1%A0/&title=线程池 - LlHai&summary="
           
           >
           
@@ -631,7 +655,7 @@
       
         <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://yoursite.com/2022/03/29/Java%E5%9F%BA%E7%A1%80/Java%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E6%9C%BA%E5%88%B6/&title=Java中的并发机制 - LlHai&summary="
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://yoursite.com/2022/04/20/Java%E5%9F%BA%E7%A1%80/%E7%BA%BF%E7%A8%8B%E6%B1%A0/&title=线程池 - LlHai&summary="
           
           >
           
@@ -643,7 +667,7 @@
       
         <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
           
-          target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2022/03/29/Java%E5%9F%BA%E7%A1%80/Java%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E6%9C%BA%E5%88%B6/&title=Java中的并发机制 - LlHai&summary="
+          target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2022/04/20/Java%E5%9F%BA%E7%A1%80/%E7%BA%BF%E7%A8%8B%E6%B1%A0/&title=线程池 - LlHai&summary="
           
           >
           
@@ -667,21 +691,14 @@
         
           <div class="prev-next">
             
-              <a class='prev' href='/2022/04/18/Java%E5%9F%BA%E7%A1%80/%E4%BA%86%E8%A7%A3Synchronized/'>
-                <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>深入了解Synchronized</p>
-                <p class='content'>Synchronized 是 Java 中最常见的同步锁，依赖 Synchronized 可以高效地实现进程间的同步、保护临界区内的资源。
- Synchronized 应用场景
-一般情况下，Sy...</p>
-              </a>
             
-            
-              <a class='next' href='/2022/03/28/Java%E5%9F%BA%E7%A1%80/HashMap/'>
-                <p class='title'>深入了解HashMap<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
-                <p class='content'> HashMap 简介
-HashMap 是实现了 Map 接口的 K,V 型容器, 可以根据 Key 进行高效的数据访问
- HashMap 底层实现
- HashMap 的数据结构
-HashMap...</p>
+              <a class='next' href='/2022/04/19/Java%E5%9F%BA%E7%A1%80/HashMap100%E9%97%AE/'>
+                <p class='title'>HashMap面试100问<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+                <p class='content'> 1. HashMap1.8 做了哪些优化
+
+引入红黑树来代替长度大于等于 8 的链表，解决了长链表带来的查找效率低的问题
+链表的插入方式从头插法改成了尾插法，解决并发扩容带来的链表成环问题
+扩...</p>
               </a>
             
           </div>
@@ -726,7 +743,7 @@ HashMap...</p>
 
   <script>
     window.subData = {
-      title: 'Java中的并发机制',
+      title: '线程池',
       tools: true
     }
   </script>
@@ -752,7 +769,7 @@ HashMap...</p>
 
 
     <div class='content'>
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#cas"><span class="toc-text"> CAS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%82%B2%E8%A7%82%E9%94%81%E5%92%8C%E4%B9%90%E8%A7%82%E9%94%81"><span class="toc-text"> 悲观锁和乐观锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cas-%E6%9C%BA%E5%88%B6"><span class="toc-text"> CAS 机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cas-%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="toc-text"> CAS 的缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cas-%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-text"> CAS 的应用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#aqs"><span class="toc-text"> AQS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#aqs-%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-text"> AQS 的原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#aqs-%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-text"> AQS 的实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-aqs-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%90%8C%E6%AD%A5%E5%99%A8"><span class="toc-text"> 使用 AQS 自定义同步器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81-aqs-%E7%BB%84%E4%BB%B6"><span class="toc-text"> 常见 AQS 组件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronized-%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-text"> Synchronized 关键字</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-text"> 原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-text"> 使用方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8E-reentranlock-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text"> 与 ReentranLock 的区别</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%A6%82%E5%BF%B5%E5%92%8C%E4%BC%98%E5%8A%BF"><span class="toc-text"> 1. 概念和优势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%B8%83%E4%B8%AA%E6%A0%B8%E5%BF%83%E5%8F%82%E6%95%B0"><span class="toc-text"> 2. 七个核心参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6"><span class="toc-text"> 3. 运行机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="toc-text"> 4. 异常处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%9B%9B%E7%A7%8D%E9%A5%B1%E5%92%8C%E7%AD%96%E7%95%A5"><span class="toc-text"> 5. 四种饱和策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97%E7%B1%BB%E5%9E%8B"><span class="toc-text"> 6. 阻塞队列类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E5%87%A0%E7%A7%8D%E5%B8%B8%E8%A7%81%E7%BA%BF%E7%A8%8B%E6%B1%A0"><span class="toc-text"> 7. 几种常见线程池</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#newfixedthreadpool"><span class="toc-text"> newFixedThreadPool</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#newcachedthreadpool"><span class="toc-text"> newCachedThreadPool</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#newsinglethreadexecutor"><span class="toc-text"> newSingleThreadExecutor</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#newscheduledthreadpool"><span class="toc-text"> newScheduledThreadPool</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%8A%B6%E6%80%81"><span class="toc-text"> 8. 线程池状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4-java-%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E4%B8%8A%E8%A6%81%E7%A6%81%E6%AD%A2%E4%BD%BF%E7%94%A8-executors-%E6%9D%A5%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E6%B1%A0"><span class="toc-text"> 9. 为什么《阿里巴巴 Java 开发手册》上要禁止使用 Executors 来创建线程池</span></a></li></ol>
     </div>
   </section>
 
