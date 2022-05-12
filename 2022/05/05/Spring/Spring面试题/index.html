@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html>
+<head hexo-theme="https://volantis.js.org/#2.6.6">
+  <meta charset="utf-8" />
+  <!-- SEO相关 -->
+    
+  <!-- 渲染优化 -->
+  <meta name="renderer" content="webkit" />
+  <meta name="force-rendering" content="webkit" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  />
+
+  <!-- 页面元数据 -->
+  
+  <title>Spring面试笔记 - LlHai</title>
+   
+  <meta name="description" content="记录Spring常见面试题" />
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13/css/all.min.css"
+  />
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+    
+
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css"
+    integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq"
+    crossorigin="anonymous"
+  />
+
+  <!-- The loading of KaTeX is deferred to speed up page rendering -->
+  <script
+    defer
+    src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"
+    integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz"
+    crossorigin="anonymous"
+  ></script>
+
+  <!-- To automatically render math in text elements, include the auto-render extension: -->
+  <script
+    defer
+    src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"
+    integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI"
+    crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"
+  ></script>
+
+  <!-- import link -->
+     
+<link rel="stylesheet" href="/css/style.css">
+ 
+
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById("loading-bar").style.width = num + "%";
+    }
+  </script>
+
+   
+</head>
+
+<body>
+  
+  <div id="loading-bar-wrapper">
+  <div id="loading-bar"></div>
+</div>
+<header class="l_header shadow blur">
+  <div class='container'>
+  <div class='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h'>
+        <li><a class="s-comment fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+          
+          
+            你说的对
+          
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/friends/
+                  
+                  
+                  
+                    id="friends"
+                  >
+                  <i class='fas fa-link fa-fw'></i>友链
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="flat-box" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/friends/
+                  
+                  
+                  
+                    id="friends"
+                  >
+                  <i class='fas fa-link fa-fw'></i>友链
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="flat-box" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+<script>setLoadingBarProgress(40);</script>
+
+
+
+  <div class="l_body nocover">
+    <div class='body-wrapper'>
+      
+
+<div class='l_main'>
+  
+
+  
+    <article id="post" class="post white-box reveal shadow article-type-post" itemscope itemprop="blogPost">
+      
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h1 class="title">
+    <a href="/2022/05/05/Spring/Spring%E9%9D%A2%E8%AF%95%E9%A2%98/">
+      Spring面试笔记
+    </a>
+  </h1>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：May 5, 2022</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+      <section class="article typo">
+        <div class="article-entry" itemprop="articleBody">
+          
+          <h2 id="1-介绍一下对-spring-ioc-的了解"><a class="markdownIt-Anchor" href="#1-介绍一下对-spring-ioc-的了解"></a> 1. 介绍一下对 Spring IOC 的了解</h2>
+<ul>
+<li>IOC(Inversion of control)控制反转，它描述的是 Java 开发中对象创建以及管理的问题，它是一种设计思想，即<strong>将原本在程序中手动创建对象的控制权，交给框架来管理</strong></li>
+<li>如，现有类 A 依赖于类 B：
+<ul>
+<li>传统的开发方法，需要在类 A 中通过 new 关键字手动 new 一个 B 的对象出来</li>
+<li>使用 IOC 思想的开发方法，不需要通过 new 关键字来创建对象，而是通过 IOC 容器来帮助实例化对象，我们需要哪个对象，直接从 IOC 容器中取</li>
+</ul>
+</li>
+<li>IOC 降低了对象之间的耦合程度、使得资源管理变得容易</li>
+</ul>
+<h2 id="2-介绍一下对-spring-aop-的了解"><a class="markdownIt-Anchor" href="#2-介绍一下对-spring-aop-的了解"></a> 2. 介绍一下对 Spring AOP 的了解</h2>
+<ul>
+<li>AOP(Aspect-Oriented Programming) 面向切面编程，它能将那些与业务无关，但却为业务模块所共同调用的函数或者功能(如事务管理、日志管理、权限控制)封装起来</li>
+<li>AOP 能减少系统的重复代码、降低模块间的耦合度、提高代码的可拓展性和可维护性</li>
+<li>AOP 重用的是横切逻辑方法，这些方法往往和逻辑代码与业务代码混在一起，无法通过继承的方法进行抽象，如以下代码</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 性能监控代码</span></span><br><span class="line">        <span class="keyword">long</span> start = System.currentTimeMillis();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 业务逻辑代码</span></span><br><span class="line">        System.out.println(<span class="string">&quot;I can eat...&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 性能监控代码</span></span><br><span class="line">        System.out.println(<span class="string">&quot;执行时长：&quot;</span> + (System.currentTimeMillis() - start)/<span class="number">1000f</span> + <span class="string">&quot;s&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 性能监控代码</span></span><br><span class="line">        <span class="keyword">long</span> start = System.currentTimeMillis();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 业务逻辑代码</span></span><br><span class="line">        System.out.println(<span class="string">&quot;I can run...&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 性能监控代码</span></span><br><span class="line">        System.out.println(<span class="string">&quot;执行时长：&quot;</span> + (System.currentTimeMillis() - start)/<span class="number">1000f</span> + <span class="string">&quot;s&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码中 run()和 eat()函数开始和结束流程中，都重复出现了性能监控代码，这种代码就是横切逻辑代码</p>
+<ul>
+<li>AOP 是基于动态代理实现的，如果要代理的对象，实现了某个接口，那么 Spring AOP 会使用 JDK Proxy 创建代理对象，如果要代理的对象没有实现接口，那么就使用 Cglib 来生成一个被代理对象的子类来作为代理</li>
+</ul>
+<h2 id="3-spring-bean-相关内容"><a class="markdownIt-Anchor" href="#3-spring-bean-相关内容"></a> 3. Spring Bean 相关内容</h2>
+<h3 id="31-什么是-spring-bean"><a class="markdownIt-Anchor" href="#31-什么是-spring-bean"></a> 3.1 什么是 Spring Bean</h3>
+<p>IOC 容器中管理的对象，就是 Bean</p>
+<h3 id="32-将类声明为-bean-的注解有哪些"><a class="markdownIt-Anchor" href="#32-将类声明为-bean-的注解有哪些"></a> 3.2 将类声明为 Bean 的注解有哪些</h3>
+<ul>
+<li>@Component: 通用的注解，可以标注任意类</li>
+<li>@Repository: 对应持久层即 Dao 层，主要用于数据库相关操作</li>
+<li>@Service: 对应服务层，主要处理业务逻辑</li>
+<li>@Controller：对应 Spring MVC 控制层，主要进行前端请求的处理、转发、重定向等</li>
+</ul>
+<p>要点：</p>
+<ol>
+<li>@Service, @Controller, @Repository 是@Component 的拓展，从源码可以上来看，他们都派生自@Component 注解</li>
+<li>@Component、@Repository、@Service 默认是单例，而@Controller 默认多例</li>
+</ol>
+<h3 id="33-repository-controller-service-相对于component-的区别"><a class="markdownIt-Anchor" href="#33-repository-controller-service-相对于component-的区别"></a> 3.3 @Repository、@Controller、@Service 相对于@Component 的区别</h3>
+<p>首先，因为它们派生自@Component，所以对于 BeanDefinition 的自动检测和依赖注入，所有这些注解都是相同的，可以使用一个注解来替换另一个注解</p>
+<ol>
+<li>@Repository<br />
+他提供了 PersistenceExceptionTranslationPostProcessor，将其添加到 Spring application context 后，可以捕获特定于平台的异常，并将它们添加到 Spring 的未检查异常重新抛出</li>
+<li>@Controller<br />
+@Controller 是最特殊的注解，不能将此注解与@Service 或@Repository 等任何其它注解进行切换。因为调度器扫描用@Controller 注解的类，并检测其中用@RequestMapping 注解的方法，只能使用了@Controller 的类，才可以使用@RequestMapping 方法</li>
+<li>@Service<br />
+@Service 目前没有特殊内容，它唯一的作用就是表示此类是用来处理业务逻辑</li>
+</ol>
+<h3 id="34-component-和bean-的区别是什么"><a class="markdownIt-Anchor" href="#34-component-和bean-的区别是什么"></a> 3.4 @Component 和@Bean 的区别是什么</h3>
+<ol>
+<li>@Component 用于类，@Bean 用于方法</li>
+<li>@Component 是通过类路径扫描来自动侦测以及装配到 Spring 容器中；@Bean 注解则是在标有该注解的方法中定义产生这个 bean，并交由容器管理</li>
+<li>@Bean 注解比@Component 注解的自定义性更强，如当引用第三方库中的类需要装配到 Spring 容器或者下面代码中的例子，只能通过@Bean 实现</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> OneService <span class="title">getService</span><span class="params">(status)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">case</span> (status)  &#123;</span><br><span class="line">        when <span class="number">1</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> serviceImpl1();</span><br><span class="line">        when <span class="number">2</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> serviceImpl2();</span><br><span class="line">        when <span class="number">3</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> serviceImpl3();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="35-依赖注入的方法有哪些"><a class="markdownIt-Anchor" href="#35-依赖注入的方法有哪些"></a> 3.5 依赖注入的方法有哪些</h3>
+<ol>
+<li>Field 注入</li>
+</ol>
+<p>通过在属性上添加注解的方式注入</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> A a;</span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li>代码简洁、美观</li>
+<li>新增字段时，不需要做过多修改</li>
+<li>Spring 官方不推荐使用这种方法</li>
+</ul>
+<ol start="2">
+<li>set 方法注入</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> A a;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setA</span><span class="params">(A a)</span></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.a = a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>final + 构造函数 注入</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> A a;</span><br><span class="line"><span class="comment">// @Autowird 在只有一个构造函数的情况下，可以不写注解</span></span><br><span class="line"><span class="function">pubic <span class="title">AServiceImpl</span><span class="params">(A a)</span></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.a = a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li>会使得代码臃肿，Field 字段过多时，使构造方法笨重</li>
+<li>新增 Field 时修改麻烦</li>
+<li>官方推荐使用这种方式注入</li>
+</ul>
+<p>官方为什么推荐使用构造函数注入：</p>
+<ol>
+<li>依赖不可变：使用 final 来约束 Field</li>
+<li>依赖不可为空：在实例化时会检查构造函数参数是否为空，为空时抛出异常</li>
+<li>单一职责：实例化时检查构造函数参数是否为空</li>
+<li>避免循环依赖</li>
+<li>避免空指针异常</li>
+<li>更利于单元测试</li>
+<li>保证返回客户端的代码的时候是完全初始化的状态</li>
+</ol>
+<h3 id="36-注入-bean-的注解有哪些"><a class="markdownIt-Anchor" href="#36-注入-bean-的注解有哪些"></a> 3.6 注入 Bean 的注解有哪些</h3>
+<ul>
+<li>@Autowired</li>
+<li>@Resource</li>
+<li>@Inject</li>
+</ul>
+<h3 id="37-autowired-和resource-的区别是什么"><a class="markdownIt-Anchor" href="#37-autowired-和resource-的区别是什么"></a> 3.7 @Autowired 和@Resource 的区别是什么</h3>
+<h3 id="38-bean-的作用域"><a class="markdownIt-Anchor" href="#38-bean-的作用域"></a> 3.8 Bean 的作用域</h3>
+<h3 id="38-bean-的生命周期"><a class="markdownIt-Anchor" href="#38-bean-的生命周期"></a> 3.8 Bean 的生命周期</h3>
+
+          
+            <div class='article_footer'>
+              
+                
+  
+    
+    
+
+
+
+  
+
+  
+    
+    
+
+
+
+  
+
+  
+    
+    
+
+<section class="widget copyright  desktop mobile">
+  <div class='content'>
+    
+      <blockquote>
+        
+          
+            <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+          
+        
+          
+            <p>本文永久链接是：<a href=http://yoursite.com/2022/05/05/Spring/Spring%E9%9D%A2%E8%AF%95%E9%A2%98/>http://yoursite.com/2022/05/05/Spring/Spring%E9%9D%A2%E8%AF%95%E9%A2%98/</a></p>
+          
+        
+      </blockquote>
+    
+  </div>
+</section>
+
+  
+
+  
+    
+    
+
+<section class="widget qrcode  desktop mobile">
+  
+
+  <div class='content article-entry'>
+    
+      
+        <div class='fancybox'><img src='https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/qrcode/wiki_volantis.png'
+        
+          height='64px'
+        ></div>
+      
+    
+      
+        <div class='fancybox'><img src='https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/qrcode/wiki_volantis.png'
+        
+          height='64px'
+        ></div>
+      
+    
+  </div>
+</section>
+
+  
+
+
+              
+            </div>
+          
+        </div>
+        
+          
+
+
+  <section class='meta' id="footer-meta">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2022-05-10T14:53:41+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：May 10, 2022</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Java-%E5%90%8E%E7%AB%AF/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Java, 后端</p></a></div>
+
+
+        
+      
+        
+          
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2022/05/05/Spring/Spring%E9%9D%A2%E8%AF%95%E9%A2%98/&title=Spring面试笔记 - LlHai&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/logo/128/qq.png">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://yoursite.com/2022/05/05/Spring/Spring%E9%9D%A2%E8%AF%95%E9%A2%98/&title=Spring面试笔记 - LlHai&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/logo/128/qzone.png">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2022/05/05/Spring/Spring%E9%9D%A2%E8%AF%95%E9%A2%98/&title=Spring面试笔记 - LlHai&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/logo/128/weibo.png">
+          
+        </a>
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </section>
+
+
+        
+        
+          <div class="prev-next">
+            
+              <a class='prev' href='/2022/05/12/Java%E5%9F%BA%E7%A1%80/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E7%9A%84%E6%9C%80%E4%BC%98%E5%AE%9E%E7%8E%B0/'>
+                <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>单例模式的最优实现——枚举类</p>
+                <p class='content'> 什么是单例
+ 单例模式的定义
+单例模式就是对象在程序运行过程中只实例化一次，类似 Java 静态变量的思想，创建一个全局唯一对象。
+ 单例实现思路
+
+将实例对象静态化
+将构造方法私有化，禁止通...</p>
+              </a>
+            
+            
+              <a class='next' href='/2022/04/24/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/'>
+                <p class='title'>排序算法总结<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+                <p class='content'> 概述
+排序算法按是否基于元素比较，可分为以下两大类：
+
+基于比较的排序算法：此类算法依赖于元素大小比较来决定元素的位置，算法时间复杂度不能突破 O(nlogn)O(nlogn)O(nlogn)...</p>
+              </a>
+            
+          </div>
+        
+      </section>
+    </article>
+  
+
+  
+    <!-- 显示推荐文章和评论 -->
+
+
+
+  <article class="post white-box reveal comments shadow">
+    <section class="article typo">
+      <p ct><i class='fas fa-comments'></i> 评论</p>
+      
+      
+      
+      
+      
+      
+        <section id="comments">
+          <div id="valine_container" class="valine_thread">
+            <i class="fas fa-cog fa-spin fa-fw fa-2x"></i>
+          </div>
+        </section>
+      
+      
+    </section>
+  </article>
+
+
+  
+
+
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+
+
+  <script>
+    window.subData = {
+      title: 'Spring面试笔记',
+      tools: true
+    }
+  </script>
+
+
+</div>
+<aside class='l_side'>
+  
+  
+
+  
+    
+    
+
+
+  <section class="widget toc-wrapper shadow desktop mobile">
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8B%E5%AF%B9-spring-ioc-%E7%9A%84%E4%BA%86%E8%A7%A3"><span class="toc-text"> 1. 介绍一下对 Spring IOC 的了解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8B%E5%AF%B9-spring-aop-%E7%9A%84%E4%BA%86%E8%A7%A3"><span class="toc-text"> 2. 介绍一下对 Spring AOP 的了解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-spring-bean-%E7%9B%B8%E5%85%B3%E5%86%85%E5%AE%B9"><span class="toc-text"> 3. Spring Bean 相关内容</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-%E4%BB%80%E4%B9%88%E6%98%AF-spring-bean"><span class="toc-text"> 3.1 什么是 Spring Bean</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-%E5%B0%86%E7%B1%BB%E5%A3%B0%E6%98%8E%E4%B8%BA-bean-%E7%9A%84%E6%B3%A8%E8%A7%A3%E6%9C%89%E5%93%AA%E4%BA%9B"><span class="toc-text"> 3.2 将类声明为 Bean 的注解有哪些</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#33-repository-controller-service-%E7%9B%B8%E5%AF%B9%E4%BA%8Ecomponent-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text"> 3.3 @Repository、@Controller、@Service 相对于@Component 的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#34-component-%E5%92%8Cbean-%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text"> 3.4 @Component 和@Bean 的区别是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#35-%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E7%9A%84%E6%96%B9%E6%B3%95%E6%9C%89%E5%93%AA%E4%BA%9B"><span class="toc-text"> 3.5 依赖注入的方法有哪些</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#36-%E6%B3%A8%E5%85%A5-bean-%E7%9A%84%E6%B3%A8%E8%A7%A3%E6%9C%89%E5%93%AA%E4%BA%9B"><span class="toc-text"> 3.6 注入 Bean 的注解有哪些</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#37-autowired-%E5%92%8Cresource-%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text"> 3.7 @Autowired 和@Resource 的区别是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#38-bean-%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="toc-text"> 3.8 Bean 的作用域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#38-bean-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-text"> 3.8 Bean 的生命周期</span></a></li></ol></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+  
+  <footer class="clearfix">
+    <br><br>
+    
+      
+        <div class="aplayer-container">
+          
+
+
+        </div>
+      
+    
+      
+        <br>
+        <div class="social-wrapper">
+          
+            
+              <a href="/atom.xml"
+                class="social fas fa-rss flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+            
+              <a href="mailto:me@xaoxuu.com"
+                class="social fas fa-envelope flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+            
+              <a href="https://github.com/xaoxuu"
+                class="social fab fa-github flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+            
+              <a href="https://music.163.com/#/user/home?id=63035382"
+                class="social fas fa-headphones-alt flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+        </div>
+      
+    
+      
+        <div><p>Blog content follows the <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en">Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License</a></p>
+</div>
+      
+    
+      
+        Use
+        <a href="https://volantis.js.org/" target="_blank" class="codename">Volantis</a>
+        as theme, total visits
+          <span id="busuanzi_value_site_pv"><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
+          times
+        
+      
+    
+      
+        <div class='copyright'>
+        <p><a target="_blank" rel="noopener" href="https://xaoxuu.com">Copyright © 2017-2020 Mr. X</a></p>
+
+        </div>
+      
+    
+  </footer>
+
+<script>setLoadingBarProgress(80);</script>
+
+
+      <script>setLoadingBarProgress(60);</script>
+    </div>
+    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+  </div>
+  
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4/dist/jquery.min.js"></script>
+
+
+  <script>
+    
+    var SEARCH_SERVICE = "hexo" || "hexo";
+    var ROOT = "/" || "/";
+    if (!ROOT.endsWith('/')) ROOT += '/';
+  </script>
+
+
+  <script async src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-volantis@2/js/instant_page.js" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.6/dist/scrollreveal.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      ScrollReveal().reveal('.l_main .reveal', {
+        distance: '8px',
+        duration: '800',
+        interval: '100',
+        scale: '1'
+      });
+    });
+  </script>
+
+
+  
+<script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+
+  <script type="text/javascript">
+    $(function() {
+      Waves.attach('.flat-btn', ['waves-button']);
+      Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+      Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+      Waves.attach('.flat-box', ['waves-block']);
+      Waves.attach('.float-box', ['waves-block', 'waves-float']);
+      Waves.attach('.waves-image');
+      Waves.init();
+    });
+  </script>
+
+
+  <script defer src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-busuanzi@2.3/js/busuanzi.pure.mini.js"></script>
+
+
+
+  
+  
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery-backstretch@2.1.18/jquery.backstretch.min.js"></script>
+
+    <script type="text/javascript">
+      $(function(){
+        var imgs=["https://cdn.jsdelivr.net/gh/Llhai/img/source/wallhaven-6k3oox.jpg"];
+        if ('true' == 'true') {
+          function shuffle(arr){
+            /*From countercurrent-time*/
+            var n = arr.length;
+            while(n--) {
+              var index = Math.floor(Math.random() * n);
+              var temp = arr[index];
+              arr[index] = arr[n];
+              arr[n] = temp;
+            }
+          }
+          shuffle(imgs);
+        }
+        if ('.cover') {
+          $('.cover').backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        } else {
+          $.backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        }
+      });
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4/dist/Valine.min.js"></script>
+
+  
+  <script>
+  var GUEST_INFO = ['nick','mail','link'];
+  var meta = 'nick,mail,link'.split(',').filter(function(item){
+    return GUEST_INFO.indexOf(item) > -1
+  });
+  var REQUIRED_FIELDS = ['nick','mail','link'];
+  var requiredFields = 'nick,mail'.split(',').filter(function(item){
+    return REQUIRED_FIELDS.indexOf(item) > -1
+  });
+  var valine = new Valine();
+  function emoji(path, idx, ext) {
+      return path + "/" + path + "-" + idx + "." + ext;
+  }
+  var emojiMaps = {};
+  for (var i = 1; i <= 54; i++) {
+    emojiMaps['tieba-' + i] = emoji('tieba', i, 'png');
+  }
+  for (var i = 1; i <= 101; i++) {
+    emojiMaps['qq-' + i] = emoji('qq', i, 'gif');
+  }
+  for (var i = 1; i <= 116; i++) {
+    emojiMaps['aru-' + i] = emoji('aru', i, 'gif');
+  }
+  for (var i = 1; i <= 125; i++) {
+    emojiMaps['twemoji-' + i] = emoji('twemoji', i, 'png');
+  }
+  for (var i = 1; i <= 4; i++) {
+    emojiMaps['weibo-' + i] = emoji('weibo', i, 'png');
+  }
+  valine.init({
+    el: '#valine_container',
+    meta: meta,
+    
+    appId: "8oYFiSOBgumF6fqO7mxHYSbt-gzGzoHsz",
+    appKey: "4YfG5ENRdUo42aYxkI1Ds2Aj",
+    placeholder: "快来评论吧~",
+    pageSize:'10',
+    avatar:'robohash',
+    lang:'zh-cn',
+    visitor: 'true',
+    highlight: 'true',
+    mathJax: 'false',
+    enableQQ: 'true',
+    requiredFields: requiredFields,
+    emojiCDN: 'https://cdn.jsdelivr.net/gh/xaoxuu/cdn-assets/emoji/valine/',
+    emojiMaps: emojiMaps
+  })
+  </script>
+
+
+
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+  
+<script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-volantis@2.6.5/js/search.js"></script>
+
+
+
+  
+<script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-volantis@2/js/comment_typing.js"></script>
+
+
+
+
+
+
+<!-- 复制 -->
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="fas fa-copy"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('fa-copy');
+        $icon.addClass('fa-check-circle');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('fa-check-circle');
+          $icon.addClass('fa-copy');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('fa-copy');
+        $icon.addClass('fa-times-circle');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('fa-times-circle');
+          $icon.addClass('fa-copy');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+
+
+<!-- fancybox -->
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script>
+  function pjax_fancybox() {
+    $(".article-entry").find("img").not('.inline').not('a img').each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 标准 markdown 描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".article-entry").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  $(function () {
+    pjax_fancybox();
+  });
+</script>
+
+
+
+
+  <script>setLoadingBarProgress(100);</script>
+</body>
+</html>
